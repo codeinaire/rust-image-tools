@@ -1,6 +1,7 @@
 Store a decision record in the `decisions/` folder.
 
 Instructions:
+
 1. Look at the recent conversation to identify the decision being made, the options considered, and the reasoning.
 2. Create a new markdown file at `decisions/<YYYYMMDD>-<short-kebab-case-title>.md` (using today's date) with this template:
 
@@ -21,6 +22,10 @@ Instructions:
 ## Decision
 
 <Which option was chosen and a brief justification.>
+
+## Resources
+
+<List the resources that were used to come to this decision such as website, file, etc>
 ```
 
 4. Confirm the file was created and show the path.
