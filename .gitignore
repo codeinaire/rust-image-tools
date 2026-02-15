@@ -1,0 +1,25 @@
+# Rust
+target/
+Cargo.lock
+
+# WASM build output
+crates/image-converter/pkg/
+
+# Node / Frontend
+web/node_modules/
+web/dist/
+web/.parcel-cache/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

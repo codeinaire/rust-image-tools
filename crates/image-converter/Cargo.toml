@@ -1,0 +1,33 @@
+# -- Package metadata --
+[package]
+name = "image-converter"
+version = "0.1.0"
+edition = "2021"               # Rust edition (controls language features and defaults)
+
+# -- Library output types --
+[lib]
+crate-type = [
+    "cdylib",                  # C-compatible dynamic library — required by wasm-pack to produce .wasm
+    "rlib",                    # Standard Rust library — required by cargo test to link unit tests
+]
+
+# -- Runtime dependencies --
+[dependencies]
+wasm-bindgen = "0.2"           # JS<->Rust FFI glue (provides #[wasm_bindgen] attribute)
+image = { version = "0.25", default-features = false, features = [
+    "png",
+    "jpeg",
+    "gif",
+    "webp",
+    "bmp",
+    # default-features = false disables rayon (multithreading) which breaks WASM.
+    # Only the codecs listed here are compiled in, keeping the .wasm binary smaller.
+] }
+
+# -- Test-only dependencies (not included in the final .wasm binary) --
+[dev-dependencies]
+wasm-bindgen-test = "0.3"      # Test harness for running Rust tests in a headless browser via WASM
+
+# -- Lint rules inherited from the workspace root Cargo.toml --
+[lints]
+workspace = true
