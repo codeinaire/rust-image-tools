@@ -90,6 +90,18 @@ cd web && npm install && npx parcel src/index.html
 # Rust unit tests
 cargo test --manifest-path crates/image-converter/Cargo.toml
 
+# With conversion timings visible
+cargo test --manifest-path crates/image-converter/Cargo.toml -- --nocapture
+
+# Sequential output (avoids interleaved timing lines)
+cargo test --manifest-path crates/image-converter/Cargo.toml -- --nocapture --test-threads=1
+
+# Run the large-image tests (100 MP / 10000x10000, ~400 MB per buffer)
+cargo test --manifest-path crates/image-converter/Cargo.toml -- --ignored --nocapture size_square_max
+
+# Run a single large-image test by format
+cargo test --manifest-path crates/image-converter/Cargo.toml -- --ignored --nocapture size_square_max_gif
+
 # Rust WASM tests (headless browser)
 wasm-pack test --headless --chrome crates/image-converter
 
