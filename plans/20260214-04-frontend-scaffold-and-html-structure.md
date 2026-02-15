@@ -1,7 +1,7 @@
 # Plan: Frontend Scaffold & HTML Structure
 
 **Date:** 2026-02-14
-**Status:** Draft
+**Status:** Done
 **PR Scope:** Small — project setup + static HTML
 **Depends On:** None (can be developed in parallel with Plans 01-03)
 
@@ -29,26 +29,26 @@ Parcel is used as a zero-config bundler with native WASM support. Tailwind CSS v
 
 ## Todo
 
-- [ ] Create `web/` directory
-- [ ] Write `web/package.json` with dependencies: parcel, typescript, tailwindcss v4, postcss
-- [ ] Write `web/tsconfig.json` with `"strict": true`
-- [ ] Write `web/.postcssrc` for Tailwind PostCSS integration
-- [ ] Write `web/src/index.html`:
-  - [ ] HTML5 boilerplate with lang, charset, viewport
-  - [ ] H1: "Free Image Converter — Convert PNG, JPEG, WebP, GIF, BMP Online"
-  - [ ] Subheading: "100% private — your images never leave your browser"
-  - [ ] File drop zone / file input area (static HTML)
-  - [ ] Format selector area (static HTML)
-  - [ ] Convert button (static HTML)
-  - [ ] Preview + download area (static HTML, hidden by default)
-  - [ ] Error display area (static HTML, hidden by default)
-  - [ ] Progress bar area (static HTML, hidden by default)
-- [ ] Write `web/src/styles.css` with Tailwind directives (`@import "tailwindcss"` for v4)
-- [ ] Write `web/src/main.ts` — minimal entry point
-- [ ] Update root `.gitignore` for web build artifacts
-- [ ] Run `npm install` in `web/` and verify no errors
-- [ ] Run `npx parcel src/index.html` and verify dev server starts
-- [ ] Verify page loads in browser with styled content
+- [x] Create `web/` directory
+- [x] Write `web/package.json` with dependencies: parcel, typescript, tailwindcss v4, postcss
+- [x] Write `web/tsconfig.json` with `"strict": true`
+- [x] Write `web/.postcssrc` for Tailwind PostCSS integration
+- [x] Write `web/src/index.html`:
+  - [x] HTML5 boilerplate with lang, charset, viewport
+  - [x] H1: "Free Image Converter — Convert PNG, JPEG, WebP, GIF, BMP Online"
+  - [x] Subheading: "100% private — your images never leave your browser"
+  - [x] File drop zone / file input area (static HTML)
+  - [x] Format selector area (static HTML)
+  - [x] Convert button (static HTML)
+  - [x] Preview + download area (static HTML, hidden by default)
+  - [x] Error display area (static HTML, hidden by default)
+  - [x] Progress bar area (static HTML, hidden by default)
+- [x] Write `web/src/styles.css` with Tailwind directives (`@import "tailwindcss"` for v4)
+- [x] Write `web/src/main.ts` — minimal entry point
+- [x] Update root `.gitignore` for web build artifacts
+- [x] Run `npm install` in `web/` and verify no errors
+- [x] Run `npx parcel src/index.html` and verify dev server starts
+- [x] Verify page loads in browser with styled content
 
 ## Key Details from PLANNING.md
 

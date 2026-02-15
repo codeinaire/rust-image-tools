@@ -1,0 +1,20 @@
+{
+  "name": "rust-image-converter-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend for Rust + WASM image converter",
+  "source": "src/index.html",
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "^2.16.4",
+    "@parcel/transformer-jsonld": "^2.16.4",
+    "@tailwindcss/postcss": "^4",
+    "parcel": "^2",
+    "postcss": "^8",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
