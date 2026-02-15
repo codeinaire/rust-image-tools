@@ -25,45 +25,45 @@ Tests live in `#[cfg(test)]` modules at the bottom of each source file, plus int
 
 ## Todo
 
-- [ ] Create test helper module/function to generate synthetic test images programmatically
-- [ ] Generate fixtures: tiny (1x1), small (100x100), medium (1920x1080), large (4000x3000), wide (10000x100), tall (100x10000)
-- [ ] Write conversion matrix tests — all 16 input→output combinations:
-  - [ ] PNG → JPEG, GIF, BMP
-  - [ ] JPEG → PNG, GIF, BMP
-  - [ ] WebP → PNG, JPEG, GIF, BMP
-  - [ ] GIF → PNG, JPEG, BMP
-  - [ ] BMP → PNG, JPEG, GIF
-- [ ] Each conversion test verifies: output is valid (re-decodable), output format matches target, dimensions preserved
-- [ ] Write size variant tests for key conversion paths across all image sizes
-- [ ] Write `#[ignore]` test for square max (10000x10000 / 100 MP) with note about CI-only
-- [ ] Write error case tests:
-  - [ ] Empty input (`&[]`) → meaningful error
-  - [ ] Truncated file (first 100 bytes of valid PNG) → decode error
-  - [ ] Random bytes (`&[u8; 1024]`) → unrecognized format error
-  - [ ] Unsupported output format (`"avif"`) → unsupported format error
-  - [ ] Invalid format string (`"notaformat"`) → unsupported format error
-- [ ] Write pixel fidelity tests:
-  - [ ] PNG→PNG round-trip: pixel-perfect
-  - [ ] BMP→PNG round-trip: pixel-perfect
-  - [ ] JPEG→PNG: dimensions preserved (no pixel-perfect check for lossy source)
-  - [ ] Alpha channel preserved in PNG→PNG, PNG→GIF
-- [ ] Write dimension reading tests:
-  - [ ] Correct dimensions for each format
-  - [ ] Correct dimensions for unusual aspect ratios (wide, tall)
-  - [ ] Error on corrupted/truncated headers
-- [ ] Run `cargo fmt`, `cargo clippy`, `cargo test`
-- [ ] Verify all non-ignored tests pass
+- [x] Create test helper module/function to generate synthetic test images programmatically
+- [x] Generate fixtures: tiny (1x1), small (100x100), medium (1920x1080), large (4000x3000), wide (10000x100), tall (100x10000)
+- [x] Write conversion matrix tests — all 16 input→output combinations:
+  - [x] PNG → JPEG, GIF, BMP
+  - [x] JPEG → PNG, GIF, BMP
+  - [x] WebP → PNG, JPEG, GIF, BMP
+  - [x] GIF → PNG, JPEG, BMP
+  - [x] BMP → PNG, JPEG, GIF
+- [x] Each conversion test verifies: output is valid (re-decodable), output format matches target, dimensions preserved
+- [x] Write size variant tests for key conversion paths across all image sizes
+- [x] Write `#[ignore]` test for square max (10000x10000 / 100 MP) with note about CI-only
+- [x] Write error case tests:
+  - [x] Empty input (`&[]`) → meaningful error
+  - [x] Truncated file (first 100 bytes of valid PNG) → decode error
+  - [x] Random bytes (`&[u8; 1024]`) → unrecognized format error
+  - [x] Unsupported output format (`"avif"`) → unsupported format error
+  - [x] Invalid format string (`"notaformat"`) → unsupported format error
+- [x] Write pixel fidelity tests:
+  - [x] PNG→PNG round-trip: pixel-perfect
+  - [x] BMP→PNG round-trip: pixel-perfect
+  - [x] JPEG→PNG: dimensions preserved (no pixel-perfect check for lossy source)
+  - [x] Alpha channel preserved in PNG→PNG, PNG→GIF
+- [x] Write dimension reading tests:
+  - [x] Correct dimensions for each format
+  - [x] Correct dimensions for unusual aspect ratios (wide, tall)
+  - [x] Error on corrupted/truncated headers
+- [x] Run `cargo fmt`, `cargo clippy`, `cargo test`
+- [x] Verify all non-ignored tests pass
 
 ## Key Details from PLANNING.md
 
 **Conversion matrix:**
 | Input↓ / Output→ | PNG | JPEG | GIF | BMP |
 |-------------------|-----|------|-----|-----|
-| PNG               | -   | T    | T   | T   |
-| JPEG              | T   | -    | T   | T   |
-| WebP              | T   | T    | T   | T   |
-| GIF               | T   | T    | -   | T   |
-| BMP               | T   | T    | T   | -   |
+| PNG | - | T | T | T |
+| JPEG | T | - | T | T |
+| WebP | T | T | T | T |
+| GIF | T | T | - | T |
+| BMP | T | T | T | - |
 
 **Image size variants:**
 | Category | Dimensions | Purpose |

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Image Converter — PNG, JPEG, WebP, GIF, BMP | Online &amp; Private</title>
+  <meta name="description" content="Convert images between PNG, JPEG, WebP, GIF, and BMP instantly in your browser. No upload to any server — 100% private, free, and fast.">
+  <meta name="keywords" content="image converter, png to jpeg, webp to png, convert image online, free image converter">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Free Image Converter — PNG, JPEG, WebP, GIF, BMP">
+  <meta property="og:description" content="Convert images instantly in your browser. No uploads, 100% private.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free Image Converter — PNG, JPEG, WebP, GIF, BMP">
+  <meta name="twitter:description" content="Convert images instantly in your browser. No uploads, 100% private.">
+
+  <!-- Structured Data: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Image Converter",
+    "description": "Convert images between PNG, JPEG, WebP, GIF, and BMP formats. Runs entirely in your browser — no server uploads.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any (browser-based)",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "browserRequirements": "Requires WebAssembly support"
+  }
+  </script>
+
+  <!-- Structured Data: FAQ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I convert a PNG to JPEG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Drop your PNG file onto the converter, select JPEG as the output format, and click Convert. Your converted file downloads instantly — no server upload required."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this image converter safe to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. All conversion happens locally in your browser using WebAssembly. Your images are never uploaded to any server."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What image formats are supported?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can convert between PNG, JPEG, GIF, and BMP. WebP files can be converted to any of these formats."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the maximum file size?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Files up to 200 MB are supported. Images can be up to 100 megapixels."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./main.ts"></script>
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-900">
+
+  <!-- Header -->
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 py-6 text-center">
+      <h1 class="text-3xl font-bold sm:text-4xl">Free Image Converter — Convert PNG, JPEG, WebP, GIF, BMP Online</h1>
+      <p class="mt-2 text-lg text-gray-600">100% private — your images never leave your browser</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- Tool UI -->
+    <section id="converter" class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-6">
+
+      <!-- Error display (hidden by default) -->
+      <div id="error-display" class="hidden rounded-lg bg-red-50 border border-red-200 p-4 text-red-800" role="alert">
+        <p id="error-message"></p>
+      </div>
+
+      <!-- File drop zone -->
+      <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors">
+        <p class="text-gray-500 text-lg">Drag &amp; drop an image here, or click to select</p>
+        <p class="text-gray-400 text-sm mt-1">Supports PNG, JPEG, WebP, GIF, BMP — up to 200 MB</p>
+        <input id="file-input" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp" class="hidden">
+      </div>
+
+      <!-- Source info (hidden until file selected) -->
+      <div id="source-info" class="hidden text-sm text-gray-600">
+        <span id="source-filename" class="font-medium"></span>
+        <span id="source-details" class="ml-2"></span>
+      </div>
+
+      <!-- Format selector + convert button -->
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+        <div class="flex items-center gap-2">
+          <label for="format-select" class="text-sm font-medium text-gray-700">Convert to:</label>
+          <select id="format-select" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            <option value="png">PNG</option>
+            <option value="jpeg">JPEG</option>
+            <option value="gif">GIF</option>
+            <option value="bmp">BMP</option>
+          </select>
+        </div>
+        <button id="convert-btn" disabled class="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
+          Convert
+        </button>
+      </div>
+
+      <!-- Progress bar (hidden by default) -->
+      <div id="progress-container" class="hidden">
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div id="progress-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
+        </div>
+        <p id="progress-text" class="text-xs text-gray-500 mt-1">Converting...</p>
+      </div>
+
+      <!-- Preview + download (hidden by default) -->
+      <div id="result-area" class="hidden space-y-4">
+        <div class="flex flex-col sm:flex-row gap-4 items-start">
+          <div class="flex-1">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">Preview</h3>
+            <img id="preview-image" class="max-w-full max-h-64 rounded border border-gray-200" alt="Converted image preview">
+          </div>
+          <div class="flex-shrink-0 space-y-2">
+            <div id="result-details" class="text-sm text-gray-600"></div>
+            <a id="download-link" class="inline-block rounded-lg bg-green-600 px-6 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors" download>
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- How It Works -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">How It Works</h2>
+      <ol class="list-decimal list-inside space-y-2 text-gray-700">
+        <li><strong>Drop your image</strong> — drag and drop a file or click to browse. We support PNG, JPEG, WebP, GIF, and BMP.</li>
+        <li><strong>Pick a format</strong> — choose your target format from the dropdown.</li>
+        <li><strong>Download instantly</strong> — your converted image is ready in seconds. No server upload, no waiting.</li>
+      </ol>
+    </section>
+
+    <!-- Supported Formats -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">Supported Formats</h2>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <h3 class="font-semibold">PNG</h3>
+          <p class="text-sm text-gray-600 mt-1">Lossless compression with transparency support. Ideal for graphics, logos, and screenshots.</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <h3 class="font-semibold">JPEG</h3>
+          <p class="text-sm text-gray-600 mt-1">Lossy compression optimized for photographs. Produces smaller file sizes for photo-realistic images.</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <h3 class="font-semibold">WebP</h3>
+          <p class="text-sm text-gray-600 mt-1">Modern format by Google supporting both lossy and lossless compression. Supported as an input format.</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <h3 class="font-semibold">GIF</h3>
+          <p class="text-sm text-gray-600 mt-1">Supports animation and simple transparency. Best for short animations and simple graphics.</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <h3 class="font-semibold">BMP</h3>
+          <p class="text-sm text-gray-600 mt-1">Uncompressed bitmap format. Large files but universal compatibility and no quality loss.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mt-12">
+      <h2 class="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+      <div class="space-y-2">
+        <details class="bg-white rounded-lg border border-gray-200 p-4">
+          <summary class="font-medium cursor-pointer">How do I convert a PNG to JPEG?</summary>
+          <p class="mt-2 text-sm text-gray-600">Drop your PNG file onto the converter, select JPEG as the output format, and click Convert. Your converted file downloads instantly — no server upload required.</p>
+        </details>
+        <details class="bg-white rounded-lg border border-gray-200 p-4">
+          <summary class="font-medium cursor-pointer">Is this image converter safe to use?</summary>
+          <p class="mt-2 text-sm text-gray-600">Yes. All conversion happens locally in your browser using WebAssembly. Your images are never uploaded to any server.</p>
+        </details>
+        <details class="bg-white rounded-lg border border-gray-200 p-4">
+          <summary class="font-medium cursor-pointer">What image formats are supported?</summary>
+          <p class="mt-2 text-sm text-gray-600">You can convert between PNG, JPEG, GIF, and BMP. WebP files can be converted to any of these formats.</p>
+        </details>
+        <details class="bg-white rounded-lg border border-gray-200 p-4">
+          <summary class="font-medium cursor-pointer">What is the maximum file size?</summary>
+          <p class="mt-2 text-sm text-gray-600">Files up to 200 MB are supported. Images can be up to 100 megapixels.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Privacy Note -->
+    <section class="mt-12 bg-green-50 border border-green-200 rounded-xl p-6">
+      <h2 class="text-2xl font-bold mb-2">Your Privacy Matters</h2>
+      <p class="text-gray-700">Unlike most online image converters, this tool processes everything <strong>locally in your browser</strong> using WebAssembly. Your images are never uploaded to any server. Nothing leaves your device — ever.</p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-12 border-t border-gray-200 bg-white">
+    <div class="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
+      <p>Powered by Rust + WebAssembly. All processing happens in your browser.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
