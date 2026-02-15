@@ -4,6 +4,10 @@ name = "image-converter"
 version = "0.1.0"
 edition = "2021"               # Rust edition (controls language features and defaults)
 
+# -- WASM-specific metadata --
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false               # Disable wasm-opt — bundled version doesn't support bulk memory ops
+
 # -- Library output types --
 [lib]
 crate-type = [
@@ -14,6 +18,8 @@ crate-type = [
 # -- Runtime dependencies --
 [dependencies]
 wasm-bindgen = "0.2"           # JS<->Rust FFI glue (provides #[wasm_bindgen] attribute)
+serde = { version = "1", features = ["derive"] }  # Serialization framework (derive for #[derive(Serialize)])
+serde-wasm-bindgen = "0.6"     # Converts Rust structs to JsValue via serde
 image = { version = "0.25", default-features = false, features = [
     "png",
     "jpeg",

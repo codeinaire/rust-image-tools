@@ -36,6 +36,35 @@ impl ImageFormat {
         }
     }
 
+    /// Parses a format name string into an `ImageFormat`.
+    ///
+    /// Accepts lowercase names: `"png"`, `"jpeg"`, `"jpg"`, `"webp"`, `"gif"`, `"bmp"`.
+    ///
+    /// Returns an error if the string is not a recognized format name.
+    pub fn from_name(name: &str) -> Result<Self, FormatError> {
+        match name.to_ascii_lowercase().as_str() {
+            "png" => Ok(Self::Png),
+            "jpeg" | "jpg" => Ok(Self::Jpeg),
+            "webp" => Ok(Self::WebP),
+            "gif" => Ok(Self::Gif),
+            "bmp" => Ok(Self::Bmp),
+            _ => Err(FormatError::UnknownName(name.to_owned())),
+        }
+    }
+
+    /// Converts to the `image` crate's format type for encoding.
+    ///
+    /// Returns an error for formats that are decode-only (e.g. WebP).
+    pub fn to_image_format(self) -> Result<image::ImageFormat, FormatError> {
+        match self {
+            Self::Png => Ok(image::ImageFormat::Png),
+            Self::Jpeg => Ok(image::ImageFormat::Jpeg),
+            Self::Gif => Ok(image::ImageFormat::Gif),
+            Self::Bmp => Ok(image::ImageFormat::Bmp),
+            Self::WebP => Err(FormatError::EncodeUnsupported(self)),
+        }
+    }
+
     /// Returns the lowercase string name for this format (e.g. `"png"`, `"jpeg"`).
     pub fn as_str(&self) -> &'static str {
         match self {
@@ -63,6 +92,10 @@ pub enum FormatError {
     Unrecognized,
     /// The format was recognized by the `image` crate but is not in our supported set.
     Unsupported(image::ImageFormat),
+    /// The format name string was not recognized (e.g. `"avif"`, `"notaformat"`).
+    UnknownName(String),
+    /// The format cannot be used as an encode target (e.g. WebP is decode-only).
+    EncodeUnsupported(ImageFormat),
 }
 
 impl fmt::Display for FormatError {
@@ -71,6 +104,10 @@ impl fmt::Display for FormatError {
             Self::EmptyInput => write!(f, "Input is empty — no image data provided"),
             Self::Unrecognized => write!(f, "Unrecognized image format"),
             Self::Unsupported(fmt) => write!(f, "Unsupported image format: {fmt:?}"),
+            Self::UnknownName(name) => write!(f, "Unknown format name: \"{name}\""),
+            Self::EncodeUnsupported(fmt) => {
+                write!(f, "Format \"{fmt}\" is not supported as an output format")
+            }
         }
     }
 }
@@ -200,6 +237,73 @@ mod tests {
         // image::guess_format may still recognize partial PNG signature,
         // so we just verify it doesn't panic
         let _ = result;
+    }
+
+    // --- from_name tests ---
+
+    #[test]
+    fn from_name_png() {
+        assert_eq!(ImageFormat::from_name("png").unwrap(), ImageFormat::Png);
+        assert_eq!(ImageFormat::from_name("PNG").unwrap(), ImageFormat::Png);
+    }
+
+    #[test]
+    fn from_name_jpeg_variants() {
+        assert_eq!(ImageFormat::from_name("jpeg").unwrap(), ImageFormat::Jpeg);
+        assert_eq!(ImageFormat::from_name("jpg").unwrap(), ImageFormat::Jpeg);
+        assert_eq!(ImageFormat::from_name("JPEG").unwrap(), ImageFormat::Jpeg);
+    }
+
+    #[test]
+    fn from_name_webp() {
+        assert_eq!(ImageFormat::from_name("webp").unwrap(), ImageFormat::WebP);
+    }
+
+    #[test]
+    fn from_name_gif() {
+        assert_eq!(ImageFormat::from_name("gif").unwrap(), ImageFormat::Gif);
+    }
+
+    #[test]
+    fn from_name_bmp() {
+        assert_eq!(ImageFormat::from_name("bmp").unwrap(), ImageFormat::Bmp);
+    }
+
+    #[test]
+    fn from_name_unknown() {
+        let result = ImageFormat::from_name("avif");
+        assert!(matches!(result, Err(FormatError::UnknownName(_))));
+
+        let result = ImageFormat::from_name("notaformat");
+        assert!(matches!(result, Err(FormatError::UnknownName(_))));
+    }
+
+    // --- to_image_format tests ---
+
+    #[test]
+    fn to_image_format_encodable() {
+        assert_eq!(
+            ImageFormat::Png.to_image_format().unwrap(),
+            image::ImageFormat::Png
+        );
+        assert_eq!(
+            ImageFormat::Jpeg.to_image_format().unwrap(),
+            image::ImageFormat::Jpeg
+        );
+        assert_eq!(
+            ImageFormat::Gif.to_image_format().unwrap(),
+            image::ImageFormat::Gif
+        );
+        assert_eq!(
+            ImageFormat::Bmp.to_image_format().unwrap(),
+            image::ImageFormat::Bmp
+        );
+    }
+
+    #[test]
+    fn to_image_format_webp_unsupported() {
+        let result = ImageFormat::WebP.to_image_format();
+        assert!(matches!(result, Err(FormatError::EncodeUnsupported(_))));
     }
 
     // --- Display ---

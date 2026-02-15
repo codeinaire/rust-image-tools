@@ -1,7 +1,7 @@
 # Plan: Core Conversion Logic & Dimension Reading
 
 **Date:** 2026-02-14
-**Status:** Draft
+**Status:** Done
 **PR Scope:** Medium — core image processing functions
 **Depends On:** Plan 01 (crate scaffold + format detection)
 
@@ -30,19 +30,19 @@ Memory note: drop the input buffer explicitly after decoding to free memory befo
 
 ## Todo
 
-- [ ] Create `src/convert.rs` with internal conversion logic
-- [ ] Implement decode → encode pipeline with explicit memory management (`drop(input)` after decode)
-- [ ] Implement dimension reading from image headers (without full decode)
-- [ ] Add `convert_image()` wasm_bindgen export to `lib.rs`
-- [ ] Add `get_dimensions()` wasm_bindgen export to `lib.rs` (returns `{ width, height }` via `JsValue`)
-- [ ] Add `serde` and `serde-wasm-bindgen` dependencies if needed for `JsValue` serialization
-- [ ] Handle unsupported target format with clear error message
-- [ ] Add doc comments to all public functions
-- [ ] Write unit tests: PNG→JPEG, JPEG→PNG basic round-trips
-- [ ] Write unit tests: dimension reading for each format
-- [ ] Write unit tests: error on unsupported output format (e.g., `"avif"`, `"notaformat"`)
-- [ ] Run `cargo fmt`, `cargo clippy`, `cargo test`
-- [ ] Verify `wasm-pack build` still compiles
+- [x] Create `src/convert.rs` with internal conversion logic
+- [x] Implement decode → encode pipeline with explicit memory management (`drop(input)` after decode)
+- [x] Implement dimension reading from image headers (without full decode)
+- [x] Add `convert_image()` wasm_bindgen export to `lib.rs`
+- [x] Add `get_dimensions()` wasm_bindgen export to `lib.rs` (returns `{ width, height }` via `JsValue`)
+- [x] Add `serde` and `serde-wasm-bindgen` dependencies if needed for `JsValue` serialization
+- [x] Handle unsupported target format with clear error message
+- [x] Add doc comments to all public functions
+- [x] Write unit tests: PNG→JPEG, JPEG→PNG basic round-trips
+- [x] Write unit tests: dimension reading for each format
+- [x] Write unit tests: error on unsupported output format (e.g., `"avif"`, `"notaformat"`)
+- [x] Run `cargo fmt`, `cargo clippy`, `cargo test`
+- [x] Verify `wasm-pack build` still compiles
 
 ## Key Details from PLANNING.md
 
