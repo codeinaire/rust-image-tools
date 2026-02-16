@@ -44,6 +44,23 @@ function formatFileSize(bytes: number): string {
 
 const GIF_SLOW_THRESHOLD_MP = 2
 
+// Format-pair timing rates for estimated progress bar.
+// estimated_ms = base_ms + (megapixels * ms_per_mp)
+type TimingRate = { base: number; perMp: number }
+const TIMING_RATES: Record<string, TimingRate> = {
+  'jpeg->png': { base: 20, perMp: 40 },
+  'png->jpeg': { base: 20, perMp: 25 },
+  'webp->png': { base: 20, perMp: 35 },
+  'bmp->jpeg': { base: 20, perMp: 25 },
+}
+const TIMING_FALLBACK: TimingRate = { base: 30, perMp: 50 }
+
+function estimateConversionMs(sourceFormat: string, targetFormat: string, megapixels: number): number {
+  const key = `${sourceFormat}->${targetFormat}`
+  const rate = TIMING_RATES[key] ?? TIMING_FALLBACK
+  return rate.base + megapixels * rate.perMp
+}
+
 function updateGifWarning(): void {
   const showWarning =
     formatSelect.value === 'gif' && currentBytes !== null && currentMegapixels >= GIF_SLOW_THRESHOLD_MP
@@ -73,6 +90,7 @@ function resetResult(): void {
   resultDetails.textContent = ''
   downloadLink.removeAttribute('href')
   progressContainer.classList.add('hidden')
+  progressBar.style.transition = 'width 0ms ease-out'
   progressBar.style.width = '0%'
 }
 
@@ -141,11 +159,19 @@ async function handleConvert(): Promise<void> {
   // Disable button, show progress
   convertBtn.disabled = true
   progressContainer.classList.remove('hidden')
+  progressBar.style.transition = 'width 0ms ease-out'
   progressBar.style.width = '0%'
   progressText.textContent = 'Converting...'
 
-  // Animate progress to 90% over estimated time
+  // Animate progress to 90% over estimated conversion time
+  const estimatedMs = estimateConversionMs(
+    currentSourceFormat ?? '',
+    targetFormat,
+    currentMegapixels,
+  )
+  const animationMs = Math.round(estimatedMs * 0.9)
   requestAnimationFrame(() => {
+    progressBar.style.transition = `width ${animationMs}ms ease-out`
     progressBar.style.width = '90%'
   })
 
@@ -155,7 +181,8 @@ async function handleConvert(): Promise<void> {
     const result = await converter.convertImage(currentBytes, targetFormat)
     const elapsedMs = Math.round(performance.now() - startTime)
 
-    // Snap progress to 100%
+    // Snap progress to 100% with a fast transition
+    progressBar.style.transition = 'width 200ms ease-out'
     progressBar.style.width = '100%'
     progressText.textContent = 'Done!'
 
@@ -189,6 +216,8 @@ async function handleConvert(): Promise<void> {
       progressContainer.classList.add('hidden')
     }, 500)
   } catch (e) {
+    progressBar.style.transition = 'width 0ms ease-out'
+    progressBar.style.width = '0%'
     progressContainer.classList.add('hidden')
     const message = e instanceof Error ? e.message : String(e)
     showError(`Conversion failed: ${message}`)
