@@ -1,7 +1,7 @@
 # Plan: UI Implementation
 
 **Date:** 2026-02-14
-**Status:** Draft
+**Status:** Done
 **PR Scope:** Medium-Large — full interactive UI
 **Depends On:** Plan 05 (Web Worker + WASM integration)
 
@@ -40,41 +40,50 @@ Blob URLs are created for preview/download and revoked when no longer needed to 
 
 ## Todo
 
-- [ ] Create `web/src/ui.ts`
-- [ ] Implement file input — click-to-browse:
-  - [ ] Wire `<input type="file">` with accept attribute for supported image types
-  - [ ] Style the file input (hidden input + visible drop zone)
-- [ ] Implement drag-and-drop:
-  - [ ] `dragover` event — prevent default, add visual highlight
-  - [ ] `dragleave` event — remove visual highlight
-  - [ ] `drop` event — extract file, remove highlight
-- [ ] On file selected/dropped:
-  - [ ] Read file as `ArrayBuffer` using `FileReader` or `file.arrayBuffer()`
-  - [ ] Convert to `Uint8Array`
-  - [ ] Call Worker `detect_format()` — display detected format
-  - [ ] Call Worker `get_dimensions()` — display width x height
-  - [ ] Display file size (human-readable, e.g., "4.2 MB")
-- [ ] Implement target format selector:
-  - [ ] Dropdown with options: PNG, JPEG, GIF, BMP
-  - [ ] Pre-select a sensible default (e.g., PNG, or auto-pick based on source format)
-- [ ] Implement convert button:
-  - [ ] On click: send bytes + target format to Worker
-  - [ ] Disable button and show loading state during conversion
-  - [ ] Re-enable on completion or error
-- [ ] On conversion success:
-  - [ ] Create `Blob` from result bytes with correct MIME type
-  - [ ] Create `URL.createObjectURL()` for preview
-  - [ ] Show `<img>` preview with the blob URL
-  - [ ] Show output file size
-  - [ ] Show size comparison (e.g., "4.2 MB → 15.8 MB (+276%)")
-  - [ ] Show download button
-- [ ] Implement download:
-  - [ ] Create `<a>` element with `href` = blob URL, `download` = filename with correct extension
-  - [ ] Programmatic click to trigger download
-- [ ] Implement Blob URL cleanup:
-  - [ ] Revoke previous blob URLs when new conversion starts or on file change
-- [ ] Wire UI initialization in `main.ts`
+- [x] Create `web/src/ui.ts`
+- [x] Implement file input — click-to-browse:
+  - [x] Wire `<input type="file">` with accept attribute for supported image types
+  - [x] Style the file input (hidden input + visible drop zone)
+- [x] Implement drag-and-drop:
+  - [x] `dragover` event — prevent default, add visual highlight
+  - [x] `dragleave` event — remove visual highlight
+  - [x] `drop` event — extract file, remove highlight
+- [x] On file selected/dropped:
+  - [x] Read file as `ArrayBuffer` using `file.arrayBuffer()`
+  - [x] Convert to `Uint8Array`
+  - [x] Call Worker `detect_format()` — display detected format
+  - [x] Call Worker `get_dimensions()` — display width x height
+  - [x] Display file size (human-readable, e.g., "4.2 MB")
+- [x] Implement target format selector:
+  - [x] Dropdown with options: PNG, JPEG, GIF, BMP
+  - [x] Pre-select a sensible default (PNG is default in HTML)
+- [x] Implement convert button:
+  - [x] On click: send bytes + target format to Worker
+  - [x] Disable button and show loading state during conversion
+  - [x] Re-enable on completion or error
+- [x] On conversion success:
+  - [x] Create `Blob` from result bytes with correct MIME type
+  - [x] Create `URL.createObjectURL()` for preview
+  - [x] Show `<img>` preview with the blob URL
+  - [x] Show output file size
+  - [x] Show size comparison (e.g., "4.2 MB → 15.8 MB (+276%)")
+  - [x] Show download button
+- [x] Implement download:
+  - [x] `<a>` element with `href` = blob URL, `download` = filename with correct extension
+- [x] Implement Blob URL cleanup:
+  - [x] Revoke previous blob URLs when new conversion starts or on file change
+- [x] Wire UI initialization in `main.ts`
 - [ ] Test full flow in browser: select file → see info → pick format → convert → preview → download
+
+## Implementation Notes
+
+- `ui.ts` exports a single `initUI()` function called from `main.ts`
+- DOM elements are cached once during `initUI()` to avoid repeated lookups
+- `detect_format` and `get_dimensions` are called in parallel via `Promise.all` for faster file analysis
+- File size validation (200 MB) happens before reading bytes to Worker; dimension validation (100 MP) happens after `get_dimensions` returns
+- Progress bar animates to 90% during conversion and snaps to 100% on completion (estimated progress pattern from PLANNING.md)
+- Circular import between `main.ts` ↔ `ui.ts` is safe because `ui.ts` only accesses `converter` inside event handler functions, not at module evaluation time
+- `script type="module"` is deferred by default, so `initUI()` runs after DOM is parsed
 
 ## Key Details from PLANNING.md
 

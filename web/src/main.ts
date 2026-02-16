@@ -2,6 +2,7 @@ import './styles.css'
 
 import { MessageType } from './worker-types'
 import type { WorkerRequest, WorkerResponse, ImageDimensions } from './worker-types'
+import { initUI } from './ui'
 
 type PendingRequest = {
   resolve: (value: WorkerResponse) => void
@@ -133,3 +134,6 @@ converter
   .catch((err) => {
     console.error('[image-converter] Failed to initialize:', err)
   })
+
+// Initialize UI once DOM is ready
+initUI()

@@ -811,13 +811,13 @@ Each page is the same tool but with format-specific H1, meta tags, and pre-selec
 
 ## MVP Feature Scope
 
-- [ ] File input (click to browse + drag-and-drop)
-- [ ] Auto-detect source format and display it
-- [ ] Target format selector (PNG, JPEG, GIF, BMP)
-- [ ] Convert button
-- [ ] Preview of converted image
-- [ ] Download converted image
-- [ ] Display image dimensions and file size (before/after)
+- [x] File input (click to browse + drag-and-drop)
+- [x] Auto-detect source format and display it
+- [x] Target format selector (PNG, JPEG, GIF, BMP)
+- [x] Convert button
+- [x] Preview of converted image
+- [x] Download converted image
+- [x] Display image dimensions and file size (before/after)
 - [ ] Estimated progress bar during conversion (see below)
 - [ ] Error handling with user-friendly messages
 - [ ] File size validation (200 MB limit)
