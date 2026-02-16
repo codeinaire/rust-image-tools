@@ -47,6 +47,159 @@ Most online image converters upload your files to a server. This tool runs entir
 - **Web Worker** — runs WASM off the main thread so the UI stays responsive
 - **TypeScript frontend** — vanilla TS with Tailwind CSS, bundled by Parcel
 
+### Worker–Main Thread Communication
+
+All WASM operations run inside a Web Worker. The main thread (`main.ts`) communicates with the Worker (`worker.ts`) via a structured message protocol using `postMessage`. Each request carries a numeric ID so the main thread can match responses back to the correct pending Promise.
+
+#### Initialization
+
+```
+  main.ts                              worker.ts
+    │                                     │
+    │  new Worker()                       │
+    │────────────────────────────────────▶│
+    │                                     │  await init()  ──▶  WASM loads
+    │                                     │
+    │      { type: Init, success, initMs }│
+    │◀────────────────────────────────────│
+    │                                     │
+    │  resolveInit(initMs)                │
+    │  ready promise fulfilled            │
+    │                                     │
+```
+
+The Worker is created eagerly on page load. It calls the wasm-pack `init()` function immediately and posts back the initialization result with timing.
+
+#### Format Detection
+
+```
+  caller             main.ts                          worker.ts
+    │                  │                                 │
+    │  detectFormat()  │                                 │
+    │─────────────────▶│                                 │
+    │                  │  await ready                    │
+    │                  │  id = nextRequestId++           │
+    │                  │  store {resolve, reject} in map │
+    │                  │                                 │
+    │                  │  postMessage({                  │
+    │                  │    type: DetectFormat,           │
+    │                  │    id,                          │
+    │                  │    data: Uint8Array              │
+    │                  │  })                             │
+    │                  │────────────────────────────────▶│
+    │                  │                     detect_format(data)
+    │                  │                                 │
+    │                  │  { type: DetectFormat,           │
+    │                  │    id, success, format }        │
+    │                  │◀────────────────────────────────│
+    │                  │                                 │
+    │                  │  pendingRequests.get(id)        │
+    │                  │  resolve(response)              │
+    │  ◀── "png" ──────│                                 │
+    │                  │                                 │
+```
+
+#### Image Conversion
+
+```
+  caller             main.ts                          worker.ts
+    │                  │                                 │
+    │  convertImage()  │                                 │
+    │─────────────────▶│                                 │
+    │                  │  await ready                    │
+    │                  │  id = nextRequestId++           │
+    │                  │  store {resolve, reject} in map │
+    │                  │                                 │
+    │                  │  postMessage({                  │
+    │                  │    type: ConvertImage,           │
+    │                  │    id,                          │
+    │                  │    data: Uint8Array,             │
+    │                  │    targetFormat: "jpeg"          │
+    │                  │  })                             │
+    │                  │──────── copy ─────────────────▶│
+    │                  │                     convert_image(data, fmt)
+    │                  │                                 │
+    │                  │  { type: ConvertImage,           │
+    │                  │    id, success,                 │
+    │                  │    data: Uint8Array }            │
+    │                  │◀─── transfer (zero-copy) ───────│
+    │                  │     [result.buffer]              │
+    │                  │                                 │
+    │                  │  pendingRequests.get(id)        │
+    │                  │  resolve(response)              │
+    │  ◀── Uint8Array ─│                                 │
+    │                  │                                 │
+```
+
+Input data is **copied** to the Worker (default `postMessage` behavior) so the caller retains the original bytes. Output data is **transferred** back via `[result.buffer]` (zero-copy, O(1) regardless of size).
+
+#### Dimension Reading
+
+```
+  caller             main.ts                          worker.ts
+    │                  │                                 │
+    │  getDimensions() │                                 │
+    │─────────────────▶│                                 │
+    │                  │  await ready                    │
+    │                  │  id = nextRequestId++           │
+    │                  │  store {resolve, reject} in map │
+    │                  │                                 │
+    │                  │  postMessage({                  │
+    │                  │    type: GetDimensions,          │
+    │                  │    id,                          │
+    │                  │    data: Uint8Array              │
+    │                  │  })                             │
+    │                  │────────────────────────────────▶│
+    │                  │                     get_dimensions(data)
+    │                  │                                 │
+    │                  │  { type: GetDimensions,          │
+    │                  │    id, success,                 │
+    │                  │    width, height }              │
+    │                  │◀────────────────────────────────│
+    │                  │                                 │
+    │                  │  pendingRequests.get(id)        │
+    │                  │  resolve(response)              │
+    │  ◀── {w, h} ─────│                                 │
+    │                  │                                 │
+```
+
+#### Error Handling
+
+```
+  caller             main.ts                          worker.ts
+    │                  │                                 │
+    │  convertImage()  │                                 │
+    │─────────────────▶│                                 │
+    │                  │  postMessage(request)           │
+    │                  │────────────────────────────────▶│
+    │                  │                     convert_image() throws
+    │                  │                                 │
+    │                  │  { type: Error,                  │
+    │                  │    id,                          │
+    │                  │    error: "Failed to decode..." }│
+    │                  │◀────────────────────────────────│
+    │                  │                                 │
+    │                  │  pendingRequests.get(id)        │
+    │                  │  reject(new Error(...))         │
+    │  ◀── throws ─────│                                 │
+    │                  │                                 │
+```
+
+If the Worker itself crashes, the `onerror` handler rejects the init promise and all pending requests:
+
+```
+  caller             main.ts                          worker.ts
+    │                  │                                 │
+    │  (pending ops)   │                                 💥
+    │                  │◀──── onerror ───────────────────│
+    │                  │                                 │
+    │                  │  rejectInit(error)              │
+    │                  │  for each pending request:      │
+    │                  │    reject("Worker crashed")     │
+    │  ◀── throws ─────│                                 │
+    │                  │                                 │
+```
+
 ## How to Use
 
 1. Open the app in your browser
