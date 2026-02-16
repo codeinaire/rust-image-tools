@@ -5,8 +5,10 @@
   "description": "Frontend for Rust + WASM image converter",
   "source": "src/index.html",
   "scripts": {
+    "build:wasm": "wasm-pack build ../crates/image-converter --target web --release",
     "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html"
+    "dev:full": "npm run build:wasm && parcel src/index.html",
+    "build": "npm run build:wasm && parcel build src/index.html"
   },
   "devDependencies": {
     "@parcel/packager-raw-url": "^2.16.4",
