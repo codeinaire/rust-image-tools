@@ -1,20 +1,28 @@
+export enum MessageType {
+  Init = "init",
+  DetectFormat = "detect_format",
+  ConvertImage = "convert_image",
+  GetDimensions = "get_dimensions",
+  Error = "error",
+}
+
 // Request types (main thread → worker)
 
 interface DetectFormatRequest {
-  type: "detect_format";
+  type: MessageType.DetectFormat;
   id: number;
   data: Uint8Array;
 }
 
 interface ConvertImageRequest {
-  type: "convert_image";
+  type: MessageType.ConvertImage;
   id: number;
   data: Uint8Array;
   targetFormat: string;
 }
 
 interface GetDimensionsRequest {
-  type: "get_dimensions";
+  type: MessageType.GetDimensions;
   id: number;
   data: Uint8Array;
 }
@@ -27,33 +35,33 @@ export type WorkerRequest =
 // Response types (worker → main thread)
 
 interface InitSuccessResponse {
-  type: "init";
+  type: MessageType.Init;
   success: true;
   initMs: number;
 }
 
 interface InitErrorResponse {
-  type: "init";
+  type: MessageType.Init;
   success: false;
   error: string;
 }
 
 interface DetectFormatSuccessResponse {
-  type: "detect_format";
+  type: MessageType.DetectFormat;
   id: number;
   success: true;
   format: string;
 }
 
 interface ConvertImageSuccessResponse {
-  type: "convert_image";
+  type: MessageType.ConvertImage;
   id: number;
   success: true;
   data: Uint8Array;
 }
 
 interface GetDimensionsSuccessResponse {
-  type: "get_dimensions";
+  type: MessageType.GetDimensions;
   id: number;
   success: true;
   width: number;
@@ -61,7 +69,7 @@ interface GetDimensionsSuccessResponse {
 }
 
 interface ErrorResponse {
-  type: "error";
+  type: MessageType.Error;
   id: number;
   error: string;
 }

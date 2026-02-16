@@ -7,6 +7,7 @@ import init, {
   get_dimensions,
 } from "../../crates/image-converter/pkg/image_converter.js";
 
+import { MessageType } from "./worker-types";
 import type { WorkerRequest, WorkerResponse } from "./worker-types";
 
 async function initialize(): Promise<void> {
@@ -14,11 +15,11 @@ async function initialize(): Promise<void> {
   try {
     await init();
     const initMs = Math.round(performance.now() - start);
-    const response: WorkerResponse = { type: "init", success: true, initMs };
+    const response: WorkerResponse = { type: MessageType.Init, success: true, initMs };
     postMessage(response);
   } catch (e) {
     const error = e instanceof Error ? e.message : String(e);
-    const response: WorkerResponse = { type: "init", success: false, error };
+    const response: WorkerResponse = { type: MessageType.Init, success: false, error };
     postMessage(response);
   }
 }
@@ -27,13 +28,13 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
   const request = event.data;
 
   switch (request.type) {
-    case "detect_format":
+    case MessageType.DetectFormat:
       handleDetectFormat(request.id, request.data);
       break;
-    case "convert_image":
+    case MessageType.ConvertImage:
       handleConvertImage(request.id, request.data, request.targetFormat);
       break;
-    case "get_dimensions":
+    case MessageType.GetDimensions:
       handleGetDimensions(request.id, request.data);
       break;
   }
@@ -43,7 +44,7 @@ function handleDetectFormat(id: number, data: Uint8Array): void {
   try {
     const format = detect_format(data);
     const response: WorkerResponse = {
-      type: "detect_format",
+      type: MessageType.DetectFormat,
       id,
       success: true,
       format,
@@ -62,7 +63,7 @@ function handleConvertImage(
   try {
     const result = convert_image(data, targetFormat);
     const response: WorkerResponse = {
-      type: "convert_image",
+      type: MessageType.ConvertImage,
       id,
       success: true,
       data: result,
@@ -78,7 +79,7 @@ function handleGetDimensions(id: number, data: Uint8Array): void {
   try {
     const dims = get_dimensions(data) as { width: number; height: number };
     const response: WorkerResponse = {
-      type: "get_dimensions",
+      type: MessageType.GetDimensions,
       id,
       success: true,
       width: dims.width,
@@ -92,7 +93,7 @@ function handleGetDimensions(id: number, data: Uint8Array): void {
 
 function postError(id: number, e: unknown): void {
   const error = e instanceof Error ? e.message : String(e);
-  const response: WorkerResponse = { type: "error", id, error };
+  const response: WorkerResponse = { type: MessageType.Error, id, error };
   postMessage(response);
 }
 
