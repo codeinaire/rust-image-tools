@@ -1,7 +1,7 @@
 # Plan: SEO Optimization
 
 **Date:** 2026-02-14
-**Status:** Draft
+**Status:** Done
 **PR Scope:** Medium — meta tags, structured data, on-page content, static assets
 **Depends On:** Plan 04 (frontend scaffold + HTML structure)
 
@@ -26,42 +26,50 @@ Core Web Vitals are addressed by: static HTML content (fast LCP), fixed-size lay
    - Supported Formats (brief descriptions)
    - FAQ (matching FAQ schema, rendered as `<details>/<summary>`)
    - Privacy note
-6. Create `web/public/robots.txt`
-7. Create `web/public/sitemap.xml`
+6. Create `web/static/robots.txt`
+7. Create `web/static/sitemap.xml`
 8. Add favicon placeholder and apple-touch-icon reference
 9. Ensure WASM loads lazily (deferred, doesn't block page render)
 
 ## Todo
 
-- [ ] Add `<head>` meta tags to `index.html`:
-  - [ ] `<title>Free Image Converter — PNG, JPEG, WebP, GIF, BMP | Online & Private</title>`
-  - [ ] `<meta name="description" content="...">`
-  - [ ] `<meta name="keywords" content="...">`
-  - [ ] `<link rel="canonical" href="https://[domain]/">`
-  - [ ] `<meta name="robots" content="index, follow">`
-- [ ] Add Open Graph meta tags:
-  - [ ] `og:title`, `og:description`, `og:type`, `og:url`, `og:image`
-- [ ] Add Twitter Card meta tags:
-  - [ ] `twitter:card`, `twitter:title`, `twitter:description`
-- [ ] Add JSON-LD WebApplication schema:
-  - [ ] `@type: WebApplication`, name, description, URL, category, offers (free), browser requirements
-- [ ] Add JSON-LD FAQ schema:
-  - [ ] "How do I convert a PNG to JPEG?"
-  - [ ] "Is this image converter safe to use?"
-  - [ ] "What image formats are supported?"
-  - [ ] "What is the maximum file size?"
-- [ ] Add on-page content sections:
-  - [ ] "How It Works" — 3 steps: drop file, pick format, download
-  - [ ] "Supported Formats" — brief description of PNG, JPEG, WebP, GIF, BMP
-  - [ ] FAQ section — rendered as `<details>/<summary>` elements (matches FAQ schema)
-  - [ ] Privacy note — "Your images never leave your browser" prominently displayed
-- [ ] Create `web/public/robots.txt` (allow all crawlers)
-- [ ] Create `web/public/sitemap.xml` (single page for now)
-- [ ] Add favicon references in `<head>` (`favicon.ico`, `apple-touch-icon.png`)
-- [ ] Create placeholder `og-image.png` (1200x630) or add a TODO for design
-- [ ] Verify WASM script tag uses `defer` or is loaded lazily (doesn't block render)
-- [ ] Verify page renders meaningful content with JavaScript disabled
-- [ ] Validate structured data with Google's Rich Results Test (manual check)
+- [x] Add `<head>` meta tags to `index.html`:
+  - [x] `<title>Free Image Converter — PNG, JPEG, WebP, GIF, BMP | Online & Private</title>`
+  - [x] `<meta name="description" content="...">`
+  - [x] `<meta name="keywords" content="...">`
+  - [x] `<link rel="canonical" href="https://[domain]/">`
+  - [x] `<meta name="robots" content="index, follow">`
+- [x] Add Open Graph meta tags:
+  - [x] `og:title`, `og:description`, `og:type`, `og:url`, `og:image`
+- [x] Add Twitter Card meta tags:
+  - [x] `twitter:card`, `twitter:title`, `twitter:description`
+- [x] Add JSON-LD WebApplication schema:
+  - [x] `@type: WebApplication`, name, description, URL, category, offers (free), browser requirements
+- [x] Add JSON-LD FAQ schema:
+  - [x] "How do I convert a PNG to JPEG?"
+  - [x] "Is this image converter safe to use?"
+  - [x] "What image formats are supported?"
+  - [x] "What is the maximum file size?"
+- [x] Add on-page content sections:
+  - [x] "How It Works" — 3 steps: drop file, pick format, download
+  - [x] "Supported Formats" — brief description of PNG, JPEG, WebP, GIF, BMP
+  - [x] FAQ section — rendered as `<details>/<summary>` elements (matches FAQ schema)
+  - [x] Privacy note — "Your images never leave your browser" prominently displayed
+- [x] Create `web/static/robots.txt` (allow all crawlers)
+- [x] Create `web/static/sitemap.xml` (single page for now)
+- [x] Add favicon TODO comment in `<head>` (actual assets need design)
+- [x] `og-image.png` — TODO for design (referenced in OG meta tag with placeholder domain)
+- [x] Verify WASM script tag uses `defer` or is loaded lazily (doesn't block render) — `<script type="module">` is deferred by default
+- [x] Verify page renders meaningful content with JavaScript disabled — all content is static HTML
+- [ ] Validate structured data with Google's Rich Results Test (manual check — do when deployed)
+
+## Implementation Notes
+
+- Static files (`robots.txt`, `sitemap.xml`) are in `web/static/` and copied to `dist/` via `parcel-reporter-static-files-copy`
+- `.parcelrc` created to enable the static files copy reporter
+- Domain placeholder `[domain]` used in canonical URL, OG URL, OG image, robots.txt sitemap ref, and sitemap.xml — replace when domain is chosen
+- Favicon and `og-image.png` assets need design — TODO comments in place
+- Most on-page content (How It Works, Supported Formats, FAQ, Privacy) was added in Plan 06 (UI implementation); this plan added the remaining meta tags and static files
 
 ## Key Details from PLANNING.md
 

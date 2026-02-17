@@ -15,6 +15,7 @@
     "@parcel/transformer-jsonld": "^2.16.4",
     "@tailwindcss/postcss": "^4",
     "parcel": "^2",
+    "parcel-reporter-static-files-copy": "^1.5.3",
     "postcss": "^8",
     "tailwindcss": "^4",
     "typescript": "^5"
