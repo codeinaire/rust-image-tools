@@ -824,7 +824,7 @@ Each page is the same tool but with format-specific H1, meta tags, and pre-selec
 - [x] Pixel dimension validation (100 MP limit)
 - [ ] Rust unit tests (conversion matrix, format detection, error cases)
 - [ ] Integration tests (Worker lifecycle, end-to-end conversion, validation guards)
-- [ ] PostHog analytics (7 events, env-based API key, disabled in dev)
+- [x] PostHog analytics (7 events, env-based API key, disabled in dev)
 - [x] SEO: meta tags, Open Graph, JSON-LD (WebApplication + FAQ schemas)
 - [x] SEO: on-page content (H1, how it works, supported formats, FAQ, privacy note)
 - [x] SEO: robots.txt, sitemap.xml, favicon, og-image

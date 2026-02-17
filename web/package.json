@@ -19,5 +19,8 @@
     "postcss": "^8",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "dependencies": {
+    "posthog-js": "^1.347.2"
   }
 }
