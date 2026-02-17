@@ -3,6 +3,7 @@ import './styles.css'
 import { MessageType } from './worker-types'
 import type { WorkerRequest, WorkerResponse, ImageDimensions } from './worker-types'
 import { initUI } from './ui'
+import { initAnalytics, trackAppLoaded } from './analytics'
 
 type PendingRequest = {
   resolve: (value: WorkerResponse) => void
@@ -123,6 +124,9 @@ class ImageConverter {
   }
 }
 
+// Initialize analytics before WASM (no-op without POSTHOG_KEY)
+initAnalytics()
+
 // Single instance, initialized eagerly on page load
 export const converter = new ImageConverter()
 
@@ -130,6 +134,7 @@ converter
   .ensureReady()
   .then((initMs) => {
     console.log(`[image-converter] Ready (WASM init: ${initMs}ms)`)
+    trackAppLoaded({ wasm_init_ms: initMs })
   })
   .catch((err) => {
     console.error('[image-converter] Failed to initialize:', err)

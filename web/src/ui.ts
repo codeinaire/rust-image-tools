@@ -1,4 +1,12 @@
 import { converter } from './main'
+import {
+  trackImageSelected,
+  trackConversionStarted,
+  trackConversionCompleted,
+  trackConversionFailed,
+  trackValidationRejected,
+  trackDownloadClicked,
+} from './analytics'
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
@@ -35,6 +43,8 @@ let currentBytes: Uint8Array | null = null
 let currentSourceFormat: string | null = null
 let currentBlobUrl: string | null = null
 let currentMegapixels = 0
+let currentWidth = 0
+let currentHeight = 0
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -94,12 +104,13 @@ function resetResult(): void {
   progressBar.style.width = '0%'
 }
 
-async function handleFile(file: File): Promise<void> {
+async function handleFile(file: File, inputMethod: 'file_picker' | 'drag_drop'): Promise<void> {
   hideError()
   resetResult()
 
   // Validate file size
   if (file.size > MAX_FILE_SIZE) {
+    trackValidationRejected({ reason: 'file_too_large', file_size_bytes: file.size, megapixels: null })
     showError(`File too large (${formatFileSize(file.size)}). Maximum allowed: ${formatFileSize(MAX_FILE_SIZE)}.`)
     return
   }
@@ -122,7 +133,10 @@ async function handleFile(file: File): Promise<void> {
     // Validate dimensions
     const megapixels = (dimensions.width * dimensions.height) / 1_000_000
     currentMegapixels = megapixels
+    currentWidth = dimensions.width
+    currentHeight = dimensions.height
     if (megapixels > MAX_MEGAPIXELS) {
+      trackValidationRejected({ reason: 'dimensions_too_large', file_size_bytes: file.size, megapixels })
       showError(
         `Image too large (${dimensions.width}x${dimensions.height}, ${megapixels.toFixed(1)} MP). Maximum allowed: ${MAX_MEGAPIXELS} MP.`
       )
@@ -131,6 +145,15 @@ async function handleFile(file: File): Promise<void> {
       currentSourceFormat = null
       return
     }
+
+    trackImageSelected({
+      source_format: format,
+      file_size_bytes: file.size,
+      width: dimensions.width,
+      height: dimensions.height,
+      megapixels,
+      input_method: inputMethod,
+    })
 
     // Display source info
     sourceFilename.textContent = file.name
@@ -175,6 +198,13 @@ async function handleConvert(): Promise<void> {
     progressBar.style.width = '90%'
   })
 
+  trackConversionStarted({
+    source_format: currentSourceFormat ?? '',
+    target_format: targetFormat,
+    file_size_bytes: currentFile.size,
+    megapixels: currentMegapixels,
+  })
+
   const startTime = performance.now()
 
   try {
@@ -200,6 +230,7 @@ async function handleConvert(): Promise<void> {
     const extension = targetFormat === 'jpeg' ? 'jpg' : targetFormat
     downloadLink.href = currentBlobUrl
     downloadLink.download = `${baseName}.${extension}`
+    downloadLink.setAttribute('data-output-size', String(result.byteLength))
 
     // Show result details
     const inputSize = currentFile.size
@@ -211,6 +242,19 @@ async function handleConvert(): Promise<void> {
 
     resultArea.classList.remove('hidden')
 
+    trackConversionCompleted({
+      source_format: currentSourceFormat ?? '',
+      target_format: targetFormat,
+      input_size_bytes: inputSize,
+      output_size_bytes: outputSize,
+      size_change_pct: changePercent,
+      width: currentWidth,
+      height: currentHeight,
+      megapixels: currentMegapixels,
+      conversion_ms: elapsedMs,
+      pipeline_total_ms: elapsedMs,
+    })
+
     // Hide progress after brief pause
     setTimeout(() => {
       progressContainer.classList.add('hidden')
@@ -220,6 +264,19 @@ async function handleConvert(): Promise<void> {
     progressBar.style.width = '0%'
     progressContainer.classList.add('hidden')
     const message = e instanceof Error ? e.message : String(e)
+
+    const errorType = message.includes('decode') ? 'decode_error'
+      : message.includes('encode') ? 'encode_error'
+      : message.includes('unsupported') || message.includes('Unsupported') ? 'unsupported_format'
+      : 'unknown'
+    trackConversionFailed({
+      source_format: currentSourceFormat,
+      target_format: targetFormat,
+      file_size_bytes: currentFile?.size ?? 0,
+      error_type: errorType,
+      error_message: message,
+    })
+
     showError(`Conversion failed: ${message}`)
   } finally {
     convertBtn.disabled = false
@@ -253,7 +310,7 @@ export function initUI(): void {
   // File input change
   fileInput.addEventListener('change', () => {
     const file = fileInput.files?.[0]
-    if (file) handleFile(file)
+    if (file) handleFile(file, 'file_picker')
   })
 
   // Drag-and-drop
@@ -270,11 +327,23 @@ export function initUI(): void {
     e.preventDefault()
     dropZone.classList.remove('border-blue-400', 'bg-blue-50')
     const file = e.dataTransfer?.files[0]
-    if (file) handleFile(file)
+    if (file) handleFile(file, 'drag_drop')
   })
 
   // Format selector change — update GIF warning
   formatSelect.addEventListener('change', () => updateGifWarning())
+
+  // Download tracking
+  downloadLink.addEventListener('click', () => {
+    if (currentSourceFormat && downloadLink.href) {
+      const outputSize = parseInt(downloadLink.getAttribute('data-output-size') ?? '0', 10)
+      trackDownloadClicked({
+        source_format: currentSourceFormat,
+        target_format: formatSelect.value,
+        output_size_bytes: outputSize,
+      })
+    }
+  })
 
   // Convert button
   convertBtn.addEventListener('click', () => handleConvert())
