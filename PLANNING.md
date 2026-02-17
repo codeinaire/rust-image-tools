@@ -818,17 +818,17 @@ Each page is the same tool but with format-specific H1, meta tags, and pre-selec
 - [x] Preview of converted image
 - [x] Download converted image
 - [x] Display image dimensions and file size (before/after)
-- [ ] Estimated progress bar during conversion (see below)
-- [ ] Error handling with user-friendly messages
-- [ ] File size validation (200 MB limit)
-- [ ] Pixel dimension validation (100 MP limit)
+- [x] Estimated progress bar during conversion (see below)
+- [x] Error handling with user-friendly messages
+- [x] File size validation (200 MB limit)
+- [x] Pixel dimension validation (100 MP limit)
 - [ ] Rust unit tests (conversion matrix, format detection, error cases)
 - [ ] Integration tests (Worker lifecycle, end-to-end conversion, validation guards)
 - [ ] PostHog analytics (7 events, env-based API key, disabled in dev)
-- [ ] SEO: meta tags, Open Graph, JSON-LD (WebApplication + FAQ schemas)
-- [ ] SEO: on-page content (H1, how it works, supported formats, FAQ, privacy note)
-- [ ] SEO: robots.txt, sitemap.xml, favicon, og-image
-- [ ] SEO: Core Web Vitals optimization (lazy WASM load, fixed layout, Worker offload)
+- [x] SEO: meta tags, Open Graph, JSON-LD (WebApplication + FAQ schemas)
+- [x] SEO: on-page content (H1, how it works, supported formats, FAQ, privacy note)
+- [x] SEO: robots.txt, sitemap.xml, favicon, og-image
+- [x] SEO: Core Web Vitals optimization (lazy WASM load, fixed layout, Worker offload)
 
 ## Stretch Goals (post-MVP)
 
