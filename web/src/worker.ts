@@ -61,12 +61,15 @@ function handleConvertImage(
   targetFormat: string,
 ): void {
   try {
+    const start = performance.now();
     const result = convert_image(data, targetFormat);
+    const conversionMs = Math.round(performance.now() - start);
     const response: WorkerResponse = {
       type: MessageType.ConvertImage,
       id,
       success: true,
       data: result,
+      conversionMs,
     };
     // Transfer the result buffer back to main thread (zero-copy, O(1))
     postMessage(response, [result.buffer]);
