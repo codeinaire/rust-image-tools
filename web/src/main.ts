@@ -98,6 +98,15 @@ class ImageConverter {
 
   /// Convert an image to the specified target format. Returns the converted bytes.
   async convertImage(data: Uint8Array, targetFormat: string): Promise<Uint8Array> {
+    const { data: result } = await this.convertImageTimed(data, targetFormat)
+    return result
+  }
+
+  /// Convert an image and return the result with Worker-side conversion timing.
+  async convertImageTimed(
+    data: Uint8Array,
+    targetFormat: string,
+  ): Promise<{ data: Uint8Array; conversionMs: number }> {
     await this.ready
     const id = this.nextRequestId++
     const response = await this.sendRequest({
@@ -107,7 +116,7 @@ class ImageConverter {
       targetFormat,
     })
     if (response.type === MessageType.ConvertImage && response.success) {
-      return response.data
+      return { data: response.data, conversionMs: response.conversionMs }
     }
     throw new Error('Unexpected response type')
   }
@@ -129,6 +138,8 @@ initAnalytics()
 
 // Single instance, initialized eagerly on page load
 export const converter = new ImageConverter()
+// Expose for integration tests
+;(window as unknown as Record<string, unknown>)['__converter'] = converter
 
 converter
   .ensureReady()

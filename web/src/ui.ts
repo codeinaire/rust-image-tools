@@ -218,7 +218,7 @@ async function handleConvert(): Promise<void> {
 
     // Create blob and URL
     const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
-    const blob = new Blob([result], { type: mimeType })
+    const blob = new Blob([result.buffer as ArrayBuffer], { type: mimeType })
     currentBlobUrl = URL.createObjectURL(blob)
 
     // Show preview

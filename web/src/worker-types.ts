@@ -58,6 +58,7 @@ interface ConvertImageSuccessResponse {
   id: number;
   success: true;
   data: Uint8Array;
+  conversionMs: number;
 }
 
 interface GetDimensionsSuccessResponse {

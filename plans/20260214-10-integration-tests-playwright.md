@@ -1,7 +1,7 @@
 # Plan: Integration Tests (Playwright)
 
 **Date:** 2026-02-14
-**Status:** Draft
+**Status:** Done
 **PR Scope:** Medium — Playwright setup + full integration test suite
 **Depends On:** Plan 07 (validation + error handling + progress bar — full UI must be functional)
 
@@ -25,36 +25,36 @@ Playwright runs headless browser tests that exercise the real application: file 
 
 ## Todo
 
-- [ ] Install Playwright: `npm install -D @playwright/test` and `npx playwright install`
-- [ ] Create `web/playwright.config.ts`:
-  - [ ] Configure base URL (dev server)
-  - [ ] Configure headless mode
-  - [ ] Configure webServer to start Parcel dev server before tests
-- [ ] Create test fixtures in `web/tests/fixtures/`:
-  - [ ] `test.png`, `test.jpg`, `test.webp`, `test.gif`, `test.bmp`
-  - [ ] Keep files small (< 100 KB each)
-- [ ] **Worker lifecycle tests** (`web/tests/integration/worker.spec.ts`):
-  - [ ] WASM initializes in Worker without errors
-  - [ ] Worker responds to conversion message (post valid image, receive converted bytes)
-  - [ ] Worker returns structured error for invalid bytes (not silent failure)
-  - [ ] Multiple sequential conversions work (no memory leaks or stale state)
-  - [ ] Worker handles large transfer (~50 MB buffer via transferable objects)
-- [ ] **End-to-end conversion tests** (`web/tests/integration/conversion.spec.ts`):
-  - [ ] File select → convert → download: verify blob is valid, correct MIME type, non-zero size
-  - [ ] Format auto-detection: load JPEG, verify UI shows "JPEG" as source format
-  - [ ] Before/after metadata: convert known image, verify dimensions and file sizes in DOM
-  - [ ] Error display: load corrupted file, trigger convert, verify user-friendly error shown
-- [ ] **Validation guard tests** (`web/tests/integration/validation.spec.ts`):
-  - [ ] File size limit: attempt > 200 MB file, verify rejected before Worker, error shown
-  - [ ] Dimension limit: load image > 100 MP, verify rejected after dimension check, error shown
-- [ ] **Performance & memory tests**:
-  - [ ] No main thread blocking: start conversion, verify CSS animation doesn't freeze
-  - [ ] Blob URL cleanup: after download, verify `URL.revokeObjectURL()` was called
-- [ ] **Performance timing** — each conversion test logs:
-  - [ ] `worker_init`, `transfer_to_worker`, `conversion`, `transfer_from_worker`, `total_pipeline`
-  - [ ] Format: `[PERF E2E] PNG → JPEG | WxH | worker_init: Xms | ...`
-- [ ] Add test scripts to `package.json`: `"test:e2e": "npx playwright test"`
-- [ ] Run full test suite and verify all tests pass
+- [x] Install Playwright: `npm install -D @playwright/test` and `npx playwright install`
+- [x] Create `web/playwright.config.ts`:
+  - [x] Configure base URL (dev server)
+  - [x] Configure headless mode
+  - [x] Configure webServer to start Parcel dev server before tests
+- [x] Create test fixtures in `web/tests/fixtures/`:
+  - [x] `test.png`, `test.jpg`, `test.webp`, `test.gif`, `test.bmp`
+  - [x] Keep files small (< 100 KB each)
+- [x] **Worker lifecycle tests** (`web/tests/integration/worker.spec.ts`):
+  - [x] WASM initializes in Worker without errors
+  - [x] Worker responds to conversion message (post valid image, receive converted bytes)
+  - [x] Worker returns structured error for invalid bytes (not silent failure)
+  - [x] Multiple sequential conversions work (no memory leaks or stale state)
+  - [x] Worker handles large transfer (~50 MB buffer via transferable objects)
+- [x] **End-to-end conversion tests** (`web/tests/integration/conversion.spec.ts`):
+  - [x] File select → convert → download: verify blob is valid, correct MIME type, non-zero size
+  - [x] Format auto-detection: load JPEG, verify UI shows "JPEG" as source format
+  - [x] Before/after metadata: convert known image, verify dimensions and file sizes in DOM
+  - [x] Error display: load corrupted file, trigger convert, verify user-friendly error shown
+- [x] **Validation guard tests** (`web/tests/integration/validation.spec.ts`):
+  - [x] File size limit: attempt > 200 MB file, verify rejected before Worker, error shown
+  - [x] Dimension limit: load image > 100 MP, verify rejected after dimension check, error shown
+- [x] **Performance & memory tests**:
+  - [x] No main thread blocking: start conversion, verify CSS animation doesn't freeze
+  - [x] Blob URL cleanup: after download, verify `URL.revokeObjectURL()` was called
+- [x] **Performance timing** — each conversion test logs:
+  - [x] `worker_init`, `transfer_to_worker`, `conversion`, `transfer_from_worker`, `total_pipeline`
+  - [x] Format: `[PERF E2E] PNG → JPEG | WxH | worker_init: Xms | ...`
+- [x] Add test scripts to `package.json`: `"test:e2e": "npx playwright test"`
+- [x] Run full test suite and verify all tests pass
 
 ## Key Details from PLANNING.md
 
