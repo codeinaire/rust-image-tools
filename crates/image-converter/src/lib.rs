@@ -1,5 +1,5 @@
-pub(crate) mod convert;
-pub(crate) mod formats;
+pub mod convert;
+pub mod formats;
 
 use wasm_bindgen::prelude::*;
 

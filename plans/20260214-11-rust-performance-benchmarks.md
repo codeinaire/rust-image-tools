@@ -1,7 +1,7 @@
 # Plan: Rust Performance Benchmarks
 
 **Date:** 2026-02-14
-**Status:** Draft
+**Status:** Done
 **PR Scope:** Small-Medium — Criterion setup + benchmark suite
 **Depends On:** Plan 03 (Rust test suite — fixtures and test helpers can be reused)
 
@@ -25,28 +25,28 @@ For WASM-specific benchmarks, use `wasm-pack test` with `performance.now()` — 
 
 ## Todo
 
-- [ ] Add `criterion` dev dependency to `crates/image-converter/Cargo.toml`:
-  - [ ] `[dev-dependencies] criterion = { version = "0.5", features = ["html_reports"] }`
-  - [ ] Add `[[bench]]` section: `name = "conversion_bench"`, `harness = false`
-- [ ] Create `crates/image-converter/benches/conversion_bench.rs`:
-  - [ ] Import criterion macros and fixture generation helpers
-  - [ ] Generate test images at benchmark setup (not measured)
-- [ ] Implement benchmark groups by image size:
-  - [ ] Small (100x100) — all format pairs
-  - [ ] Medium (1920x1080) — all format pairs
-  - [ ] Large (4000x3000) — all format pairs
-- [ ] Benchmark all format conversion pairs:
-  - [ ] PNG → JPEG, GIF, BMP
-  - [ ] JPEG → PNG, GIF, BMP
-  - [ ] WebP → PNG, JPEG, GIF, BMP
-  - [ ] GIF → PNG, JPEG, BMP
-  - [ ] BMP → PNG, JPEG, GIF
-- [ ] Add performance timing to unit tests (optional, `#[cfg(feature = "bench")]`):
-  - [ ] Use `std::time::Instant` to measure decode, encode, total
-  - [ ] Log structured line: `[PERF] PNG → JPEG | WxH | input: X MB | output: X MB | decode: X ms | encode: X ms | total: X ms`
-- [ ] Run `cargo bench` and verify benchmarks produce results
-- [ ] Verify Criterion HTML reports are generated in `target/criterion/`
-- [ ] Add `target/criterion/` to `.gitignore` if not already ignored
+- [x] Add `criterion` dev dependency to `crates/image-converter/Cargo.toml`:
+  - [x] `[dev-dependencies] criterion = { version = "0.5", features = ["html_reports"] }`
+  - [x] Add `[[bench]]` section: `name = "conversion_bench"`, `harness = false`
+- [x] Create `crates/image-converter/benches/conversion_bench.rs`:
+  - [x] Import criterion macros and fixture generation helpers
+  - [x] Generate test images at benchmark setup (not measured)
+- [x] Implement benchmark groups by image size:
+  - [x] Small (100x100) — all format pairs
+  - [x] Medium (1920x1080) — all format pairs
+  - [x] Large (4000x3000) — all format pairs
+- [x] Benchmark all format conversion pairs:
+  - [x] PNG → JPEG, GIF, BMP
+  - [x] JPEG → PNG, GIF, BMP
+  - [x] WebP → PNG, JPEG, GIF, BMP
+  - [x] GIF → PNG, JPEG, BMP
+  - [x] BMP → PNG, JPEG, GIF
+- [x] Add performance timing to unit tests (optional, `#[cfg(feature = "bench")]`):
+  - [x] Use `std::time::Instant` to measure decode, encode, total
+  - [x] Log structured line: `[PERF] PNG → JPEG | WxH | input: X MB | output: X MB | decode: X ms | encode: X ms | total: X ms`
+- [x] Run `cargo bench` and verify benchmarks produce results
+- [x] Verify Criterion HTML reports are generated in `target/criterion/`
+- [x] Add `target/criterion/` to `.gitignore` if not already ignored
 
 ## Key Details from PLANNING.md
 

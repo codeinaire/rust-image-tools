@@ -33,6 +33,12 @@ image = { version = "0.25", default-features = false, features = [
 # -- Test-only dependencies (not included in the final .wasm binary) --
 [dev-dependencies]
 wasm-bindgen-test = "0.3"      # Test harness for running Rust tests in a headless browser via WASM
+criterion = { version = "0.5", features = ["html_reports"] }  # Statistical benchmarking framework
+
+# -- Benchmark configuration --
+[[bench]]
+name = "conversion_bench"
+harness = false                # Use Criterion's own main function instead of the default test harness
 
 # -- Lint rules inherited from the workspace root Cargo.toml --
 [lints]

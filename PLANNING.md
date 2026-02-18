@@ -485,7 +485,7 @@ rust-image-converter/
 │           ├── detect_test.rs      # Format detection tests
 │           └── dimensions_test.rs  # Dimension reading tests
 │       └── benches/
-│           └── conversion_bench.rs # Criterion benchmarks (native)
+│           └── conversion_bench.rs # Criterion benchmarks (native) ✅
 ├── web/
 │   └── tests/
 │       ├── integration/
