@@ -262,6 +262,35 @@ wasm-pack test --headless --chrome crates/image-converter
 cd web && npx playwright test
 ```
 
+### Benchmarks
+
+Performance benchmarks use [Criterion](https://bheisler.github.io/criterion.rs/book/) to measure conversion time across all format pairs and image sizes. See [`resources/20260218-cargo-bench-and-criterion.md`](resources/20260218-cargo-bench-and-criterion.md) for a deeper explanation of how `cargo bench` and Criterion work.
+
+```bash
+# Run all benchmarks
+cargo bench --bench conversion_bench
+
+# Run benchmarks for a specific image size
+cargo bench --bench conversion_bench -- 'convert_100x100'
+cargo bench --bench conversion_bench -- 'convert_1920x1080'
+cargo bench --bench conversion_bench -- 'convert_4000x3000'
+
+# Run benchmarks for a specific source format
+cargo bench --bench conversion_bench -- 'from_PNG'
+
+# Save a named baseline (e.g., before a refactor)
+cargo bench --bench conversion_bench -- --save-baseline before-refactor
+
+# Compare against a saved baseline
+cargo bench --bench conversion_bench -- --baseline before-refactor
+```
+
+After running benchmarks, open the HTML report for detailed charts and regression analysis:
+
+```bash
+open target/criterion/report/index.html
+```
+
 ### Linting
 
 ```bash
@@ -280,10 +309,12 @@ rust-image-tools/
 ├── crates/
 │   └── image-converter/            # Rust WASM library
 │       ├── Cargo.toml
-│       └── src/
-│           ├── lib.rs              # #[wasm_bindgen] exports
-│           ├── convert.rs          # Core conversion logic
-│           └── formats.rs          # Format detection & mapping
+│       ├── src/
+│       │   ├── lib.rs              # #[wasm_bindgen] exports
+│       │   ├── convert.rs          # Core conversion logic
+│       │   └── formats.rs          # Format detection & mapping
+│       └── benches/
+│           └── conversion_bench.rs # Criterion performance benchmarks
 ├── web/                            # Frontend
 │   ├── package.json
 │   ├── tsconfig.json
