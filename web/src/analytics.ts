@@ -14,22 +14,23 @@ type ImageDimensionProps = {
 let initialized = false
 
 export function initAnalytics(): void {
+  if (process.env.NODE_ENV !== 'production') return
   const key = process.env.POSTHOG_KEY
   if (!key) return
 
   posthog.init(key, {
     api_host: 'https://eu.i.posthog.com',
     autocapture: false,
+    request_batching: false,
+    person_profiles: 'always',
+    debug: process.env.NODE_ENV !== 'production',
   })
   initialized = true
-
-  if (process.env.NODE_ENV === 'development') {
-    posthog.opt_out_capturing()
-  }
 }
 
 function capture(event: string, properties: Record<string, unknown>): void {
   if (!initialized) return
+  console.log('[posthog]', event, properties)
   posthog.capture(event, properties)
 }
 
@@ -87,3 +88,4 @@ export function trackValidationRejected(props: {
 export function trackDownloadClicked(props: FormatPairProps & { output_size_bytes: number }): void {
   capture('download_clicked', props)
 }
+
