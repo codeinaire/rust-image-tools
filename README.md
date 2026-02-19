@@ -237,6 +237,18 @@ wasm-pack build crates/image-converter --target web --release
 cd web && npm install && npx parcel src/index.html
 ```
 
+### Deploy to Cloudflare Pages
+
+Build the project then deploy the `web/dist` directory:
+
+```bash
+cd web && npm install && npm run build && cd .. && npx wrangler pages deploy web/dist
+```
+
+`npm run build` handles both steps in sequence:
+1. `wasm-pack build ../crates/image-converter --target web --release`
+2. `parcel build src/index.html` — output goes to `web/dist/`
+
 ### Testing
 
 ```bash
