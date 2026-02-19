@@ -239,15 +239,19 @@ cd web && npm install && npx parcel src/index.html
 
 ### Deploy to Cloudflare Pages
 
-Build the project then deploy the `web/dist` directory:
+A `build.sh` script at the repo root handles the full build from scratch:
 
 ```bash
-cd web && npm install && npm run build && cd .. && npx wrangler pages deploy web/dist
+# Deploy from the repo root
+npx wrangler pages deploy web/dist
 ```
 
-`npm run build` handles both steps in sequence:
-1. `wasm-pack build ../crates/image-converter --target web --release`
-2. `parcel build src/index.html` — output goes to `web/dist/`
+Configure Cloudflare Pages with:
+- **Root directory**: *(leave blank — repo root)*
+- **Build command**: `bash build.sh`
+- **Output directory**: `web/dist`
+
+The script installs Rust if not present, adds the `wasm32-unknown-unknown` target, installs npm dependencies (which includes `wasm-pack`), builds the WASM module, then runs Parcel.
 
 ### Testing
 
