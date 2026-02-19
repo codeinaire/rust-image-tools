@@ -17,6 +17,24 @@ The choice for this project. Built by the team that originally created Puppeteer
 - **Strengths**: Fast parallel execution, auto-waiting for elements, native Web Worker and WASM support, good `performance.now()` access for timing tests
 - **Trade-off**: Newer ecosystem than Cypress
 
+**Playwright is not "the best" in all situations** — and it does not replicate all browser functionality. Known limitations:
+
+- **Safari support is WebKit, not real Safari** — uses the WebKit engine rather than a real Safari build, so some Safari-specific bugs won't surface
+- **Mobile is simulated** — emulates mobile viewports and user-agent strings but does not run on real iOS or Android hardware
+- **No browser extension testing** — Cypress has limited support here; Playwright does not
+- **Some browser internals are inaccessible** — GPU/rendering behaviour, hardware codec paths, and other low-level features cannot be tested
+- **Automation detection** — sites that fingerprint or detect headless browsers can block Playwright
+- **Flakiness** — timing-sensitive tests can still be flaky despite auto-waiting
+
+**When another tool is a better fit:**
+
+- Real Safari bugs matter → Playwright (only option with any Safari coverage; Cypress has none)
+- Heavy React/Vue component debugging → Cypress (time-travel debugger is significantly nicer)
+- Enterprise teams using Java or Python → Selenium (W3C standard, broadest language support)
+- Real iOS/Android → Appium or platform-native tools (XCUITest, Espresso)
+
+For this project (WASM + Web Workers + TypeScript), Playwright is the right call because jsdom-based tools like Testing Library cannot run WebAssembly or Web Workers at all.
+
 ### Cypress (2017)
 
 The most popular alternative in the frontend world.
@@ -54,9 +72,11 @@ Lower-level Chrome automation, often used beyond testing.
 | Need | Best fit |
 |------|----------|
 | Multi-browser + Web Workers/WASM | Playwright |
-| React/Vue app, Chrome-focused | Cypress |
+| Heavy component debugging, Chrome-focused | Cypress |
 | Enterprise, many languages/browsers | Selenium |
 | Chrome scripting, scraping, PDFs | Puppeteer |
+| Real iOS/Android | Appium, XCUITest, Espresso |
+| Component/unit testing (no real browser needed) | Testing Library + Jest |
 
 ## References
 
