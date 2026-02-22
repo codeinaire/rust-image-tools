@@ -48,6 +48,21 @@ pub fn dimensions(input: &[u8]) -> Result<Dimensions, ConvertError> {
     Ok(Dimensions { width, height })
 }
 
+/// Decodes the input image bytes and returns the raw RGBA8 pixel data.
+///
+/// Returns a flat `Vec<u8>` of pixels in RGBA order (4 bytes per pixel, row-major).
+/// Use `dimensions` first to know the width and height needed to interpret the data.
+///
+/// # Errors
+///
+/// Returns a `ConvertError::Decode` if the input cannot be decoded or the format is unrecognized.
+pub fn decode_rgba(input: &[u8]) -> Result<Vec<u8>, ConvertError> {
+    Ok(image::load_from_memory(input)
+        .map_err(ConvertError::Decode)?
+        .into_rgba8()
+        .into_raw())
+}
+
 /// Errors that can occur during image conversion or dimension reading.
 #[derive(Debug)]
 pub enum ConvertError {
@@ -488,6 +503,73 @@ mod tests {
                 assert!(dec_px.0[3] > 0, "Opaque pixels should remain opaque in GIF");
             }
         }
+    }
+
+    // ===== decode_rgba Tests =====
+
+    #[test]
+    fn decode_rgba_png() {
+        let png = make_png(4, 4);
+        let rgba = decode_rgba(&png).unwrap();
+        assert_eq!(rgba.len(), 4 * 4 * 4, "RGBA pixels: width * height * 4 bytes");
+    }
+
+    #[test]
+    fn decode_rgba_jpeg() {
+        let jpeg = make_jpeg(4, 4);
+        let rgba = decode_rgba(&jpeg).unwrap();
+        assert_eq!(rgba.len(), 4 * 4 * 4);
+    }
+
+    #[test]
+    fn decode_rgba_gif() {
+        let gif = make_gif(4, 4);
+        let rgba = decode_rgba(&gif).unwrap();
+        assert_eq!(rgba.len(), 4 * 4 * 4);
+    }
+
+    #[test]
+    fn decode_rgba_bmp() {
+        let bmp = make_bmp(4, 4);
+        let rgba = decode_rgba(&bmp).unwrap();
+        assert_eq!(rgba.len(), 4 * 4 * 4);
+    }
+
+    #[test]
+    fn decode_rgba_webp() {
+        let webp = make_webp(4, 4);
+        let rgba = decode_rgba(&webp).unwrap();
+        assert_eq!(rgba.len(), 4 * 4 * 4);
+    }
+
+    #[test]
+    fn decode_rgba_pixel_fidelity() {
+        let (original, png_data) = make_patterned_png(8, 8);
+        let rgba = decode_rgba(&png_data).unwrap();
+        assert_eq!(rgba, original.into_raw(), "Pixel data should match original RGBA image");
+    }
+
+    #[test]
+    fn decode_rgba_empty_input() {
+        let result = decode_rgba(&[]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn decode_rgba_random_bytes() {
+        let random: Vec<u8> = (0..1024u16)
+            .map(|i| (i.wrapping_mul(137).wrapping_add(43) % 256) as u8)
+            .collect();
+        let result = decode_rgba(&random);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn decode_rgba_truncated_file() {
+        let png = make_png(10, 10);
+        let truncated = &png[..50.min(png.len())];
+        let result = decode_rgba(truncated);
+        assert!(result.is_err());
     }
 
     // ===== Dimension Reading Tests =====
