@@ -43,6 +43,20 @@ pub fn convert_image(input: &[u8], target_format: &str) -> Result<Vec<u8>, JsErr
     Ok(result)
 }
 
+/// Decode an image from any supported format to raw RGBA8 pixel bytes.
+///
+/// Returns a flat `Vec<u8>` of pixels in RGBA order (4 bytes per pixel, row-major).
+/// Use `get_dimensions` first to obtain the width and height needed to interpret the data.
+///
+/// # Errors
+///
+/// Returns a `JsError` if the input cannot be decoded or the format is unrecognized.
+#[wasm_bindgen]
+pub fn decode_to_rgba(input: &[u8]) -> Result<Vec<u8>, JsError> {
+    convert::decode_rgba(input)
+        .map_err(|e| JsError::new(&format!("Failed to decode image to RGBA: {e}")))
+}
+
 /// Read the dimensions of an image without fully decoding its pixel data.
 ///
 /// Returns a JavaScript object with `width` and `height` properties (both `u32`).

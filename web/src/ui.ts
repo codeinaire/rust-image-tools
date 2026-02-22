@@ -16,6 +16,7 @@ const MIME_TYPES: Record<string, string> = {
   jpeg: 'image/jpeg',
   gif: 'image/gif',
   bmp: 'image/bmp',
+  webp: 'image/webp',
 }
 
 // DOM elements — cached on init
@@ -62,6 +63,11 @@ const TIMING_RATES: Record<string, TimingRate> = {
   'png->jpeg': { base: 20, perMp: 25 },
   'webp->png': { base: 20, perMp: 35 },
   'bmp->jpeg': { base: 20, perMp: 25 },
+  'png->webp': { base: 25, perMp: 35 },
+  'jpeg->webp': { base: 25, perMp: 35 },
+  'gif->webp': { base: 25, perMp: 30 },
+  'bmp->webp': { base: 25, perMp: 30 },
+  'webp->webp': { base: 25, perMp: 35 },
 }
 const TIMING_FALLBACK: TimingRate = { base: 30, perMp: 50 }
 

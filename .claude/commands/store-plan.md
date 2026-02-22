@@ -1,6 +1,7 @@
 Store a plan record in the `plans/` folder.
 
 Instructions:
+
 1. Look at the recent conversation to identify the plan being discussed — its goals, approach, steps, and any trade-offs or open questions.
 2. Create a new markdown file at `plans/<YYYYMMDD>-<short-kebab-case-title>.md` (using today's date) with this template:
 
@@ -21,6 +22,10 @@ Instructions:
 ## Steps
 
 <Ordered list of implementation steps.>
+
+## TODOs
+
+<Create a list of to-dos that will be checked off as work is completed>
 
 ## Open Questions
 

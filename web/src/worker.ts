@@ -3,6 +3,7 @@ declare function postMessage(message: unknown, transfer?: Transferable[]): void;
 
 import init, {
   convert_image,
+  decode_to_rgba,
   detect_format,
   get_dimensions,
 } from "../../crates/image-converter/pkg/image_converter.js";
@@ -32,7 +33,7 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
       handleDetectFormat(request.id, request.data);
       break;
     case MessageType.ConvertImage:
-      handleConvertImage(request.id, request.data, request.targetFormat);
+      void handleConvertImage(request.id, request.data, request.targetFormat);
       break;
     case MessageType.GetDimensions:
       handleGetDimensions(request.id, request.data);
@@ -55,14 +56,43 @@ function handleDetectFormat(id: number, data: Uint8Array): void {
   }
 }
 
-function handleConvertImage(
+async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
+  if (!("OffscreenCanvas" in globalThis)) {
+    throw new Error(
+      "WebP output requires OffscreenCanvas, which is not supported in this browser.",
+    );
+  }
+  const dims = get_dimensions(data) as { width: number; height: number };
+  const rgba = decode_to_rgba(data);
+  const canvas = new OffscreenCanvas(dims.width, dims.height);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Failed to get 2D context from OffscreenCanvas.");
+  }
+  const imageData = new ImageData(
+    new Uint8ClampedArray(rgba.buffer),
+    dims.width,
+    dims.height,
+  );
+  ctx.putImageData(imageData, 0, 0);
+  const blob = await canvas.convertToBlob({ type: "image/webp", quality: 0.85 });
+  const arrayBuffer = await blob.arrayBuffer();
+  return new Uint8Array(arrayBuffer);
+}
+
+async function handleConvertImage(
   id: number,
   data: Uint8Array,
   targetFormat: string,
-): void {
+): Promise<void> {
   try {
     const start = performance.now();
-    const result = convert_image(data, targetFormat);
+    let result: Uint8Array;
+    if (targetFormat === "webp") {
+      result = await encodeWebpViaCanvas(data);
+    } else {
+      result = convert_image(data, targetFormat);
+    }
     const conversionMs = Math.round(performance.now() - start);
     const response: WorkerResponse = {
       type: MessageType.ConvertImage,
