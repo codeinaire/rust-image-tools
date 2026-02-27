@@ -7,7 +7,7 @@ Client-side web app that converts images between formats using Rust compiled to 
 ## Tech Stack
 
 - **Rust** (WASM library): `image` crate, `wasm-bindgen`, `wasm-pack`
-- **TypeScript** (frontend): Vanilla TS, Parcel bundler
+- **TypeScript** (frontend): Astro + Preact, Vite bundler
 - **Styling**: Tailwind CSS v4
 
 ## Rust Coding Conventions
@@ -73,7 +73,7 @@ Client-side web app that converts images between formats using Rust compiled to 
 ## Linting & Formatting
 
 - **Rust**: Run `cargo fmt` before committing. Run `cargo clippy` and fix all warnings.
-- **TypeScript**: Use standard Parcel/TS defaults.
+- **TypeScript**: Use standard Astro/TS defaults.
 - Treat all compiler warnings as errors — do not leave warnings unaddressed.
 
 ## Build Commands
@@ -86,8 +86,8 @@ wasm-pack build crates/image-converter --target web --release
 cargo test --manifest-path crates/image-converter/Cargo.toml
 
 # Frontend dev
-cd web && npx parcel src/index.html
+cd web && npm run dev
 
 # Production build
-cd web && npx parcel build src/index.html
+cd web && npm run build
 ```

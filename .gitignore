@@ -11,7 +11,7 @@ crates/image-converter/pkg/
 # Node / Frontend
 web/node_modules/
 web/dist/
-web/.parcel-cache/
+web/.astro/
 
 # Environment
 .env

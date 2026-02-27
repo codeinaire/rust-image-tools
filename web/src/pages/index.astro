@@ -1,0 +1,281 @@
+---
+import Base from '../layouts/Base.astro'
+import { ImageConverter } from '../components/ImageConverter'
+
+const title = 'Free Image Converter — PNG, JPEG, WebP, GIF, BMP | Online & Private'
+const description =
+  'Convert images between PNG, JPEG, WebP, GIF, and BMP instantly in your browser. No upload to any server — 100% private, free, and fast.'
+const canonical = 'https://[domain]/'
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How do I convert a PNG to JPEG?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Drop your PNG file onto the converter, select JPEG as the output format, and click Convert. Your converted file downloads instantly — no server upload required.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is this image converter safe to use?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. All conversion happens locally in your browser using WebAssembly. Your images are never uploaded to any server.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What image formats are supported?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'You can convert between PNG, JPEG, WebP, GIF, and BMP. All five formats are supported as both input and output.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the maximum file size?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Files up to 200 MB are supported. Images can be up to 100 megapixels.',
+      },
+    },
+  ],
+}
+---
+
+<Base title={title} description={description} canonical={canonical}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <!-- ░░ SCROLLING TICKER HEADER ░░ -->
+  <div
+    style="width: 100%; overflow: hidden; background: var(--cp-panel); border-bottom: 2px solid var(--cp-yellow); box-shadow: 0 4px 24px rgba(255, 230, 0, 0.15);"
+  >
+    <!-- Screen-reader title (ticker is aria-hidden) -->
+    <h1 class="sr-only">Image Toolz — Free Image Converter</h1>
+    <div
+      aria-hidden="true"
+      style="display: flex; width: max-content; animation: ticker-scroll 28s linear infinite; will-change: transform;"
+    >
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+      <span style="font-family: 'Orbitron', monospace; font-size: clamp(4rem, 7vw, 6rem); font-weight: 900; color: var(--cp-yellow); letter-spacing: 0.06em; word-spacing: -0.32em; line-height: 1; padding: 0 0.22em; white-space: nowrap; text-shadow: 0 0 12px var(--cp-yellow), 0 0 40px rgba(255, 230, 0, 0.4);">IMAGE TOOLZ</span>
+    </div>
+  </div>
+
+  <!-- ░░ TAGLINE ░░ -->
+  <div style="text-align: center; padding: 1rem 1rem 0; border-bottom: 1px solid var(--cp-border);">
+    <p style="color: var(--cp-muted); font-size: 0.75rem; letter-spacing: 0.25em; padding-bottom: 1rem;">
+      ◆ &nbsp; FREE &nbsp;·&nbsp; CLIENT-SIDE &nbsp;·&nbsp; POWERED BY RUST + WASM &nbsp; ◆
+    </p>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Interactive converter island (client:only because it uses Worker/WASM browser APIs) -->
+    <ImageConverter client:only="preact" />
+
+    <!-- ░░ PRIVACY PROTOCOL ░░ -->
+    <section
+      style="margin-top: 3rem; background: var(--cp-panel); border: 1px solid var(--cp-cyan); border-left: 3px solid var(--cp-cyan); padding: 1.5rem; box-shadow: inset 0 0 30px rgba(0, 245, 255, 0.03);"
+    >
+      <h2
+        style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 0.75rem;"
+      >
+        // PRIVACY PROTOCOL
+      </h2>
+      <p style="color: var(--cp-text); line-height: 1.7; font-size: 0.9rem;">
+        Unlike most online image converters, this tool processes everything
+        <strong style="color: var(--cp-yellow);">locally in your browser</strong> using Rust
+        compiled to WebAssembly — conversion is near-instant. Your images are never uploaded to any
+        server. Nothing leaves your device. Ever.
+      </p>
+    </section>
+
+    <!-- ░░ HOW IT WORKS ░░ -->
+    <section style="margin-top: 3rem;">
+      <h2
+        style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
+      >
+        // HOW IT WORKS
+      </h2>
+      <ol style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem;">
+        <li style="display: flex; gap: 1.25rem; align-items: flex-start;">
+          <span
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.75rem; min-width: 2rem; padding-top: 0.1rem; letter-spacing: 0.05em;"
+            >01</span
+          >
+          <span style="color: var(--cp-text); font-size: 0.9rem; line-height: 1.6;">
+            <strong style="color: var(--cp-cyan);">Drop your image</strong> — drag and drop a file
+            or click to browse. We support PNG, JPEG, WebP, GIF, and BMP.
+          </span>
+        </li>
+        <li style="display: flex; gap: 1.25rem; align-items: flex-start;">
+          <span
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.75rem; min-width: 2rem; padding-top: 0.1rem; letter-spacing: 0.05em;"
+            >02</span
+          >
+          <span style="color: var(--cp-text); font-size: 0.9rem; line-height: 1.6;">
+            <strong style="color: var(--cp-cyan);">Pick a format</strong> — choose your target
+            format from the dropdown.
+          </span>
+        </li>
+        <li style="display: flex; gap: 1.25rem; align-items: flex-start;">
+          <span
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.75rem; min-width: 2rem; padding-top: 0.1rem; letter-spacing: 0.05em;"
+            >03</span
+          >
+          <span style="color: var(--cp-text); font-size: 0.9rem; line-height: 1.6;">
+            <strong style="color: var(--cp-cyan);">Download instantly</strong> — conversion takes
+            milliseconds, not minutes. No server upload, no waiting.
+          </span>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ░░ SUPPORTED FORMATS ░░ -->
+    <section style="margin-top: 3rem;">
+      <h2
+        style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
+      >
+        // SUPPORTED FORMATS
+      </h2>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+            >PNG</h3
+          >
+          <p style="color: var(--cp-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;">
+            Lossless compression with transparency support. Ideal for graphics, logos, and
+            screenshots.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+            >JPEG</h3
+          >
+          <p style="color: var(--cp-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;">
+            Lossy compression optimized for photographs. Produces smaller file sizes for
+            photo-realistic images.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+            >WEBP</h3
+          >
+          <p style="color: var(--cp-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;">
+            Modern format by Google supporting both lossy and lossless compression. Supported as
+            both an input and output format.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+            >GIF</h3
+          >
+          <p style="color: var(--cp-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;">
+            Supports animation and simple transparency. Best for short animations and simple
+            graphics.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+            >BMP</h3
+          >
+          <p style="color: var(--cp-muted); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;">
+            Uncompressed bitmap format. Large files but universal compatibility and no quality loss.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ FAQ ░░ -->
+    <section style="margin-top: 3rem;">
+      <h2
+        style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
+      >
+        // SYSTEM FAQ
+      </h2>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <details
+          class="cyber-details"
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
+        >
+          <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+            How do I convert a PNG to JPEG?
+          </summary>
+          <p style="margin-top: 0.75rem; color: var(--cp-muted); font-size: 0.8rem; line-height: 1.6;">
+            Drop your PNG file onto the converter, select JPEG as the output format, and click
+            Execute. Your converted file downloads instantly — no server upload required.
+          </p>
+        </details>
+        <details
+          class="cyber-details"
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
+        >
+          <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+            Is this image converter safe to use?
+          </summary>
+          <p style="margin-top: 0.75rem; color: var(--cp-muted); font-size: 0.8rem; line-height: 1.6;">
+            Yes. All conversion happens locally in your browser using WebAssembly. Your images are
+            never uploaded to any server.
+          </p>
+        </details>
+        <details
+          class="cyber-details"
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
+        >
+          <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+            What image formats are supported?
+          </summary>
+          <p style="margin-top: 0.75rem; color: var(--cp-muted); font-size: 0.8rem; line-height: 1.6;">
+            You can convert between PNG, JPEG, WebP, GIF, and BMP. All five formats are supported
+            as both input and output.
+          </p>
+        </details>
+        <details
+          class="cyber-details"
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
+        >
+          <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+            What is the maximum file size?
+          </summary>
+          <p style="margin-top: 0.75rem; color: var(--cp-muted); font-size: 0.8rem; line-height: 1.6;">
+            Files up to 200 MB are supported. Images can be up to 100 megapixels.
+          </p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <!-- ░░ FOOTER ░░ -->
+  <footer style="margin-top: 3rem; border-top: 1px solid var(--cp-border); background: var(--cp-panel);">
+    <div class="max-w-4xl mx-auto px-4 py-6" style="text-align: center;">
+      <p style="color: var(--cp-muted); font-size: 0.75rem; letter-spacing: 0.2em;">
+        ◆ &nbsp; POWERED BY <span style="color: var(--cp-cyan);">RUST + WEBASSEMBLY</span> — ALL
+        PROCESSING IN YOUR BROWSER &nbsp; ◆
+      </p>
+    </div>
+  </footer>
+</Base>

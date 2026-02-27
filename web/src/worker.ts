@@ -8,8 +8,8 @@ import init, {
   get_dimensions,
 } from "../../crates/image-converter/pkg/image_converter.js";
 
-import { MessageType } from "./worker-types";
-import type { WorkerRequest, WorkerResponse } from "./worker-types";
+import { MessageType } from "./types";
+import type { WorkerRequest, WorkerResponse } from "./types";
 
 async function initialize(): Promise<void> {
   const start = performance.now();

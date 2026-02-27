@@ -1,12 +1,15 @@
 import { test, expect } from '@playwright/test'
-import { join } from 'path'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
 test.describe('Validation guards', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    await page.evaluate(async () => window.__converter.ensureReady())
+    await page.waitForFunction(() => !!window.__converter)
+    await page.evaluate(() => window.__converter.ensureReady())
   })
 
   // ── File size limit ──────────────────────────────────────────────────────
@@ -31,7 +34,7 @@ test.describe('Validation guards', () => {
         .dispatchEvent(new DragEvent('drop', { bubbles: true, dataTransfer: dt }))
     })
 
-    await expect(page.locator('#error-display')).not.toHaveClass(/hidden/, { timeout: 5_000 })
+    await expect(page.locator('#error-display')).toBeVisible({ timeout: 5_000 })
 
     const errorText = await page.locator('#error-message').textContent()
     expect(errorText).toMatch(/too large/i)
@@ -51,7 +54,7 @@ test.describe('Validation guards', () => {
     // because PNG compression collapses the single white scanline.
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test-huge.png'))
 
-    await expect(page.locator('#error-display')).not.toHaveClass(/hidden/, { timeout: 15_000 })
+    await expect(page.locator('#error-display')).toBeVisible({ timeout: 15_000 })
 
     const errorText = await page.locator('#error-message').textContent()
     expect(errorText).toMatch(/too large/i)
@@ -70,7 +73,7 @@ test.describe('Validation guards', () => {
     page,
   }) => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     await page.locator('#format-select').selectOption('jpeg')
     await page.locator('#convert-btn').click()
@@ -103,7 +106,7 @@ test.describe('Validation guards', () => {
     expect(maxFrameMs).toBeLessThan(1000)
 
     // Wait for conversion to finish before leaving the test
-    await expect(page.locator('#result-area')).not.toHaveClass(/hidden/, { timeout: 30_000 })
+    await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
 
     console.log(`[PERF] Max frame delta during conversion: ${maxFrameMs.toFixed(1)} ms`)
   })
@@ -112,11 +115,11 @@ test.describe('Validation guards', () => {
 
   test('revokeObjectURL is called on result reset (no URL leak)', async ({ page }) => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     await page.locator('#format-select').selectOption('jpeg')
     await page.locator('#convert-btn').click()
-    await expect(page.locator('#result-area')).not.toHaveClass(/hidden/, { timeout: 30_000 })
+    await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
 
     // Capture the blob URL created after first conversion
     const firstBlobUrl = await page.locator('#download-link').getAttribute('href')
@@ -135,7 +138,7 @@ test.describe('Validation guards', () => {
 
     // Trigger a second conversion — the first blob URL should be revoked on reset
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.jpg'))
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     const revoked = await page.evaluate(
       () => (window as unknown as { __revokedUrls: string[] }).__revokedUrls,
