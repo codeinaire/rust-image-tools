@@ -11,9 +11,7 @@ export function ResultArea({ result, onDownloadClick }: Props) {
 
   const sign = result.changePercent >= 0 ? '+' : ''
   const timeStr =
-    result.elapsedMs < 1000
-      ? `${result.elapsedMs} ms`
-      : `${(result.elapsedMs / 1000).toFixed(1)} s`
+    result.elapsedMs < 1000 ? `${result.elapsedMs} ms` : `${(result.elapsedMs / 1000).toFixed(1)} s`
   const details = `${formatFileSize(result.inputSize)} → ${formatFileSize(result.outputSize)} (${sign}${result.changePercent.toFixed(0)}%) — ${timeStr}`
 
   return (

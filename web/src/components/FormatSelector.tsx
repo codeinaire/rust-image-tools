@@ -37,7 +37,10 @@ export function FormatSelector({ value, onChange }: Props) {
   }
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+    <div
+      ref={containerRef}
+      style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '0.75rem' }}
+    >
       <label
         style={{
           fontSize: '0.75rem',
