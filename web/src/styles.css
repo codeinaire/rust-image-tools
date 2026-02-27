@@ -1,1 +1,101 @@
 @import "tailwindcss";
+
+/* ─── Cyberpunk Design Tokens ─────────────────────────────────────────── */
+:root {
+  --cp-bg: #05050f;
+  --cp-panel: #0d0d1a;
+  --cp-panel-light: #141428;
+  --cp-yellow: #ffe600;
+  --cp-cyan: #00f5ff;
+  --cp-magenta: #ff0080;
+  --cp-border: #1e1e3a;
+  --cp-text: #e0e0ff;
+  --cp-muted: #6060a0;
+}
+
+/* ─── Global Base ─────────────────────────────────────────────────────── */
+body {
+  background-color: var(--cp-bg);
+  color: var(--cp-text);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+/* Subtle scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.06) 3px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── Ticker Animation ────────────────────────────────────────────────── */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ─── Clip-path Utilities ─────────────────────────────────────────────── */
+.cyber-clip {
+  clip-path: polygon(
+    20px 0%,
+    100% 0%,
+    100% calc(100% - 20px),
+    calc(100% - 20px) 100%,
+    0% 100%,
+    0% 20px
+  );
+}
+
+.cyber-clip-lg {
+  clip-path: polygon(
+    28px 0%,
+    100% 0%,
+    100% calc(100% - 28px),
+    calc(100% - 28px) 100%,
+    0% 100%,
+    0% 28px
+  );
+}
+
+/* ─── FAQ Details Styling ─────────────────────────────────────────────── */
+details.cyber-details > summary {
+  list-style: none;
+  padding-left: 1.5rem;
+  position: relative;
+  cursor: pointer;
+}
+
+details.cyber-details > summary::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: var(--cp-cyan);
+  font-size: 0.65em;
+  top: 0.25em;
+  transition: transform 0.2s, color 0.2s;
+}
+
+details.cyber-details[open] > summary::before {
+  transform: rotate(90deg);
+  color: var(--cp-yellow);
+}
+
+details.cyber-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.cyber-details > summary::marker {
+  content: none;
+}

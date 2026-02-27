@@ -26,12 +26,17 @@ Instructions:
    - Leave any items unchecked that require manual verification by the user (e.g., "verify in browser", "check dashboard") and note why they were left unchecked
 
 6. **Final verification.** Run the project build to confirm nothing is broken:
+
    ```
-   cd web && npx parcel build src/index.html
+   cd web && npx astro build
    ```
+
    If there are Rust changes, also run:
+
    ```
    cargo test --manifest-path crates/image-converter/Cargo.toml
    ```
+
+   Run the appropriate commands to verify the items in the Verification section of the plan document.
 
 7. **Summary.** Report what was implemented, what files were changed, and any items left for manual verification.
