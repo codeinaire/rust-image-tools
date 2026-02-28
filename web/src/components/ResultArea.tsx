@@ -75,7 +75,7 @@ export function ResultArea({ result, onDownloadClick }: Props) {
               letterSpacing: '0.15em',
               fontWeight: '700',
               textDecoration: 'none',
-              boxShadow: '0 0 10px rgba(0, 245, 255, 0.3)',
+              boxShadow: '0 0 10px var(--cp-cyan-glow)',
               transition: 'box-shadow 0.2s, background 0.2s',
               clipPath: 'polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)',
             }}

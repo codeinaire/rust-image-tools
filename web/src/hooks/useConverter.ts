@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'preact/hooks'
-import { useWorker } from './useWorker'
+import { useImageConverter } from './useImageConverter'
 import {
   trackImageSelected,
   trackConversionStarted,
@@ -84,7 +84,7 @@ export function useConverter(): {
   handleFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => Promise<void>
   handleConvert: (targetFormat: string) => Promise<void>
 } {
-  const converter = useWorker()
+  const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
   const progressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 

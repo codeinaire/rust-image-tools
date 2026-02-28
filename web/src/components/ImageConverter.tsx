@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'preact/hooks'
-import { useConverter, formatFileSize } from '../hooks/useConverter'
+import { useConverter } from '../hooks/useConverter'
 import { DropZone } from './DropZone'
-import { FormatSelector } from './FormatSelector'
-import { ProgressBar } from './ProgressBar'
-import { ResultArea } from './ResultArea'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
-import type { FileInfo } from '../hooks/useConverter'
 
 const GIF_SLOW_THRESHOLD_MP = 2
 
 const CLIP_LG =
   'polygon(28px 0%, 100% 0%, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0% 100%, 0% 28px)'
-
-function formatSourceDetails(fileInfo: FileInfo): string {
-  return `${fileInfo.sourceFormat.toUpperCase()} — ${fileInfo.width}×${fileInfo.height} — ${formatFileSize(fileInfo.file.size)}`
-}
 
 export function ImageConverter() {
   const { state, converter, handleFile, handleConvert } = useConverter()
@@ -30,11 +22,9 @@ export function ImageConverter() {
       .catch((err: Error) => {
         console.error('[image-converter] Failed to initialize:', err)
       })
-    // Expose for integration tests
     ;(window as unknown as Record<string, unknown>)['__converter'] = converter
   }, [])
 
-  const canConvert = state.fileInfo !== null && state.status !== 'converting'
   const gifWarning =
     targetFormat === 'gif' &&
     state.fileInfo !== null &&
@@ -51,29 +41,23 @@ export function ImageConverter() {
   }
 
   return (
-    /* Outer border layer: provides neon cyan outline via background + clip-path */
     <div
       style={{
         padding: '2px',
         background: 'var(--cp-cyan)',
         clipPath: CLIP_LG,
-        filter: 'drop-shadow(0 0 14px rgba(0, 245, 255, 0.3))',
+        filter: 'drop-shadow(0 0 14px var(--cp-cyan-glow))',
       }}
     >
-      {/* Inner panel: dark background */}
       <section
-        style={{
-          background: 'var(--cp-panel)',
-          clipPath: CLIP_LG,
-          padding: '1.5rem',
-        }}
+        style={{ background: 'var(--cp-panel)', clipPath: CLIP_LG, padding: '1.5rem' }}
         class="space-y-6"
       >
         {state.error && (
           <div
             id="error-display"
             style={{
-              background: 'rgba(255, 0, 128, 0.08)',
+              background: 'var(--cp-magenta-bg)',
               border: '1px solid var(--cp-magenta)',
               padding: '0.75rem 1rem',
               color: '#ff80bf',
@@ -86,21 +70,24 @@ export function ImageConverter() {
           </div>
         )}
 
-        <DropZone onFile={handleFile} fileInfo={state.fileInfo} />
-
-        {state.fileInfo && (
-          <div id="source-info" style={{ fontSize: '0.8rem', letterSpacing: '0.05em' }}>
-            <span style={{ color: 'var(--cp-cyan)' }}>{state.fileInfo.file.name}</span>
-            <span id="source-details" style={{ marginLeft: '0.5rem', color: 'var(--cp-muted)' }}>
-              {formatSourceDetails(state.fileInfo)}
-            </span>
-          </div>
-        )}
+        <DropZone
+          onFile={handleFile}
+          fileInfo={state.fileInfo}
+          targetFormat={targetFormat}
+          onFormatChange={setTargetFormat}
+          onConvert={() => handleConvert(targetFormat)}
+          convertDisabled={state.status === 'converting'}
+          status={state.status}
+          result={state.result}
+          estimatedMs={state.estimatedMs}
+          showProgress={state.showProgress}
+          onDownloadClick={onDownloadClick}
+        />
 
         {gifWarning && (
           <div
             style={{
-              background: 'rgba(255, 230, 0, 0.05)',
+              background: 'var(--cp-yellow-bg)',
               border: '1px solid var(--cp-yellow)',
               padding: '0.75rem 1rem',
               color: 'var(--cp-yellow)',
@@ -113,21 +100,6 @@ export function ImageConverter() {
             large images.
           </div>
         )}
-
-        <FormatSelector
-          value={targetFormat}
-          onChange={setTargetFormat}
-          onConvert={() => handleConvert(targetFormat)}
-          disabled={!canConvert}
-        />
-
-        <ProgressBar
-          status={state.status}
-          estimatedMs={state.estimatedMs}
-          showProgress={state.showProgress}
-        />
-
-        <ResultArea result={state.result} onDownloadClick={onDownloadClick} />
       </section>
     </div>
   )

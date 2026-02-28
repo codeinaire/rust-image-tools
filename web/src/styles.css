@@ -11,6 +11,15 @@
   --cp-border: #1e1e3a;
   --cp-text: #e0e0ff;
   --cp-muted: #6060a0;
+
+  /* Glow tokens — rgba variants used for shadows, glows, and tinted backgrounds */
+  --cp-cyan-glow-subtle: rgba(0, 245, 255, 0.1);
+  --cp-cyan-glow: rgba(0, 245, 255, 0.3);
+  --cp-cyan-glow-strong: rgba(0, 245, 255, 0.5);
+  --cp-yellow-glow: rgba(255, 230, 0, 0.4);
+  --cp-yellow-glow-strong: rgba(255, 230, 0, 0.5);
+  --cp-magenta-bg: rgba(255, 0, 128, 0.08);
+  --cp-yellow-bg: rgba(255, 230, 0, 0.05);
 }
 
 /* ─── Global Base ─────────────────────────────────────────────────────── */
@@ -33,7 +42,7 @@ body::after {
     rgba(0, 0, 0, 0.06) 4px
   );
   pointer-events: none;
-  z-index: 9999;
+  z-index: 1000;
 }
 
 /* ─── Ticker Animation ────────────────────────────────────────────────── */
@@ -44,6 +53,14 @@ body::after {
   to {
     transform: translateX(-50%);
   }
+}
+
+@keyframes neon-flicker {
+  0%, 84%, 100% { opacity: 1; }
+  86%   { opacity: 0.6; }
+  86.6% { opacity: 0.95; }
+  87.8% { opacity: 0.7; }
+  88.4% { opacity: 1; }
 }
 
 /* ─── Clip-path Utilities ─────────────────────────────────────────────── */

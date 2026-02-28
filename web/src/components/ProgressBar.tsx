@@ -28,12 +28,14 @@ export function ProgressBar({ status, estimatedMs, showProgress }: Props) {
     }
   }, [status, estimatedMs])
 
+  if (!showProgress) return null
+
   return (
-    <div class={showProgress ? '' : 'hidden'}>
+    <div>
       <div
         style={{
           width: '100%',
-          background: 'rgba(0, 245, 255, 0.1)',
+          background: 'var(--cp-cyan-glow-subtle)',
           height: '3px',
           position: 'relative',
         }}
@@ -43,7 +45,7 @@ export function ProgressBar({ status, estimatedMs, showProgress }: Props) {
           style={{
             background: 'var(--cp-cyan)',
             height: '3px',
-            boxShadow: '0 0 8px var(--cp-cyan), 0 0 20px rgba(0, 245, 255, 0.5)',
+            boxShadow: '0 0 8px var(--cp-cyan), 0 0 20px var(--cp-cyan-glow-strong)',
             width: '0%',
             transition: 'width 0ms ease-out',
           }}

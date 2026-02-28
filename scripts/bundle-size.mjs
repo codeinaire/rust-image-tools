@@ -160,7 +160,7 @@ function analyzeWasm() {
 // We select only files from the most recent build for a given extension by
 // taking those within FRESHNESS_MS of the newest mtime for that extension.
 
-const FRESHNESS_MS = 10 * 60 * 1000; // 10-minute window
+const FRESHNESS_MS = 60 * 1000; // 60-second window — wide enough for a single build, narrow enough to exclude stale files from previous runs
 
 function analyzeAssets(ext) {
   if (!existsSync(PATHS.dist)) {
