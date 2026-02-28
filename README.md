@@ -255,8 +255,10 @@ The script installs Rust if not present, adds the `wasm32-unknown-unknown` targe
 
 ### Testing
 
+#### Rust
+
 ```bash
-# Rust unit tests
+# Unit tests
 cargo test --manifest-path crates/image-converter/Cargo.toml
 
 # With conversion timings visible
@@ -271,11 +273,27 @@ cargo test --manifest-path crates/image-converter/Cargo.toml -- --ignored --noca
 # Run a single large-image test by format
 cargo test --manifest-path crates/image-converter/Cargo.toml -- --ignored --nocapture size_square_max_gif
 
-# Rust WASM tests (headless browser)
+# WASM tests (headless browser)
 wasm-pack test --headless --chrome crates/image-converter
+```
 
-# Frontend integration tests
-cd web && npx playwright test
+#### TypeScript (Playwright)
+
+```bash
+# Run all integration tests
+cd web && npm run test:e2e
+
+# Run a specific spec file
+cd web && npx playwright test tests/integration/conversion.spec.ts
+
+# Run a specific test by name
+cd web && npx playwright test --grep "WASM initializes"
+
+# Run with browser visible
+cd web && npx playwright test --headed
+
+# Show HTML report after a run
+cd web && npx playwright show-report
 ```
 
 ### Benchmarks

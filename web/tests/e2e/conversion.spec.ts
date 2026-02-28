@@ -1,15 +1,15 @@
 import { test, expect } from '@playwright/test'
-import { join } from 'path'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
 test.describe('End-to-end conversion', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    // Wait for WASM to initialize before each test
-    await page.evaluate(async () => {
-      return await window.__converter.ensureReady()
-    })
+    await page.waitForFunction(() => !!window.__converter)
+    await page.evaluate(() => window.__converter.ensureReady())
   })
 
   test('File select → convert → download: valid blob, correct MIME, non-zero size', async ({
@@ -21,7 +21,7 @@ test.describe('End-to-end conversion', () => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.jpg'))
 
     // Wait for source info to appear (format detected)
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     // Convert to PNG
     await page.locator('#format-select').selectOption('png')
@@ -29,7 +29,7 @@ test.describe('End-to-end conversion', () => {
     await page.locator('#convert-btn').click()
 
     // Wait for result area to appear
-    await expect(page.locator('#result-area')).not.toHaveClass(/hidden/, { timeout: 30_000 })
+    await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
 
     const totalMs = Date.now() - convertStart
 
@@ -74,7 +74,7 @@ test.describe('End-to-end conversion', () => {
   }) => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.jpg'))
 
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     const detailsText = await page.locator('#source-details').textContent()
     expect(detailsText).toMatch(/JPEG/i)
@@ -85,23 +85,21 @@ test.describe('End-to-end conversion', () => {
   test('Format auto-detection: load PNG, verify UI shows "PNG"', async ({ page }) => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
 
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     const detailsText = await page.locator('#source-details').textContent()
     expect(detailsText).toMatch(/PNG/i)
   })
 
-  test('Before/after metadata: result details show sizes and conversion time', async ({
-    page,
-  }) => {
+  test('Before/after metadata: result details show sizes and conversion time', async ({ page }) => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
 
-    await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     await page.locator('#format-select').selectOption('jpeg')
     await page.locator('#convert-btn').click()
 
-    await expect(page.locator('#result-area')).not.toHaveClass(/hidden/, { timeout: 30_000 })
+    await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
 
     const detailsText = await page.locator('#result-details').textContent()
     expect(detailsText).toBeTruthy()
@@ -116,7 +114,7 @@ test.describe('End-to-end conversion', () => {
     // Inject a fake corrupted file via drop event
     await page.evaluate(async () => {
       const dropZone = document.getElementById('drop-zone')!
-      const corruptBytes = new Uint8Array([0xFF, 0xFE, 0x00, 0x01, 0xDE, 0xAD, 0xBE, 0xEF])
+      const corruptBytes = new Uint8Array([0xff, 0xfe, 0x00, 0x01, 0xde, 0xad, 0xbe, 0xef])
       const file = new File([corruptBytes], 'corrupt.png', { type: 'image/png' })
       const dt = new DataTransfer()
       dt.items.add(file)
@@ -124,7 +122,7 @@ test.describe('End-to-end conversion', () => {
     })
 
     // Wait for error display to appear
-    await expect(page.locator('#error-display')).not.toHaveClass(/hidden/, { timeout: 15_000 })
+    await expect(page.locator('#error-display')).toBeVisible({ timeout: 15_000 })
 
     const errorText = await page.locator('#error-message').textContent()
     expect(errorText).toBeTruthy()
@@ -136,22 +134,23 @@ test.describe('End-to-end conversion', () => {
   test('Multiple format conversions produce correct MIME types', async ({ page }) => {
     const formats: Array<{ fmt: string; magic: number[] }> = [
       { fmt: 'jpeg', magic: [0xff, 0xd8, 0xff] }, // JPEG SOI + APP marker
-      { fmt: 'gif', magic: [0x47, 0x49, 0x46] },  // GIF87a or GIF89a
-      { fmt: 'bmp', magic: [0x42, 0x4d] },         // BM
+      { fmt: 'gif', magic: [0x47, 0x49, 0x46] }, // GIF87a or GIF89a
+      { fmt: 'bmp', magic: [0x42, 0x4d] }, // BM
     ]
 
     for (const { fmt, magic } of formats) {
       // Reload fresh for each sub-test
       await page.goto('/')
-      await page.evaluate(async () => window.__converter.ensureReady())
+      await page.waitForFunction(() => !!window.__converter)
+      await page.evaluate(() => window.__converter.ensureReady())
 
       await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
-      await expect(page.locator('#source-info')).not.toHaveClass(/hidden/, { timeout: 10_000 })
+      await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
       const pipelineStart = performance.now()
       await page.locator('#format-select').selectOption(fmt)
       await page.locator('#convert-btn').click()
-      await expect(page.locator('#result-area')).not.toHaveClass(/hidden/, { timeout: 30_000 })
+      await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
       const totalMs = Math.round(performance.now() - pipelineStart)
 
       const href = await page.locator('#download-link').getAttribute('href')

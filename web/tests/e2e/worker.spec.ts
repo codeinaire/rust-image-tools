@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test'
 import { readFileSync } from 'fs'
-import { join } from 'path'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
 // Type alias for the converter exposed on window by main.ts
@@ -27,11 +29,10 @@ test.describe('Worker lifecycle', () => {
     page.on('pageerror', (err) => pageErrors.push(err.message))
 
     await page.goto('/')
+    await page.waitForFunction(() => !!window.__converter)
 
     // Wait until converter is ready (WASM loaded in Worker)
-    const initMs = await page.evaluate(async () => {
-      return await window.__converter.ensureReady()
-    })
+    const initMs = await page.evaluate(() => window.__converter.ensureReady())
 
     expect(typeof initMs).toBe('number')
     expect(initMs).toBeGreaterThanOrEqual(0)

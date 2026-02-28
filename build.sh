@@ -17,4 +17,4 @@ npm install --prefix web
 web/node_modules/.bin/wasm-pack build crates/image-converter --target web --release
 
 # Build frontend — output goes to web/dist/
-web/node_modules/.bin/parcel build web/src/index.html --dist-dir web/dist
+web/node_modules/.bin/astro build --root web

@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:1234',
+    baseURL: 'http://localhost:4321',
     headless: true,
     trace: 'on-first-retry',
   },
@@ -19,8 +19,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npx parcel src/index.html --port 1234',
-    url: 'http://localhost:1234',
+    command: 'npx astro dev',
+    url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
