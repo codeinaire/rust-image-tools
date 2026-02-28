@@ -24,6 +24,8 @@
     "@types/node": "^24",
     "astro": "^5",
     "preact": "^10",
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "wasm-pack": "^0.14.0"

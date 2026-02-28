@@ -14,8 +14,8 @@ type ImageDimensionProps = {
 let initialized = false
 
 export function initAnalytics(): void {
-  if (process.env.NODE_ENV !== 'production') return
-  const key = process.env.POSTHOG_KEY
+  if (import.meta.env.MODE !== 'production') return
+  const key = import.meta.env.PUBLIC_POSTHOG_KEY
   if (!key) return
 
   posthog.init(key, {
@@ -23,7 +23,7 @@ export function initAnalytics(): void {
     autocapture: false,
     request_batching: false,
     person_profiles: 'always',
-    debug: process.env.NODE_ENV !== 'production',
+    debug: import.meta.env.MODE !== 'production',
   })
   initialized = true
 }
