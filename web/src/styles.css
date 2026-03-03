@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ─── Cyberpunk Design Tokens ─────────────────────────────────────────── */
 :root {
@@ -56,11 +56,23 @@ body::after {
 }
 
 @keyframes neon-flicker {
-  0%, 84%, 100% { opacity: 1; }
-  86%   { opacity: 0.6; }
-  86.6% { opacity: 0.95; }
-  87.8% { opacity: 0.7; }
-  88.4% { opacity: 1; }
+  0%,
+  84%,
+  100% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 0.6;
+  }
+  86.6% {
+    opacity: 0.95;
+  }
+  87.8% {
+    opacity: 0.7;
+  }
+  88.4% {
+    opacity: 1;
+  }
 }
 
 /* ─── Clip-path Utilities ─────────────────────────────────────────────── */
@@ -101,7 +113,9 @@ details.cyber-details > summary::before {
   color: var(--cp-cyan);
   font-size: 0.65em;
   top: 0.25em;
-  transition: transform 0.2s, color 0.2s;
+  transition:
+    transform 0.2s,
+    color 0.2s;
 }
 
 details.cyber-details[open] > summary::before {

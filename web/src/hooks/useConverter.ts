@@ -34,7 +34,11 @@ const TIMING_RATES: Record<string, TimingRate> = {
 }
 const TIMING_FALLBACK: TimingRate = { base: 30, perMp: 50 }
 
-function estimateConversionMs(sourceFormat: string, targetFormat: string, megapixels: number): number {
+function estimateConversionMs(
+  sourceFormat: string,
+  targetFormat: string,
+  megapixels: number,
+): number {
   const key = `${sourceFormat}->${targetFormat}`
   const rate = TIMING_RATES[key] ?? TIMING_FALLBACK
   return rate.base + megapixels * rate.perMp
@@ -123,8 +127,12 @@ export function useConverter(): {
     clearProgressTimeout()
 
     if (file.size > MAX_FILE_SIZE) {
-      trackValidationRejected({ reason: 'file_too_large', file_size_bytes: file.size, megapixels: null })
-      setState(s => ({
+      trackValidationRejected({
+        reason: 'file_too_large',
+        file_size_bytes: file.size,
+        megapixels: null,
+      })
+      setState((s) => ({
         ...s,
         status: 'error',
         error: `File too large (${formatFileSize(file.size)}). Maximum allowed: ${formatFileSize(MAX_FILE_SIZE)}.`,
@@ -135,7 +143,14 @@ export function useConverter(): {
       return
     }
 
-    setState(s => ({ ...s, status: 'reading', error: null, fileInfo: null, result: null, showProgress: false }))
+    setState((s) => ({
+      ...s,
+      status: 'reading',
+      error: null,
+      fileInfo: null,
+      result: null,
+      showProgress: false,
+    }))
 
     const buffer = await file.arrayBuffer()
     const bytes = new Uint8Array(buffer)
@@ -149,8 +164,12 @@ export function useConverter(): {
       const megapixels = (dimensions.width * dimensions.height) / 1_000_000
 
       if (megapixels > MAX_MEGAPIXELS) {
-        trackValidationRejected({ reason: 'dimensions_too_large', file_size_bytes: file.size, megapixels })
-        setState(s => ({
+        trackValidationRejected({
+          reason: 'dimensions_too_large',
+          file_size_bytes: file.size,
+          megapixels,
+        })
+        setState((s) => ({
           ...s,
           status: 'error',
           error: `Image too large (${dimensions.width}×${dimensions.height}, ${megapixels.toFixed(1)} MP). Maximum allowed: ${MAX_MEGAPIXELS} MP.`,
@@ -168,15 +187,27 @@ export function useConverter(): {
         input_method: inputMethod,
       })
 
-      setState(s => ({
+      setState((s) => ({
         ...s,
         status: 'idle',
         error: null,
-        fileInfo: { file, bytes, sourceFormat: format, megapixels, width: dimensions.width, height: dimensions.height },
+        fileInfo: {
+          file,
+          bytes,
+          sourceFormat: format,
+          megapixels,
+          width: dimensions.width,
+          height: dimensions.height,
+        },
       }))
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e)
-      setState(s => ({ ...s, status: 'error', error: `Could not read image: ${message}`, fileInfo: null }))
+      setState((s) => ({
+        ...s,
+        status: 'error',
+        error: `Could not read image: ${message}`,
+        fileInfo: null,
+      }))
     }
   }
 
@@ -187,8 +218,12 @@ export function useConverter(): {
     revokeBlobUrl()
     clearProgressTimeout()
 
-    const estimatedMs = estimateConversionMs(fileInfo.sourceFormat, targetFormat, fileInfo.megapixels)
-    setState(s => ({
+    const estimatedMs = estimateConversionMs(
+      fileInfo.sourceFormat,
+      targetFormat,
+      fileInfo.megapixels,
+    )
+    setState((s) => ({
       ...s,
       status: 'converting',
       error: null,
@@ -215,7 +250,8 @@ export function useConverter(): {
       const blobUrl = URL.createObjectURL(blob)
       blobUrlRef.current = blobUrl
 
-      const changePercent = ((resultBytes.byteLength - fileInfo.file.size) / fileInfo.file.size) * 100
+      const changePercent =
+        ((resultBytes.byteLength - fileInfo.file.size) / fileInfo.file.size) * 100
       const baseName = fileInfo.file.name.replace(/\.[^.]+$/, '')
       const extension = targetFormat === 'jpeg' ? 'jpg' : targetFormat
 
@@ -232,7 +268,7 @@ export function useConverter(): {
         pipeline_total_ms: elapsedMs,
       })
 
-      setState(s => ({
+      setState((s) => ({
         ...s,
         status: 'done',
         result: {
@@ -251,14 +287,17 @@ export function useConverter(): {
       // Hide progress bar 500ms after the 200ms snap animation completes
       progressTimeoutRef.current = setTimeout(() => {
         progressTimeoutRef.current = null
-        setState(s => ({ ...s, showProgress: false }))
+        setState((s) => ({ ...s, showProgress: false }))
       }, 700)
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e)
-      const errorType = message.includes('decode') ? 'decode_error'
-        : message.includes('encode') ? 'encode_error'
-        : message.includes('unsupported') || message.includes('Unsupported') ? 'unsupported_format'
-        : 'unknown'
+      const errorType = message.includes('decode')
+        ? 'decode_error'
+        : message.includes('encode')
+          ? 'encode_error'
+          : message.includes('unsupported') || message.includes('Unsupported')
+            ? 'unsupported_format'
+            : 'unknown'
 
       trackConversionFailed({
         source_format: fileInfo.sourceFormat,
@@ -268,7 +307,7 @@ export function useConverter(): {
         error_message: message,
       })
 
-      setState(s => ({
+      setState((s) => ({
         ...s,
         status: 'error',
         error: `Conversion failed: ${message}`,

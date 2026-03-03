@@ -116,8 +116,7 @@ export function DropZone({
       : 'DRAG & DROP IMAGE — OR CLICK TO SELECT'
 
   const { w, h } = dims
-  const points =
-    w > 0 ? `${CUT},0 ${w},0 ${w},${h - CUT} ${w - CUT},${h} 0,${h} 0,${CUT}` : ''
+  const points = w > 0 ? `${CUT},0 ${w},0 ${w},${h - CUT} ${w - CUT},${h} 0,${h} 0,${CUT}` : ''
 
   function fmtButtonStyle(fmt: string) {
     const isSelected = fmt === targetFormat
@@ -362,7 +361,8 @@ export function DropZone({
                       marginTop: '0.2rem',
                     }}
                   >
-                    {sign}{result.changePercent.toFixed(0)}%
+                    {sign}
+                    {result.changePercent.toFixed(0)}%
                   </span>
                 </div>
 
