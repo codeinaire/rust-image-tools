@@ -6,13 +6,13 @@ Features are ordered by implementation difficulty, easiest first. Each entry inc
 
 ## Difficulty Scale
 
-| Rating | Meaning |
-|--------|---------|
-| 1/5 | Trivial — a few hours, minimal risk |
-| 2/5 | Easy — a focused day or two |
-| 3/5 | Moderate — multi-day, some coordination between Rust and TS |
-| 4/5 | Hard — significant effort, architectural decisions required |
-| 5/5 | Very Hard — major undertaking, weeks of work |
+| Rating | Meaning                                                     |
+| ------ | ----------------------------------------------------------- |
+| 1/5    | Trivial — a few hours, minimal risk                         |
+| 2/5    | Easy — a focused day or two                                 |
+| 3/5    | Moderate — multi-day, some coordination between Rust and TS |
+| 4/5    | Hard — significant effort, architectural decisions required |
+| 5/5    | Very Hard — major undertaking, weeks of work                |
 
 ---
 
@@ -20,13 +20,13 @@ Features are ordered by implementation difficulty, easiest first. Each entry inc
 
 Estimated sizes for the existing production build (5 formats: PNG, JPEG, WebP, GIF, BMP).
 
-| Asset | Uncompressed | Gzipped | Notes |
-|-------|-------------|---------|-------|
-| WASM binary | ~1.5–2 MB | ~550–750 KB | `image` crate with 5 codecs; `wasm-opt` disabled |
-| JavaScript (main + worker) | ~80–120 KB | ~25–40 KB | App code + PostHog SDK (~30 KB gzipped) |
-| CSS (Tailwind purged) | ~15–25 KB | ~5–8 KB | Only used utility classes |
-| HTML (`index.html`) | ~15–20 KB | ~5–7 KB | Static content + JSON-LD structured data |
-| **Total** | **~1.6–2.2 MB** | **~585–805 KB** | Over-the-wire first load |
+| Asset                      | Uncompressed    | Gzipped         | Notes                                            |
+| -------------------------- | --------------- | --------------- | ------------------------------------------------ |
+| WASM binary                | ~1.5–2 MB       | ~550–750 KB     | `image` crate with 5 codecs; `wasm-opt` disabled |
+| JavaScript (main + worker) | ~80–120 KB      | ~25–40 KB       | App code + PostHog SDK (~30 KB gzipped)          |
+| CSS (Tailwind purged)      | ~15–25 KB       | ~5–8 KB         | Only used utility classes                        |
+| HTML (`index.html`)        | ~15–20 KB       | ~5–7 KB         | Static content + JSON-LD structured data         |
+| **Total**                  | **~1.6–2.2 MB** | **~585–805 KB** | Over-the-wire first load                         |
 
 > All delta estimates below are **gzipped** (over-the-wire cost) unless stated otherwise. Uncompressed sizes are noted separately where relevant.
 
@@ -86,12 +86,12 @@ Add a light/dark theme toggle with persistence via `localStorage`. Tailwind CSS 
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | No Rust changes |
-| JavaScript | +~1–2 KB | +~0.5–1 KB | Toggle logic, `localStorage` read/write |
-| CSS | +~8–15 KB | +~3–6 KB | `dark:` variants for all existing Tailwind classes |
-| **Total** | **+~9–17 KB** | **+~3.5–7 KB** | Smallest footprint of any feature in this roadmap |
+| Asset       | Delta (uncompressed) | Delta (gzipped) | Notes                                              |
+| ----------- | -------------------- | --------------- | -------------------------------------------------- |
+| WASM binary | 0                    | 0               | No Rust changes                                    |
+| JavaScript  | +~1–2 KB             | +~0.5–1 KB      | Toggle logic, `localStorage` read/write            |
+| CSS         | +~8–15 KB            | +~3–6 KB        | `dark:` variants for all existing Tailwind classes |
+| **Total**   | **+~9–17 KB**        | **+~3.5–7 KB**  | Smallest footprint of any feature in this roadmap  |
 
 > CSS is the main contributor. Tailwind v4 purges unused classes, so cost is proportional to how many `dark:` variants you add. Using CSS custom properties (`--color-bg` etc.) instead of per-element `dark:` variants can halve this cost.
 
@@ -144,12 +144,12 @@ Allow users to paste an image directly from the clipboard using `Ctrl+V` / `Cmd+
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | No Rust changes |
-| JavaScript | +~1–2 KB | +~0.5–1 KB | Paste event handler + clipboard API glue |
-| CSS | 0 | 0 | No new UI elements beyond existing button styling |
-| **Total** | **+~1–2 KB** | **+~0.5–1 KB** | Negligible — the cheapest feature in this roadmap |
+| Asset       | Delta (uncompressed) | Delta (gzipped) | Notes                                             |
+| ----------- | -------------------- | --------------- | ------------------------------------------------- |
+| WASM binary | 0                    | 0               | No Rust changes                                   |
+| JavaScript  | +~1–2 KB             | +~0.5–1 KB      | Paste event handler + clipboard API glue          |
+| CSS         | 0                    | 0               | No new UI elements beyond existing button styling |
+| **Total**   | **+~1–2 KB**         | **+~0.5–1 KB**  | Negligible — the cheapest feature in this roadmap |
 
 > The `paste` event listener and `Blob → Uint8Array` conversion are a handful of lines that compress to near nothing. No new dependencies.
 
@@ -204,24 +204,26 @@ Expose output quality as a user-configurable parameter for lossy formats. JPEG i
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | +~3–8 KB | +~1–3 KB | `JpegEncoder::new_with_quality()` code path; `PngEncoder` quality optional |
-| JavaScript | +~1–2 KB | +~0.5–1 KB | Slider UI, Worker message update, conditional display logic |
-| CSS | +~1–2 KB | +~0.5 KB | Range input styling |
-| **Total** | **+~5–12 KB** | **+~2–5 KB** | Very low cost for high user value |
+| Asset       | Delta (uncompressed) | Delta (gzipped) | Notes                                                                      |
+| ----------- | -------------------- | --------------- | -------------------------------------------------------------------------- |
+| WASM binary | +~3–8 KB             | +~1–3 KB        | `JpegEncoder::new_with_quality()` code path; `PngEncoder` quality optional |
+| JavaScript  | +~1–2 KB             | +~0.5–1 KB      | Slider UI, Worker message update, conditional display logic                |
+| CSS         | +~1–2 KB             | +~0.5 KB        | Range input styling                                                        |
+| **Total**   | **+~5–12 KB**        | **+~2–5 KB**    | Very low cost for high user value                                          |
 
 > The WASM delta is minimal because `JpegEncoder::new_with_quality()` is already in the `image` crate — it's just a different constructor call. No new monomorphizations or codec logic needed.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `quality: Option<u8>` parameter to `convert_image()` (or add `convert_image_with_options()`)
 - [ ] Use `JpegEncoder::new_with_quality()` when quality is specified, default to 80 when not
 - [ ] Return an error if quality is outside 1–100
 - [ ] Add unit tests for quality boundaries (1, 50, 80, 100) and invalid values
 
 **Frontend:**
+
 - [ ] Add a quality slider (`<input type="range" min="1" max="100" value="80">`) to the UI
 - [ ] Show the slider only when the target format is JPEG (or other lossy formats as added)
 - [ ] Display current quality value next to the slider (e.g., "Quality: 80")
@@ -247,12 +249,12 @@ Expose output quality as a user-configurable parameter for lossy formats. JPEG i
 
 Add the four Tier 2 formats from PLANNING.md. All are pure-Rust codecs in the `image` crate — no native dependencies required, making them straightforward WASM additions.
 
-| Format | Decode | Encode | Notes |
-|--------|--------|--------|-------|
-| TIFF | Yes | Yes | Used in professional/print workflows |
-| ICO | Yes | Yes | Windows icon format, multi-resolution |
-| TGA | Yes | Yes | Legacy game/graphics format |
-| QOI | Yes | Yes | Modern fast lossless format, simple spec |
+| Format | Decode | Encode | Notes                                    |
+| ------ | ------ | ------ | ---------------------------------------- |
+| TIFF   | Yes    | Yes    | Used in professional/print workflows     |
+| ICO    | Yes    | Yes    | Windows icon format, multi-resolution    |
+| TGA    | Yes    | Yes    | Legacy game/graphics format              |
+| QOI    | Yes    | Yes    | Modern fast lossless format, simple spec |
 
 ### Pros
 
@@ -281,22 +283,23 @@ Add the four Tier 2 formats from PLANNING.md. All are pure-Rust codecs in the `i
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — TIFF | +~180–260 KB | +~60–90 KB | `tiff` crate is the heaviest; handles many TIFF variants |
-| WASM binary — ICO | +~50–80 KB | +~18–28 KB | Container format wrapping PNG/BMP internally |
-| WASM binary — TGA | +~30–50 KB | +~10–18 KB | Simple run-length encoded format |
-| WASM binary — QOI | +~15–25 KB | +~5–9 KB | Extremely simple spec — smallest codec of the four |
-| **WASM total (all four)** | **+~275–415 KB** | **+~93–145 KB** | Adds ~15–25% to current WASM binary |
-| JavaScript | +~1–2 KB | +~0.5–1 KB | New `<option>` elements, format name mappings |
-| CSS | 0 | 0 | No new styles needed |
-| **Grand total** | **+~276–417 KB** | **+~93–146 KB** | Dominated entirely by WASM codec additions |
+| Asset                     | Delta (uncompressed) | Delta (gzipped) | Notes                                                    |
+| ------------------------- | -------------------- | --------------- | -------------------------------------------------------- |
+| WASM binary — TIFF        | +~180–260 KB         | +~60–90 KB      | `tiff` crate is the heaviest; handles many TIFF variants |
+| WASM binary — ICO         | +~50–80 KB           | +~18–28 KB      | Container format wrapping PNG/BMP internally             |
+| WASM binary — TGA         | +~30–50 KB           | +~10–18 KB      | Simple run-length encoded format                         |
+| WASM binary — QOI         | +~15–25 KB           | +~5–9 KB        | Extremely simple spec — smallest codec of the four       |
+| **WASM total (all four)** | **+~275–415 KB**     | **+~93–145 KB** | Adds ~15–25% to current WASM binary                      |
+| JavaScript                | +~1–2 KB             | +~0.5–1 KB      | New `<option>` elements, format name mappings            |
+| CSS                       | 0                    | 0               | No new styles needed                                     |
+| **Grand total**           | **+~276–417 KB**     | **+~93–146 KB** | Dominated entirely by WASM codec additions               |
 
 > **Add formats incrementally** rather than all at once — add QOI first (smallest, most interesting), then ICO (favicon workflow), then TIFF. Skip TGA unless there's user demand; it adds ~15 KB gzipped for a rarely-used legacy format.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `tiff`, `ico`, `tga`, `qoi` features to `Cargo.toml`
 - [ ] Add `Tiff`, `Ico`, `Tga`, `Qoi` variants to `ImageFormat` enum
 - [ ] Extend `from_name()` to handle `"tiff"/"tif"`, `"ico"`, `"tga"`, `"qoi"` strings
@@ -306,6 +309,7 @@ Add the four Tier 2 formats from PLANNING.md. All are pure-Rust codecs in the `i
 - [ ] Verify WASM binary size increase is acceptable
 
 **Frontend:**
+
 - [ ] Add new options to target format dropdown in `index.html`
 - [ ] Update format display names and icon/badge mapping in `ui.ts` if applicable
 - [ ] Update SEO content in `index.html` to mention new formats (meta description, FAQ, supported formats section)
@@ -328,16 +332,16 @@ Add the four Tier 2 formats from PLANNING.md. All are pure-Rust codecs in the `i
 
 Expose a set of one-click, zero-parameter image transforms from the `image` crate's `imageops` module. These can be applied before conversion, transforming the output rather than the input file directly.
 
-| Operation | `imageops` function | Parameters |
-|-----------|--------------------|----|
-| Flip horizontal | `flip_horizontal()` | None |
-| Flip vertical | `flip_vertical()` | None |
-| Rotate 90° CW | `rotate90()` | None |
-| Rotate 180° | `rotate180()` | None |
-| Rotate 270° CW / 90° CCW | `rotate270()` | None |
-| Grayscale | `grayscale()` | None |
-| Invert colors | `invert()` | None |
-| Dither (quantize) | `dither()` | Color map |
+| Operation                | `imageops` function | Parameters |
+| ------------------------ | ------------------- | ---------- |
+| Flip horizontal          | `flip_horizontal()` | None       |
+| Flip vertical            | `flip_vertical()`   | None       |
+| Rotate 90° CW            | `rotate90()`        | None       |
+| Rotate 180°              | `rotate180()`       | None       |
+| Rotate 270° CW / 90° CCW | `rotate270()`       | None       |
+| Grayscale                | `grayscale()`       | None       |
+| Invert colors            | `invert()`          | None       |
+| Dither (quantize)        | `dither()`          | Color map  |
 
 ### Pros
 
@@ -363,23 +367,24 @@ Expose a set of one-click, zero-parameter image transforms from the `image` crat
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — flip H/V | +~5–10 KB | +~2–4 KB | Simple pixel reordering |
-| WASM binary — rotate 90/180/270 | +~12–20 KB | +~4–7 KB | Rotation requires new allocation per call |
-| WASM binary — grayscale | +~5–10 KB | +~2–4 KB | Channel averaging, already partially in `image` crate |
-| WASM binary — invert | +~3–6 KB | +~1–2 KB | Simple bitwise NOT per channel |
-| WASM binary — dither | +~20–35 KB | +~7–12 KB | Floyd-Steinberg or ordered dither algorithm |
-| **WASM total** | **+~45–81 KB** | **+~16–29 KB** | Many functions are already compiled in but tree-shaken out |
-| JavaScript | +~2–3 KB | +~1–1.5 KB | Transform toolbar, state array, debounce logic |
-| CSS | +~2–4 KB | +~1–2 KB | Toolbar button styling |
-| **Grand total** | **+~49–88 KB** | **+~18–32 KB** | Reasonable cost for 8 useful operations |
+| Asset                           | Delta (uncompressed) | Delta (gzipped) | Notes                                                      |
+| ------------------------------- | -------------------- | --------------- | ---------------------------------------------------------- |
+| WASM binary — flip H/V          | +~5–10 KB            | +~2–4 KB        | Simple pixel reordering                                    |
+| WASM binary — rotate 90/180/270 | +~12–20 KB           | +~4–7 KB        | Rotation requires new allocation per call                  |
+| WASM binary — grayscale         | +~5–10 KB            | +~2–4 KB        | Channel averaging, already partially in `image` crate      |
+| WASM binary — invert            | +~3–6 KB             | +~1–2 KB        | Simple bitwise NOT per channel                             |
+| WASM binary — dither            | +~20–35 KB           | +~7–12 KB       | Floyd-Steinberg or ordered dither algorithm                |
+| **WASM total**                  | **+~45–81 KB**       | **+~16–29 KB**  | Many functions are already compiled in but tree-shaken out |
+| JavaScript                      | +~2–3 KB             | +~1–1.5 KB      | Transform toolbar, state array, debounce logic             |
+| CSS                             | +~2–4 KB             | +~1–2 KB        | Toolbar button styling                                     |
+| **Grand total**                 | **+~49–88 KB**       | **+~18–32 KB**  | Reasonable cost for 8 useful operations                    |
 
 > Rust's dead-code elimination removes unused `imageops` functions at compile time. Adding these features forces those functions to be compiled in. The actual delta depends on which functions are already present due to internal `image` crate usage (e.g., `grayscale` may already be compiled in for GIF palette operations).
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `apply_transforms(img: DynamicImage, transforms: &[&str]) -> Result<DynamicImage, ConvertError>` in `convert.rs`
 - [ ] Implement each transform case using `imageops::*` functions
 - [ ] Integrate `apply_transforms` into the `convert()` pipeline (between decode and encode)
@@ -387,6 +392,7 @@ Expose a set of one-click, zero-parameter image transforms from the `image` crat
 - [ ] Add unit tests for each transform (verify dimensions after rotate90, pixel values after invert, etc.)
 
 **Frontend:**
+
 - [ ] Design a transforms toolbar in `index.html` (icon buttons for flip H/V, rotate CW/CCW, grayscale toggle, invert toggle)
 - [ ] Manage transforms state as an ordered `string[]` in `ui.ts`
 - [ ] Wire each toolbar button to update state and trigger re-conversion
@@ -435,13 +441,13 @@ Create dedicated landing pages for high-value format conversion keyword pairs (e
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | No Rust changes |
-| JavaScript (shared) | +~0.5–1 KB | +~0.3–0.5 KB | URL param reading on load, pre-selection logic |
-| HTML (per landing page) | +~12–18 KB | +~3–5 KB | Separate HTML document per format pair, served on demand |
-| Sitemap | +~2–5 KB | +~0.5–1 KB | More entries; fetched separately |
-| **Initial bundle delta** | **+~0.5–1 KB** | **+~0.3–0.5 KB** | Landing pages are separate HTTP requests, not part of the main bundle |
+| Asset                    | Delta (uncompressed) | Delta (gzipped)  | Notes                                                                 |
+| ------------------------ | -------------------- | ---------------- | --------------------------------------------------------------------- |
+| WASM binary              | 0                    | 0                | No Rust changes                                                       |
+| JavaScript (shared)      | +~0.5–1 KB           | +~0.3–0.5 KB     | URL param reading on load, pre-selection logic                        |
+| HTML (per landing page)  | +~12–18 KB           | +~3–5 KB         | Separate HTML document per format pair, served on demand              |
+| Sitemap                  | +~2–5 KB             | +~0.5–1 KB       | More entries; fetched separately                                      |
+| **Initial bundle delta** | **+~0.5–1 KB**       | **+~0.3–0.5 KB** | Landing pages are separate HTTP requests, not part of the main bundle |
 
 > Landing pages do not increase the initial load. Each `/png-to-jpeg` URL is a separate HTML document fetched only when a user navigates to that URL. The WASM binary is shared across all pages and served from browser cache after the first visit. With 20 format pairs, total additional HTML is ~60–100 KB uncompressed across all pages — negligible.
 
@@ -500,21 +506,22 @@ Accept SVG files as input and rasterize them to a bitmap format (PNG, JPEG, etc.
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — `resvg` | +~1.2–2 MB | +~400–700 KB | SVG tree parser (`usvg`) + renderer |
-| WASM binary — `tiny-skia` | +~300–600 KB | +~100–200 KB | 2D rendering backend (path fill, stroke, blending) |
-| WASM binary — `resvg` font data | +~100–400 KB | +~40–120 KB | Bundled font for SVG `<text>` elements (optional) |
-| **WASM total** | **+~1.6–3 MB** | **+~540 KB–1 MB** | Roughly doubles the current WASM binary size |
-| JavaScript | +~1–2 KB | +~0.5–1 KB | SVG-specific UI (resolution inputs, format restriction) |
-| CSS | 0 | 0 | No new styles |
-| **Grand total** | **+~1.6–3 MB** | **+~540 KB–1 MB** | **Largest single WASM addition in this roadmap** |
+| Asset                           | Delta (uncompressed) | Delta (gzipped)   | Notes                                                   |
+| ------------------------------- | -------------------- | ----------------- | ------------------------------------------------------- |
+| WASM binary — `resvg`           | +~1.2–2 MB           | +~400–700 KB      | SVG tree parser (`usvg`) + renderer                     |
+| WASM binary — `tiny-skia`       | +~300–600 KB         | +~100–200 KB      | 2D rendering backend (path fill, stroke, blending)      |
+| WASM binary — `resvg` font data | +~100–400 KB         | +~40–120 KB       | Bundled font for SVG `<text>` elements (optional)       |
+| **WASM total**                  | **+~1.6–3 MB**       | **+~540 KB–1 MB** | Roughly doubles the current WASM binary size            |
+| JavaScript                      | +~1–2 KB             | +~0.5–1 KB        | SVG-specific UI (resolution inputs, format restriction) |
+| CSS                             | 0                    | 0                 | No new styles                                           |
+| **Grand total**                 | **+~1.6–3 MB**       | **+~540 KB–1 MB** | **Largest single WASM addition in this roadmap**        |
 
 > SVG rasterization is the most expensive feature by bundle size, bar none. The `resvg` + `tiny-skia` dependency tree adds more bytes than the entire current WASM binary. **Mitigation strategies**: (1) lazy-load the SVG WASM module separately and only fetch it when the user uploads an SVG file; (2) skip bundled fonts and accept that SVG `<text>` with system fonts will use fallback rendering. Lazy-loading keeps the initial bundle unchanged and only incurs the cost when needed.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `resvg` and `tiny-skia` to `Cargo.toml`
 - [ ] Add `Svg` to `ImageFormat` enum as decode-only
 - [ ] Implement `detect_svg(input: &[u8]) -> bool` using XML/SVG signature detection
@@ -525,6 +532,7 @@ Accept SVG files as input and rasterize them to a bitmap format (PNG, JPEG, etc.
 - [ ] Measure WASM binary size increase and optimize if needed
 
 **Frontend:**
+
 - [ ] Show "Output size" input fields (width × height) when source format is SVG
 - [ ] Default to SVG viewBox dimensions parsed from the SVG text (or 1024×768 fallback)
 - [ ] Update `worker.ts` to call `rasterize_svg()` instead of `convert_image()` for SVG input
@@ -574,19 +582,20 @@ Extract and display image metadata from uploaded files — EXIF data for JPEG/TI
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — `kamadak-exif` | +~80–130 KB | +~28–45 KB | EXIF tag parser; includes IFD traversal and tag table |
-| WASM binary — glue code | +~5–10 KB | +~2–4 KB | `get_metadata()` export + serde serialization |
-| JavaScript | +~2–3 KB | +~0.8–1.2 KB | Metadata panel DOM, GPS warning logic |
-| CSS | +~1–2 KB | +~0.4–0.8 KB | Collapsible panel, table styling |
-| **Grand total** | **+~88–145 KB** | **+~31–51 KB** | Modest cost; `kamadak-exif` is a focused, lean crate |
+| Asset                        | Delta (uncompressed) | Delta (gzipped) | Notes                                                 |
+| ---------------------------- | -------------------- | --------------- | ----------------------------------------------------- |
+| WASM binary — `kamadak-exif` | +~80–130 KB          | +~28–45 KB      | EXIF tag parser; includes IFD traversal and tag table |
+| WASM binary — glue code      | +~5–10 KB            | +~2–4 KB        | `get_metadata()` export + serde serialization         |
+| JavaScript                   | +~2–3 KB             | +~0.8–1.2 KB    | Metadata panel DOM, GPS warning logic                 |
+| CSS                          | +~1–2 KB             | +~0.4–0.8 KB    | Collapsible panel, table styling                      |
+| **Grand total**              | **+~88–145 KB**      | **+~31–51 KB**  | Modest cost; `kamadak-exif` is a focused, lean crate  |
 
 > The Cons section noted `~100–200 KB` — that estimate was for the uncompressed binary. Gzipped (the actual over-the-wire cost) is closer to 30–50 KB. Note that `serde` + `serde-wasm-bindgen` are already in `Cargo.toml`, so serializing the metadata struct to JS adds essentially zero new dependencies.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `kamadak-exif` (or `exif`) to `Cargo.toml`
 - [ ] Implement `get_metadata(input: &[u8]) -> Result<JsValue, JsError>` in `lib.rs`
 - [ ] Parse EXIF fields and return a `HashMap<String, String>` of formatted key-value pairs
@@ -595,6 +604,7 @@ Extract and display image metadata from uploaded files — EXIF data for JPEG/TI
 - [ ] Add unit tests for EXIF parsing with real JPEG fixtures
 
 **Frontend:**
+
 - [ ] Call `get_metadata()` in the Worker alongside `get_dimensions()` when a file is loaded
 - [ ] Design a collapsible metadata panel in `index.html`
 - [ ] Display key EXIF fields in a clean table format
@@ -641,24 +651,26 @@ After the user uploads an image, automatically convert it to all supported forma
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | Uses existing `convert_image()` — no new Rust code |
-| JavaScript | +~2–4 KB | +~0.8–1.5 KB | Benchmark orchestration loop, new Worker message types, results table UI |
-| CSS | +~1–2 KB | +~0.4–0.8 KB | Results table, loading skeleton, highlight styling |
-| **Grand total** | **+~3–6 KB** | **+~1.2–2.3 KB** | Near-zero bundle cost — feature is pure orchestration logic |
+| Asset           | Delta (uncompressed) | Delta (gzipped)  | Notes                                                                    |
+| --------------- | -------------------- | ---------------- | ------------------------------------------------------------------------ |
+| WASM binary     | 0                    | 0                | Uses existing `convert_image()` — no new Rust code                       |
+| JavaScript      | +~2–4 KB             | +~0.8–1.5 KB     | Benchmark orchestration loop, new Worker message types, results table UI |
+| CSS             | +~1–2 KB             | +~0.4–0.8 KB     | Results table, loading skeleton, highlight styling                       |
+| **Grand total** | **+~3–6 KB**         | **+~1.2–2.3 KB** | Near-zero bundle cost — feature is pure orchestration logic              |
 
 > This is the best cost-to-value ratio of any feature in this roadmap. Zero new dependencies, zero WASM cost. The feature is entirely implemented by calling existing code in a loop and rendering results.
 
 ### Broad Todo List
 
 **Worker:**
+
 - [ ] Add `BenchmarkImages` request type to `worker-types.ts`
 - [ ] Add `BenchmarkResult` and `BenchmarkComplete` response types
 - [ ] Implement benchmark loop in `worker.ts`: iterate formats, convert, post `BenchmarkResult` per format
 - [ ] Allow early termination if a new file is loaded while benchmarking
 
 **Frontend:**
+
 - [ ] Add a results table to `index.html` (hidden initially, shown after benchmark completes)
 - [ ] Handle incremental `BenchmarkResult` messages — populate table rows as they arrive
 - [ ] Add a "Convert to this" button per row that pre-selects the format and triggers download
@@ -683,18 +695,18 @@ After the user uploads an image, automatically convert it to all supported forma
 
 Implement the full set of parameterized image processing operations from the `image` crate's `imageops` module. Unlike the simple transforms in Feature 5, these require user-supplied parameters and a more complex UI.
 
-| Operation | `imageops` function | Parameters |
-|-----------|--------------------|----|
-| Resize | `resize()` | Width, height, filter type |
-| Thumbnail | `thumbnail()` | Max width, max height (preserves aspect ratio) |
-| Crop | `crop_imm()` | x, y, width, height |
-| Blur (Gaussian) | `blur()` | Sigma (float) |
-| Fast blur | `fast_blur()` | Sigma (float) |
-| Unsharpen mask | `unsharpen()` | Sigma, threshold |
-| Brighten | `brighten()` | Value (-255 to 255) |
-| Contrast | `contrast()` | Value (float, -100.0 to 100.0) |
-| Hue rotate | `huerotate()` | Degrees (0–360) |
-| Tile | `tile()` | Count or fill mode |
+| Operation       | `imageops` function | Parameters                                     |
+| --------------- | ------------------- | ---------------------------------------------- |
+| Resize          | `resize()`          | Width, height, filter type                     |
+| Thumbnail       | `thumbnail()`       | Max width, max height (preserves aspect ratio) |
+| Crop            | `crop_imm()`        | x, y, width, height                            |
+| Blur (Gaussian) | `blur()`            | Sigma (float)                                  |
+| Fast blur       | `fast_blur()`       | Sigma (float)                                  |
+| Unsharpen mask  | `unsharpen()`       | Sigma, threshold                               |
+| Brighten        | `brighten()`        | Value (-255 to 255)                            |
+| Contrast        | `contrast()`        | Value (float, -100.0 to 100.0)                 |
+| Hue rotate      | `huerotate()`       | Degrees (0–360)                                |
+| Tile            | `tile()`            | Count or fill mode                             |
 
 ### Pros
 
@@ -733,26 +745,27 @@ Implement the full set of parameterized image processing operations from the `im
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — `resize` (all filter types) | +~30–55 KB | +~10–18 KB | Lanczos3, CatmullRom, Triangle, Gaussian sampling kernels |
-| WASM binary — `blur` / `fast_blur` | +~20–35 KB | +~7–12 KB | Gaussian convolution; `fast_blur` is a box approximation |
-| WASM binary — `unsharpen` | +~8–15 KB | +~3–5 KB | Calls blur internally + subtraction |
-| WASM binary — `crop_imm` | +~5–10 KB | +~2–3 KB | Sub-image view copy |
-| WASM binary — `brighten` / `contrast` / `huerotate` | +~15–25 KB | +~5–8 KB | Per-pixel arithmetic on channel values |
-| WASM binary — `tile` | +~8–12 KB | +~3–4 KB | Repeated overlay calls |
-| WASM binary — `serde_json` (options parsing) | 0 | 0 | `serde` already a dependency; `serde_json` adds ~40 KB uncompressed / ~15 KB gzipped if not already included |
-| WASM binary — `processing.rs` glue | +~5–10 KB | +~2–3 KB | Dispatch enum, JSON deserialization, pipeline loop |
-| **WASM total** | **+~91–162 KB** | **+~32–53 KB** | Largest Rust addition after SVG; resize filters dominate |
-| JavaScript | +~5–8 KB | +~2–3 KB | Edit panel UI, sliders, crop overlay, debounce logic |
-| CSS | +~3–6 KB | +~1–2 KB | Edit panel layout, slider styling, crop overlay |
-| **Grand total** | **+~99–176 KB** | **+~35–58 KB** | Significant but reasonable for a full processing pipeline |
+| Asset                                               | Delta (uncompressed) | Delta (gzipped) | Notes                                                                                                        |
+| --------------------------------------------------- | -------------------- | --------------- | ------------------------------------------------------------------------------------------------------------ |
+| WASM binary — `resize` (all filter types)           | +~30–55 KB           | +~10–18 KB      | Lanczos3, CatmullRom, Triangle, Gaussian sampling kernels                                                    |
+| WASM binary — `blur` / `fast_blur`                  | +~20–35 KB           | +~7–12 KB       | Gaussian convolution; `fast_blur` is a box approximation                                                     |
+| WASM binary — `unsharpen`                           | +~8–15 KB            | +~3–5 KB        | Calls blur internally + subtraction                                                                          |
+| WASM binary — `crop_imm`                            | +~5–10 KB            | +~2–3 KB        | Sub-image view copy                                                                                          |
+| WASM binary — `brighten` / `contrast` / `huerotate` | +~15–25 KB           | +~5–8 KB        | Per-pixel arithmetic on channel values                                                                       |
+| WASM binary — `tile`                                | +~8–12 KB            | +~3–4 KB        | Repeated overlay calls                                                                                       |
+| WASM binary — `serde_json` (options parsing)        | 0                    | 0               | `serde` already a dependency; `serde_json` adds ~40 KB uncompressed / ~15 KB gzipped if not already included |
+| WASM binary — `processing.rs` glue                  | +~5–10 KB            | +~2–3 KB        | Dispatch enum, JSON deserialization, pipeline loop                                                           |
+| **WASM total**                                      | **+~91–162 KB**      | **+~32–53 KB**  | Largest Rust addition after SVG; resize filters dominate                                                     |
+| JavaScript                                          | +~5–8 KB             | +~2–3 KB        | Edit panel UI, sliders, crop overlay, debounce logic                                                         |
+| CSS                                                 | +~3–6 KB             | +~1–2 KB        | Edit panel layout, slider styling, crop overlay                                                              |
+| **Grand total**                                     | **+~99–176 KB**      | **+~35–58 KB**  | Significant but reasonable for a full processing pipeline                                                    |
 
 > `serde_json` is the hidden cost — if it's not already in `Cargo.toml` (currently only `serde-wasm-bindgen` is used), adding it for JSON options parsing adds ~15 KB gzipped. Consider passing operations as a `JsValue` array instead of JSON strings to avoid this dependency entirely.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Define `ProcessingOperation` enum and `ProcessingOptions` struct in a new `processing.rs` module
 - [ ] Implement each operation using `imageops` functions
 - [ ] Integrate the processing pipeline into `convert()` between decode and encode steps
@@ -761,6 +774,7 @@ Implement the full set of parameterized image processing operations from the `im
 - [ ] Add unit tests for each operation
 
 **Frontend:**
+
 - [ ] Design an "Edit" panel below the file upload section with tabs or sections for each operation group
 - [ ] Resize section: width/height inputs with aspect ratio lock toggle, filter selector
 - [ ] Crop section: interactive crop overlay on the preview (or numeric x/y/w/h inputs as fallback)
@@ -811,14 +825,14 @@ Show the original and converted images side by side with a draggable split slide
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | Pure frontend feature |
-| JavaScript (custom CSS clip-path) | +~3–5 KB | +~1.2–2 KB | Drag event handling, clip-path calculation, touch events |
-| JavaScript (`img-comparison-slider` web component) | +~8–12 KB | +~3–5 KB | If using the library instead of custom code |
-| CSS | +~2–4 KB | +~0.8–1.5 KB | Split view layout, drag handle styling |
-| **Grand total (custom)** | **+~5–9 KB** | **+~2–3.5 KB** | Recommended — no new dependency |
-| **Grand total (library)** | **+~10–16 KB** | **+~3.8–6.5 KB** | Slightly larger but zero implementation risk |
+| Asset                                              | Delta (uncompressed) | Delta (gzipped)  | Notes                                                    |
+| -------------------------------------------------- | -------------------- | ---------------- | -------------------------------------------------------- |
+| WASM binary                                        | 0                    | 0                | Pure frontend feature                                    |
+| JavaScript (custom CSS clip-path)                  | +~3–5 KB             | +~1.2–2 KB       | Drag event handling, clip-path calculation, touch events |
+| JavaScript (`img-comparison-slider` web component) | +~8–12 KB            | +~3–5 KB         | If using the library instead of custom code              |
+| CSS                                                | +~2–4 KB             | +~0.8–1.5 KB     | Split view layout, drag handle styling                   |
+| **Grand total (custom)**                           | **+~5–9 KB**         | **+~2–3.5 KB**   | Recommended — no new dependency                          |
+| **Grand total (library)**                          | **+~10–16 KB**       | **+~3.8–6.5 KB** | Slightly larger but zero implementation risk             |
 
 > The custom CSS clip-path approach is ~3 KB gzipped and has no runtime overhead beyond standard DOM events. The `img-comparison-slider` web component is battle-tested and worth the extra ~2 KB if you don't want to maintain drag logic + touch handling yourself.
 
@@ -875,28 +889,30 @@ Analyze the uploaded image and extract its dominant color palette (5–10 colors
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — custom median cut | +~25–45 KB | +~9–16 KB | Hand-rolled median cut algorithm + downsampling step |
-| WASM binary — `color-thief` crate (if WASM-compatible) | +~40–80 KB | +~14–28 KB | Includes k-means or median cut + Rust overhead |
-| WASM binary — using `NeuQuant` (already in `image` crate for GIF) | 0–5 KB | 0–2 KB | Reuse existing quantizer — nearly free if GIF feature is enabled |
-| JavaScript | +~1.5–3 KB | +~0.6–1.2 KB | Swatch rendering, clipboard copy, "Copy all" button |
-| CSS | +~1–2 KB | +~0.4–0.8 KB | Swatch grid layout |
-| **Grand total (NeuQuant reuse)** | **+~2.5–5 KB** | **+~1–3 KB** | Near-free if you piggyback on the GIF quantizer |
-| **Grand total (custom median cut)** | **+~27.5–50 KB** | **+~10–18 KB** | Good quality, no new dependencies |
-| **Grand total (color-thief)** | **+~42–85 KB** | **+~15–30 KB** | Best quality, highest cost |
+| Asset                                                             | Delta (uncompressed) | Delta (gzipped) | Notes                                                            |
+| ----------------------------------------------------------------- | -------------------- | --------------- | ---------------------------------------------------------------- |
+| WASM binary — custom median cut                                   | +~25–45 KB           | +~9–16 KB       | Hand-rolled median cut algorithm + downsampling step             |
+| WASM binary — `color-thief` crate (if WASM-compatible)            | +~40–80 KB           | +~14–28 KB      | Includes k-means or median cut + Rust overhead                   |
+| WASM binary — using `NeuQuant` (already in `image` crate for GIF) | 0–5 KB               | 0–2 KB          | Reuse existing quantizer — nearly free if GIF feature is enabled |
+| JavaScript                                                        | +~1.5–3 KB           | +~0.6–1.2 KB    | Swatch rendering, clipboard copy, "Copy all" button              |
+| CSS                                                               | +~1–2 KB             | +~0.4–0.8 KB    | Swatch grid layout                                               |
+| **Grand total (NeuQuant reuse)**                                  | **+~2.5–5 KB**       | **+~1–3 KB**    | Near-free if you piggyback on the GIF quantizer                  |
+| **Grand total (custom median cut)**                               | **+~27.5–50 KB**     | **+~10–18 KB**  | Good quality, no new dependencies                                |
+| **Grand total (color-thief)**                                     | **+~42–85 KB**       | **+~15–30 KB**  | Best quality, highest cost                                       |
 
 > **Recommended path**: First try reusing `NeuQuant` (already compiled in for GIF encoding) — it's already in the binary and produces decent palettes. If quality is insufficient, implement median cut as a ~200-line Rust function. Avoid adding `color-thief` as a dependency unless it demonstrably outperforms the custom implementation.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Evaluate `color-thief` crate for WASM compatibility; fall back to implementing median cut if needed
 - [ ] Implement `extract_palette()` with input downsampling (resize to 100px width first)
 - [ ] Add WASM export returning array of RGB hex strings
 - [ ] Add unit tests for palette extraction on known images
 
 **Frontend:**
+
 - [ ] Display palette swatches below the image preview after upload (or run on demand)
 - [ ] Each swatch shows hex code; click copies to clipboard
 - [ ] Show a "Copy all" button that copies the full palette as comma-separated hex codes
@@ -945,16 +961,16 @@ Convert the app into a Progressive Web App (PWA) with a service worker that cach
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | No Rust changes |
-| JavaScript — service worker (manual) | +~4–8 KB | +~2–3 KB | Fetch handler, cache strategy, update logic |
-| JavaScript — Workbox runtime | +~60–100 KB | +~22–38 KB | If using Workbox; includes all strategy modules |
-| JavaScript — SW registration | +~0.3–0.5 KB | +~0.2 KB | `navigator.serviceWorker.register()` call in `main.ts` |
-| `manifest.json` | +~0.5–1 KB | +~0.3 KB | Separate HTTP request, fetched once |
-| PWA icons (192×192 + 512×512 PNG) | +~25–60 KB | n/a | PNG icons; served separately, cached by SW |
-| **Grand total (manual SW)** | **+~30–70 KB** | **+~2.5–4 KB** | Only SW registration JS is in the critical path; SW + icons cached |
-| **Grand total (Workbox)** | **+~86–162 KB** | **+~22–41 KB** | Workbox runtime loads in the SW context, not main thread |
+| Asset                                | Delta (uncompressed) | Delta (gzipped) | Notes                                                              |
+| ------------------------------------ | -------------------- | --------------- | ------------------------------------------------------------------ |
+| WASM binary                          | 0                    | 0               | No Rust changes                                                    |
+| JavaScript — service worker (manual) | +~4–8 KB             | +~2–3 KB        | Fetch handler, cache strategy, update logic                        |
+| JavaScript — Workbox runtime         | +~60–100 KB          | +~22–38 KB      | If using Workbox; includes all strategy modules                    |
+| JavaScript — SW registration         | +~0.3–0.5 KB         | +~0.2 KB        | `navigator.serviceWorker.register()` call in `main.ts`             |
+| `manifest.json`                      | +~0.5–1 KB           | +~0.3 KB        | Separate HTTP request, fetched once                                |
+| PWA icons (192×192 + 512×512 PNG)    | +~25–60 KB           | n/a             | PNG icons; served separately, cached by SW                         |
+| **Grand total (manual SW)**          | **+~30–70 KB**       | **+~2.5–4 KB**  | Only SW registration JS is in the critical path; SW + icons cached |
+| **Grand total (Workbox)**            | **+~86–162 KB**      | **+~22–41 KB**  | Workbox runtime loads in the SW context, not main thread           |
 
 > The service worker and icons are **not** part of the main JS bundle — they are separate resources fetched after the page loads. The critical-path cost is only the SW registration snippet (~200 bytes). Workbox's runtime executes inside the service worker process, not on the main thread. Choose Workbox for correctness; choose a manual SW if bundle minimalism matters.
 
@@ -1016,22 +1032,23 @@ Allow users to add a text or image watermark to the output image before conversi
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — `ab_glyph` | +~60–100 KB | +~22–35 KB | TTF/OTF glyph rasterizer |
-| WASM binary — `imageproc` (if used) | +~80–150 KB | +~28–52 KB | General image processing; only `draw_text_mut` needed — consider inlining instead |
-| WASM binary — bundled font (Latin subset) | +~40–80 KB | +~25–50 KB | Stored in WASM data segment as `static [u8]` |
-| WASM binary — watermark logic | +~8–15 KB | +~3–5 KB | Position math, opacity blending, `imageops::overlay()` |
-| **WASM total** | **+~108–345 KB** | **+~50–142 KB** | Range depends on whether `imageproc` is added or inlined |
-| JavaScript | +~2–4 KB | +~0.8–1.5 KB | Watermark UI (text input, sliders, position picker) |
-| CSS | +~1–2 KB | +~0.4–0.8 KB | Collapsible watermark section |
-| **Grand total** | **+~111–351 KB** | **+~51–144 KB** | Font data and `imageproc` are the main unknowns |
+| Asset                                     | Delta (uncompressed) | Delta (gzipped) | Notes                                                                             |
+| ----------------------------------------- | -------------------- | --------------- | --------------------------------------------------------------------------------- |
+| WASM binary — `ab_glyph`                  | +~60–100 KB          | +~22–35 KB      | TTF/OTF glyph rasterizer                                                          |
+| WASM binary — `imageproc` (if used)       | +~80–150 KB          | +~28–52 KB      | General image processing; only `draw_text_mut` needed — consider inlining instead |
+| WASM binary — bundled font (Latin subset) | +~40–80 KB           | +~25–50 KB      | Stored in WASM data segment as `static [u8]`                                      |
+| WASM binary — watermark logic             | +~8–15 KB            | +~3–5 KB        | Position math, opacity blending, `imageops::overlay()`                            |
+| **WASM total**                            | **+~108–345 KB**     | **+~50–142 KB** | Range depends on whether `imageproc` is added or inlined                          |
+| JavaScript                                | +~2–4 KB             | +~0.8–1.5 KB    | Watermark UI (text input, sliders, position picker)                               |
+| CSS                                       | +~1–2 KB             | +~0.4–0.8 KB    | Collapsible watermark section                                                     |
+| **Grand total**                           | **+~111–351 KB**     | **+~51–144 KB** | Font data and `imageproc` are the main unknowns                                   |
 
 > **Key decision**: avoid adding all of `imageproc` just for `draw_text_mut`. The function is ~200 lines in imageproc's source — copy it directly into `lib.rs` to avoid the 28–52 KB `imageproc` overhead. Also consider serving the font file as a **separate fetch** (`/fonts/watermark.woff2`) rather than embedding it in the WASM binary, which keeps the initial WASM load fast and only incurs the font cost when the user enables watermarking.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `ab_glyph` and a bundled font to `Cargo.toml`
 - [ ] Add `imageproc` or implement `draw_text_mut()` directly
 - [ ] Implement `add_text_watermark()` with position, size, color, opacity options
@@ -1039,6 +1056,7 @@ Allow users to add a text or image watermark to the output image before conversi
 - [ ] Add unit tests for watermark placement (verify pixel values at expected positions)
 
 **Frontend:**
+
 - [ ] Add a "Watermark" section to the UI (collapsible, off by default)
 - [ ] Text watermark: text input, font size slider, color picker, position selector (3×3 grid), opacity slider
 - [ ] Image watermark: second file picker for logo, size (% of output width), position, opacity
@@ -1085,29 +1103,32 @@ Replace the estimated progress bar with actual decode/encode progress reported f
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary — `js_sys::Function` callback | +~3–8 KB | +~1–3 KB | `js_sys` is already a transitive dependency of `wasm-bindgen` — minimal addition |
-| JavaScript | +~1–2 KB | +~0.4–0.8 KB | `ConversionProgress` message type, updated progress bar handler |
-| CSS | 0 | 0 | No visual changes — same progress bar |
-| **Grand total** | **+~4–10 KB** | **+~1.4–3.8 KB** | Very low cost; `js_sys` is already in the dependency tree |
+| Asset                                     | Delta (uncompressed) | Delta (gzipped)  | Notes                                                                            |
+| ----------------------------------------- | -------------------- | ---------------- | -------------------------------------------------------------------------------- |
+| WASM binary — `js_sys::Function` callback | +~3–8 KB             | +~1–3 KB         | `js_sys` is already a transitive dependency of `wasm-bindgen` — minimal addition |
+| JavaScript                                | +~1–2 KB             | +~0.4–0.8 KB     | `ConversionProgress` message type, updated progress bar handler                  |
+| CSS                                       | 0                    | 0                | No visual changes — same progress bar                                            |
+| **Grand total**                           | **+~4–10 KB**        | **+~1.4–3.8 KB** | Very low cost; `js_sys` is already in the dependency tree                        |
 
 > `js_sys` is already a transitive dependency of `wasm-bindgen`, so calling `js_sys::Function` from Rust compiles in code that is likely already present. The actual binary delta depends on which `js_sys` APIs are currently tree-shaken out.
 
 ### Broad Todo List
 
 **Rust (WASM):**
+
 - [ ] Add `progress_callback: Option<js_sys::Function>` parameter to `convert_image()`
 - [ ] Call the callback at decode-start, decode-end, encode-start, encode-end checkpoints
 - [ ] Handle `None` callback gracefully (existing callers without callback still work)
 - [ ] Add a typed wrapper struct for the progress function to avoid raw `js_sys::Function` use
 
 **Worker (TS):**
+
 - [ ] Create a `progressCallback` function that posts `ConversionProgress` messages to main thread
 - [ ] Pass callback as a `js_sys::Function`-compatible value when calling `convert_image()`
 - [ ] Ensure callback is properly cleaned up after conversion completes
 
 **Frontend:**
+
 - [ ] Handle `ConversionProgress` message type in `main.ts` and forward to `ui.ts`
 - [ ] Update progress bar in `ui.ts` to use actual progress values instead of the estimated model
 - [ ] Keep the estimated model as a floor (progress bar never goes backwards)
@@ -1171,16 +1192,16 @@ Refactor the frontend from vanilla TypeScript to React (or a lightweight alterna
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | Worker + Rust layer untouched |
-| JavaScript — **Preact** (recommended) | +~8–12 KB | +~3–5 KB | Preact core (~3 KB) + hooks (~1 KB); app code stays same size |
-| JavaScript — **React + ReactDOM** | +~280–350 KB | +~100–130 KB | React 18 production build; app code stays same size |
-| JavaScript — **Astro island** | +~15–25 KB | +~5–9 KB | Astro runtime for hydrating the converter island |
-| CSS | 0 | 0 | Tailwind classes remain the same |
-| Bundler switch (Parcel → Vite) | −5–15% | −5–15% | Vite's Rollup-based tree-shaking typically produces smaller bundles |
-| **Grand total (Preact)** | **+~8–12 KB** | **+~3–5 KB** | Strongly recommended |
-| **Grand total (React)** | **+~280–350 KB** | **+~100–130 KB** | Avoid unless ecosystem lock-in is required |
+| Asset                                 | Delta (uncompressed) | Delta (gzipped)  | Notes                                                               |
+| ------------------------------------- | -------------------- | ---------------- | ------------------------------------------------------------------- |
+| WASM binary                           | 0                    | 0                | Worker + Rust layer untouched                                       |
+| JavaScript — **Preact** (recommended) | +~8–12 KB            | +~3–5 KB         | Preact core (~3 KB) + hooks (~1 KB); app code stays same size       |
+| JavaScript — **React + ReactDOM**     | +~280–350 KB         | +~100–130 KB     | React 18 production build; app code stays same size                 |
+| JavaScript — **Astro island**         | +~15–25 KB           | +~5–9 KB         | Astro runtime for hydrating the converter island                    |
+| CSS                                   | 0                    | 0                | Tailwind classes remain the same                                    |
+| Bundler switch (Parcel → Vite)        | −5–15%               | −5–15%           | Vite's Rollup-based tree-shaking typically produces smaller bundles |
+| **Grand total (Preact)**              | **+~8–12 KB**        | **+~3–5 KB**     | Strongly recommended                                                |
+| **Grand total (React)**               | **+~280–350 KB**     | **+~100–130 KB** | Avoid unless ecosystem lock-in is required                          |
 
 > **Preact is the clear choice.** It adds ~3–5 KB gzipped over the current vanilla TS bundle — essentially free. React adds 100–130 KB, more than doubling the current JS payload. The Web Worker + WASM layer is completely unaffected by this migration either way, since it runs in a separate thread context.
 
@@ -1247,26 +1268,28 @@ Allow users to upload and convert multiple images at once. Files are processed s
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | Batch uses existing `convert_image()` sequentially |
-| JavaScript — batch queue logic | +~3–5 KB | +~1.2–2 KB | Queue manager, status tracking, progress messages |
-| JavaScript — `fflate` ZIP library | +~25–35 KB | +~9–12 KB | Fast ZIP creation; streams output to avoid memory buildup |
-| JavaScript — `JSZip` (alternative) | +~80–100 KB | +~30–38 KB | Heavier alternative; avoid in favour of `fflate` |
-| CSS | +~2–4 KB | +~0.8–1.5 KB | File queue list, status badges, progress per file |
-| **Grand total (`fflate`)** | **+~30–44 KB** | **+~11–15.5 KB** | Reasonable cost; `fflate` dominates |
-| **Grand total (`JSZip`)** | **+~85–109 KB** | **+~31–41.5 KB** | Avoid |
+| Asset                              | Delta (uncompressed) | Delta (gzipped)  | Notes                                                     |
+| ---------------------------------- | -------------------- | ---------------- | --------------------------------------------------------- |
+| WASM binary                        | 0                    | 0                | Batch uses existing `convert_image()` sequentially        |
+| JavaScript — batch queue logic     | +~3–5 KB             | +~1.2–2 KB       | Queue manager, status tracking, progress messages         |
+| JavaScript — `fflate` ZIP library  | +~25–35 KB           | +~9–12 KB        | Fast ZIP creation; streams output to avoid memory buildup |
+| JavaScript — `JSZip` (alternative) | +~80–100 KB          | +~30–38 KB       | Heavier alternative; avoid in favour of `fflate`          |
+| CSS                                | +~2–4 KB             | +~0.8–1.5 KB     | File queue list, status badges, progress per file         |
+| **Grand total (`fflate`)**         | **+~30–44 KB**       | **+~11–15.5 KB** | Reasonable cost; `fflate` dominates                       |
+| **Grand total (`JSZip`)**          | **+~85–109 KB**      | **+~31–41.5 KB** | Avoid                                                     |
 
 > `fflate` is the right choice — it's ~3× smaller than `JSZip` and has a streaming API that avoids holding all converted files in memory simultaneously. For batches that don't need ZIP (individual downloads only), the `fflate` cost can be deferred until the user first clicks "Download all as ZIP" via dynamic `import()`.
 
 ### Broad Todo List
 
 **Worker (TS):**
+
 - [ ] Add `BatchConvertRequest` and `BatchConvertProgress` message types to `worker-types.ts`
 - [ ] Implement batch processing loop in `worker.ts`: iterate files, convert each, post progress after each
 - [ ] Support cancellation of in-progress batch (check a cancellation flag between files)
 
 **Frontend:**
+
 - [ ] Redesign file input area to support multi-file selection (`multiple` attribute on `<input type="file">`)
 - [ ] Build a file queue UI component: list of filenames, status badges, individual download buttons
 - [ ] Show overall batch progress (e.g., "Converting 3 of 12...")
@@ -1318,19 +1341,20 @@ Increase the current 200 MB file size limit and 100 MP pixel limit to accommodat
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | No new logic — just changed threshold constants |
-| JavaScript | +~0.3–0.5 KB | +~0.1–0.2 KB | Mobile detection, updated limit constants, new warning messages |
-| CSS | 0 | 0 | Existing warning UI reused |
-| **Grand total (near-term)** | **+~0.3–0.5 KB** | **+~0.1–0.2 KB** | Essentially free |
-| **Grand total (tiled processing)** | +~80–200 KB WASM | +~28–70 KB | Custom strip decoders for JPEG/PNG are significant new Rust code |
+| Asset                              | Delta (uncompressed) | Delta (gzipped)  | Notes                                                            |
+| ---------------------------------- | -------------------- | ---------------- | ---------------------------------------------------------------- |
+| WASM binary                        | 0                    | 0                | No new logic — just changed threshold constants                  |
+| JavaScript                         | +~0.3–0.5 KB         | +~0.1–0.2 KB     | Mobile detection, updated limit constants, new warning messages  |
+| CSS                                | 0                    | 0                | Existing warning UI reused                                       |
+| **Grand total (near-term)**        | **+~0.3–0.5 KB**     | **+~0.1–0.2 KB** | Essentially free                                                 |
+| **Grand total (tiled processing)** | +~80–200 KB WASM     | +~28–70 KB       | Custom strip decoders for JPEG/PNG are significant new Rust code |
 
 > The threshold changes themselves are free. The hard work — tiled/chunked processing — requires new codec wrappers in Rust that add meaningful binary size. A custom JPEG strip decoder (`mozjpeg` bindings) would add ~50–150 KB WASM gzipped on its own. This is a research-heavy feature where actual size impact depends on the chosen approach.
 
 ### Broad Todo List
 
 **Near-term (raise limits without tiling):**
+
 - [ ] Research actual tested limits on desktop Chrome, Firefox, Safari (16+ GB RAM machines)
 - [ ] Detect mobile vs desktop in `ui.ts` and apply different limits
 - [ ] Raise desktop limits to 500 MB file size / 375 MP pixels
@@ -1338,6 +1362,7 @@ Increase the current 200 MB file size limit and 100 MP pixel limit to accommodat
 - [ ] Improve OOM error messages: detect `RangeError` from WASM `memory.grow()` and show "Image too large for your device's memory" instead of a generic error
 
 **Long-term (tiled processing):**
+
 - [ ] Research which image formats the `image` crate supports for strip/tile decoding (TIFF has native strip support)
 - [ ] Prototype tiled JPEG decoding using `mozjpeg` or a custom JPEG scan parser
 - [ ] Implement tiled PNG encoding using `png` crate's streaming encoder
@@ -1384,20 +1409,21 @@ Run multiple Web Workers in parallel, each with their own WASM module instance, 
 
 ### Bundle Size Impact
 
-| Asset | Delta (uncompressed) | Delta (gzipped) | Notes |
-|-------|---------------------|-----------------|-------|
-| WASM binary | 0 | 0 | Compiled module is shared — not duplicated in the bundle |
-| JavaScript — `WorkerPool` class | +~3–5 KB | +~1.2–2 KB | Pool manager, task queue, Worker lifecycle |
-| JavaScript — modified `worker.ts` | +~0.5–1 KB | +~0.2–0.4 KB | Accept pre-compiled module via `init(module)` |
-| CSS | 0 | 0 | No new UI (pool is transparent to the user) |
-| **Grand total (bundle)** | **+~3.5–6 KB** | **+~1.4–2.4 KB** | Negligible on-disk cost |
-| **Runtime memory impact** | N/A | N/A | +~1.5–2 MB RAM per additional Worker instance at runtime |
+| Asset                             | Delta (uncompressed) | Delta (gzipped)  | Notes                                                    |
+| --------------------------------- | -------------------- | ---------------- | -------------------------------------------------------- |
+| WASM binary                       | 0                    | 0                | Compiled module is shared — not duplicated in the bundle |
+| JavaScript — `WorkerPool` class   | +~3–5 KB             | +~1.2–2 KB       | Pool manager, task queue, Worker lifecycle               |
+| JavaScript — modified `worker.ts` | +~0.5–1 KB           | +~0.2–0.4 KB     | Accept pre-compiled module via `init(module)`            |
+| CSS                               | 0                    | 0                | No new UI (pool is transparent to the user)              |
+| **Grand total (bundle)**          | **+~3.5–6 KB**       | **+~1.4–2.4 KB** | Negligible on-disk cost                                  |
+| **Runtime memory impact**         | N/A                  | N/A              | +~1.5–2 MB RAM per additional Worker instance at runtime |
 
 > The bundle size impact is trivial — the `WorkerPool` class is pure orchestration logic. The real cost is **runtime memory**: each Worker loads a full WASM linear memory space (~1.5–2 MB baseline, growing with image size). A 4-Worker pool processing four 12 MP images concurrently could use 1–2 GB RAM. `WebAssembly.Module` sharing (via `postMessage` transfer) eliminates re-compilation overhead but does not reduce per-Worker memory consumption since each Worker gets its own heap.
 
 ### Broad Todo List
 
 **Architecture:**
+
 - [ ] Design a `WorkerPool` class in `main.ts`:
   - Creates N Worker instances on initialization
   - Maintains a task queue and tracks which Workers are busy
@@ -1407,9 +1433,11 @@ Run multiple Web Workers in parallel, each with their own WASM module instance, 
 - [ ] Handle Worker errors — remove crashed Workers from the pool, recreate
 
 **Worker (TS):**
+
 - [ ] Modify `worker.ts` to accept a pre-compiled WASM module via `init(compiledModule)` instead of always fetching and compiling from URL
 
 **Frontend:**
+
 - [ ] Wire batch processing (Feature 17) to use `WorkerPool` instead of the single Worker
 - [ ] Show per-worker utilization if useful for debugging (or as a fun "x cores working" indicator)
 
@@ -1426,28 +1454,28 @@ Run multiple Web Workers in parallel, each with their own WASM module instance, 
 
 Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broken out separately since WASM is fetched once and cached, while JS is part of the critical render path.
 
-| # | Feature | Difficulty | Impact | Effort | WASM Δ (gz) | JS/CSS Δ (gz) | Total Δ (gz) | Done |
-|---|---------|-----------|--------|--------|------------|--------------|-------------|------|
-| 1 | Dark Mode | 1/5 | Medium | Low | 0 | +~4–7 KB | +~4–7 KB | [ ] |
-| 2 | Paste from Clipboard | 1.5/5 | High | Low | 0 | +~0.5–1 KB | +~0.5–1 KB | [ ] |
-| 3 | JPEG Quality Slider | 2/5 | High | Low | +~1–3 KB | +~1–1.5 KB | +~2–5 KB | [ ] |
-| 4 | Tier 2 Formats (TIFF, ICO, TGA, QOI) | 2/5 | Medium | Low | +~93–145 KB | +~0.5–1 KB | +~94–146 KB | [ ] |
-| 5 | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5 | High | Medium | +~16–29 KB | +~2–3.5 KB | +~18–32 KB | [ ] |
-| 6 | Format Landing Pages (SEO) | 2.5/5 | High | Medium | 0 | +~0.3–0.5 KB | +~0.3–0.5 KB | [ ] |
-| 7 | SVG Rasterization | 2.5/5 | Medium | Medium | +~540 KB–1 MB | +~0.5–1 KB | +~541 KB–1 MB | [ ] |
-| 8 | Image Metadata + EXIF Display | 2.5/5 | Medium | Medium | +~28–45 KB | +~1.2–2 KB | +~29–47 KB | [ ] |
-| 9 | Compression Benchmark | 2.5/5 | High | Medium | 0 | +~1.2–2.3 KB | +~1.2–2.3 KB | [ ] |
-| 10 | Parameterized Processing (Resize, Crop, Blur, etc.) | 3/5 | Very High | High | +~32–53 KB | +~3–5 KB | +~35–58 KB | [ ] |
-| 11 | Side-by-Side Comparison | 3/5 | High | Medium | 0 | +~2–3.5 KB | +~2–3.5 KB | [ ] |
-| 12 | Color Palette Extraction | 3/5 | Medium | Medium | +~0–28 KB | +~1–2 KB | +~1–30 KB | [ ] |
-| 13 | PWA / Offline Support | 3/5 | Medium | High | 0 | +~2.5–4 KB† | +~2.5–4 KB† | [ ] |
-| 14 | Image Watermarking | 3.5/5 | Medium | High | +~50–142 KB | +~1.2–2.3 KB | +~51–144 KB | [ ] |
-| 15 | Real Progress Reporting | 3.5/5 | Low | High | +~1–3 KB | +~0.4–0.8 KB | +~1.4–3.8 KB | [ ] |
-| 16 | React Migration (Preact) | 4/5 | Medium | Very High | 0 | +~3–5 KB | +~3–5 KB | [x] |
-| 16 | React Migration (React) | 4/5 | Medium | Very High | 0 | +~100–130 KB | +~100–130 KB | [ ] |
-| 17 | Batch Processing | 4/5 | Very High | Very High | 0 | +~11–15.5 KB | +~11–15.5 KB | [ ] |
-| 18 | Raise File Size Limits | 4.5/5 | Low | Very High | 0‡ | +~0.1–0.2 KB | +~0.1–0.2 KB | [ ] |
-| 19 | Worker Pool (Parallel Batch) | 4.5/5 | High | Very High | 0 | +~1.4–2.4 KB | +~1.4–2.4 KB | [ ] |
+| #   | Feature                                             | Difficulty | Impact    | Effort    | WASM Δ (gz)   | JS/CSS Δ (gz) | Total Δ (gz)  | Done |
+| --- | --------------------------------------------------- | ---------- | --------- | --------- | ------------- | ------------- | ------------- | ---- |
+| 1   | Dark Mode                                           | 1/5        | Medium    | Low       | 0             | +~4–7 KB      | +~4–7 KB      | [ ]  |
+| 2   | Paste from Clipboard                                | 1.5/5      | High      | Low       | 0             | +~0.5–1 KB    | +~0.5–1 KB    | [ ]  |
+| 3   | JPEG Quality Slider                                 | 2/5        | High      | Low       | +~1–3 KB      | +~1–1.5 KB    | +~2–5 KB      | [ ]  |
+| 4   | Tier 2 Formats (TIFF, ICO, TGA, QOI)                | 2/5        | Medium    | Low       | +~93–145 KB   | +~0.5–1 KB    | +~94–146 KB   | [x]  |
+| 5   | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5        | High      | Medium    | +~16–29 KB    | +~2–3.5 KB    | +~18–32 KB    | [ ]  |
+| 6   | Format Landing Pages (SEO)                          | 2.5/5      | High      | Medium    | 0             | +~0.3–0.5 KB  | +~0.3–0.5 KB  | [ ]  |
+| 7   | SVG Rasterization                                   | 2.5/5      | Medium    | Medium    | +~540 KB–1 MB | +~0.5–1 KB    | +~541 KB–1 MB | [ ]  |
+| 8   | Image Metadata + EXIF Display                       | 2.5/5      | Medium    | Medium    | +~28–45 KB    | +~1.2–2 KB    | +~29–47 KB    | [ ]  |
+| 9   | Compression Benchmark                               | 2.5/5      | High      | Medium    | 0             | +~1.2–2.3 KB  | +~1.2–2.3 KB  | [ ]  |
+| 10  | Parameterized Processing (Resize, Crop, Blur, etc.) | 3/5        | Very High | High      | +~32–53 KB    | +~3–5 KB      | +~35–58 KB    | [ ]  |
+| 11  | Side-by-Side Comparison                             | 3/5        | High      | Medium    | 0             | +~2–3.5 KB    | +~2–3.5 KB    | [ ]  |
+| 12  | Color Palette Extraction                            | 3/5        | Medium    | Medium    | +~0–28 KB     | +~1–2 KB      | +~1–30 KB     | [ ]  |
+| 13  | PWA / Offline Support                               | 3/5        | Medium    | High      | 0             | +~2.5–4 KB†   | +~2.5–4 KB†   | [ ]  |
+| 14  | Image Watermarking                                  | 3.5/5      | Medium    | High      | +~50–142 KB   | +~1.2–2.3 KB  | +~51–144 KB   | [ ]  |
+| 15  | Real Progress Reporting                             | 3.5/5      | Low       | High      | +~1–3 KB      | +~0.4–0.8 KB  | +~1.4–3.8 KB  | [ ]  |
+| 16  | React Migration (Preact)                            | 4/5        | Medium    | Very High | 0             | +~3–5 KB      | +~3–5 KB      | [x]  |
+| 16  | React Migration (React)                             | 4/5        | Medium    | Very High | 0             | +~100–130 KB  | +~100–130 KB  | [ ]  |
+| 17  | Batch Processing                                    | 4/5        | Very High | Very High | 0             | +~11–15.5 KB  | +~11–15.5 KB  | [ ]  |
+| 18  | Raise File Size Limits                              | 4.5/5      | Low       | Very High | 0‡            | +~0.1–0.2 KB  | +~0.1–0.2 KB  | [ ]  |
+| 19  | Worker Pool (Parallel Batch)                        | 4.5/5      | High      | Very High | 0             | +~1.4–2.4 KB  | +~1.4–2.4 KB  | [ ]  |
 
 † PWA service worker and icons load separately and are not in the critical JS bundle.
 ‡ Near-zero for threshold changes; tiled processing would add +28–70 KB WASM gzipped.
@@ -1456,14 +1484,14 @@ Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broke
 
 Features that deserve careful size scrutiny before shipping:
 
-| Feature | Risk | Mitigation |
-|---------|------|-----------|
-| **SVG Rasterization** (#7) | Doubles WASM binary | Lazy-load a separate `svg-converter.wasm` only when user uploads SVG |
-| **Tier 2 Formats — TIFF** (#4) | +60–90 KB WASM | Add TIFF last; evaluate actual size delta after `wasm-opt` |
+| Feature                            | Risk                                     | Mitigation                                                              |
+| ---------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------- |
+| **SVG Rasterization** (#7)         | Doubles WASM binary                      | Lazy-load a separate `svg-converter.wasm` only when user uploads SVG    |
+| **Tier 2 Formats — TIFF** (#4)     | +60–90 KB WASM                           | Add TIFF last; evaluate actual size delta after `wasm-opt`              |
 | **Parameterized Processing** (#10) | +32–53 KB WASM; `serde_json` hidden cost | Pass ops as `JsValue` array instead of JSON string to skip `serde_json` |
-| **Image Watermarking** (#14) | Wide range due to font + `imageproc` | Inline `draw_text_mut`, serve font as separate fetch |
-| **React Migration** (#16) | +100 KB JS if React chosen | Use Preact — same API, 1/30th the size |
-| **Batch Processing** (#17) | `fflate` adds ~10 KB | Dynamic `import('fflate')` on first ZIP click — deferred cost |
+| **Image Watermarking** (#14)       | Wide range due to font + `imageproc`     | Inline `draw_text_mut`, serve font as separate fetch                    |
+| **React Migration** (#16)          | +100 KB JS if React chosen               | Use Preact — same API, 1/30th the size                                  |
+| **Batch Processing** (#17)         | `fflate` adds ~10 KB                     | Dynamic `import('fflate')` on first ZIP click — deferred cost           |
 
 ### Recommended First Sprint (Highest ROI)
 

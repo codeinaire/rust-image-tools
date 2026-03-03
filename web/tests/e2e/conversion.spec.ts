@@ -1,9 +1,24 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
+
+const TOP_FORMATS = ['png', 'jpeg', 'webp', 'gif']
+
+async function selectFormat(page: Page, fmt: string): Promise<void> {
+  if (TOP_FORMATS.includes(fmt)) {
+    await page.locator(`[data-format="${fmt}"]`).click()
+  } else {
+    await page.locator('#more-formats-btn').click()
+    await page.locator(`[data-format="${fmt}"]`).waitFor({ state: 'visible' })
+    await page.locator(`[data-format="${fmt}"]`).click()
+    // Wait for the button label to update — confirms the prop has propagated
+    // and the onConvert closure now captures the correct targetFormat.
+    await expect(page.locator('#more-formats-btn')).toContainText(fmt.toUpperCase())
+  }
+}
 
 test.describe('End-to-end conversion', () => {
   test.beforeEach(async ({ page }) => {
@@ -24,7 +39,7 @@ test.describe('End-to-end conversion', () => {
     await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
     // Convert to PNG
-    await page.locator('#format-select').selectOption('png')
+    await selectFormat(page, 'png')
     const convertStart = Date.now()
     await page.locator('#convert-btn').click()
 
@@ -96,7 +111,7 @@ test.describe('End-to-end conversion', () => {
 
     await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
-    await page.locator('#format-select').selectOption('jpeg')
+    await selectFormat(page, 'jpeg')
     await page.locator('#convert-btn').click()
 
     await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
@@ -148,7 +163,7 @@ test.describe('End-to-end conversion', () => {
       await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
       const pipelineStart = performance.now()
-      await page.locator('#format-select').selectOption(fmt)
+      await selectFormat(page, fmt)
       await page.locator('#convert-btn').click()
       await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
       const totalMs = Math.round(performance.now() - pipelineStart)

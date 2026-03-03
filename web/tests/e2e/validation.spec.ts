@@ -1,9 +1,22 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
+
+const TOP_FORMATS = ['png', 'jpeg', 'webp', 'gif']
+
+async function selectFormat(page: Page, fmt: string): Promise<void> {
+  if (TOP_FORMATS.includes(fmt)) {
+    await page.locator(`[data-format="${fmt}"]`).click()
+  } else {
+    await page.locator('#more-formats-btn').click()
+    await page.locator(`[data-format="${fmt}"]`).waitFor({ state: 'visible' })
+    await page.locator(`[data-format="${fmt}"]`).click()
+    await expect(page.locator('#more-formats-btn')).toContainText(fmt.toUpperCase())
+  }
+}
 
 test.describe('Validation guards', () => {
   test.beforeEach(async ({ page }) => {
@@ -40,8 +53,8 @@ test.describe('Validation guards', () => {
     expect(errorText).toMatch(/too large/i)
     expect(errorText).toMatch(/200/)  // matches "200 MB" or "200.0 MB"
 
-    // Convert button should still be disabled (file not accepted)
-    await expect(page.locator('#convert-btn')).toBeDisabled()
+    // File was rejected so no fileInfo is loaded — convert button should not be present
+    await expect(page.locator('#convert-btn')).not.toBeAttached()
 
     console.log(`[VALIDATION] File-too-large error: "${errorText}"`)
   })
@@ -61,8 +74,8 @@ test.describe('Validation guards', () => {
     // Should mention megapixels or MP
     expect(errorText).toMatch(/MP/i)
 
-    // Convert button should remain disabled
-    await expect(page.locator('#convert-btn')).toBeDisabled()
+    // File was rejected so no fileInfo is loaded — convert button should not be present
+    await expect(page.locator('#convert-btn')).not.toBeAttached()
 
     console.log(`[VALIDATION] Dimension-too-large error: "${errorText}"`)
   })
@@ -75,7 +88,7 @@ test.describe('Validation guards', () => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
     await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
-    await page.locator('#format-select').selectOption('jpeg')
+    await selectFormat(page, 'jpeg')
     await page.locator('#convert-btn').click()
 
     // While the conversion is happening (Worker thread), the main thread should
@@ -117,7 +130,7 @@ test.describe('Validation guards', () => {
     await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
     await expect(page.locator('#source-info')).toBeVisible({ timeout: 10_000 })
 
-    await page.locator('#format-select').selectOption('jpeg')
+    await selectFormat(page, 'jpeg')
     await page.locator('#convert-btn').click()
     await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
 
