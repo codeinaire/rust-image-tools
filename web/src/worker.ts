@@ -8,7 +8,7 @@ import init, {
   get_dimensions,
 } from "../../crates/image-converter/pkg/image_converter.js";
 
-import { MessageType } from "./types";
+import { MessageType, ValidFormat } from "./types";
 import type { WorkerRequest, WorkerResponse } from "./types";
 
 async function initialize(): Promise<void> {
@@ -83,12 +83,12 @@ async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
 async function handleConvertImage(
   id: number,
   data: Uint8Array,
-  targetFormat: string,
+  targetFormat: ValidFormat,
 ): Promise<void> {
   try {
     const start = performance.now();
     let result: Uint8Array;
-    if (targetFormat === "webp") {
+    if (targetFormat === ValidFormat.WebP) {
       result = await encodeWebpViaCanvas(data);
     } else {
       result = convert_image(data, targetFormat);

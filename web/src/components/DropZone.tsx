@@ -2,12 +2,13 @@ import { useState, useRef, useEffect } from 'preact/hooks'
 import { createPortal } from 'preact/compat'
 import { formatFileSize } from '../hooks/useConverter'
 import type { FileInfo, ConversionResult, ConverterStatus } from '../hooks/useConverter'
+import { ValidFormat } from '../types'
 
 type Props = {
   onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => void
   fileInfo: FileInfo | null
-  targetFormat: string
-  onFormatChange: (fmt: string) => void
+  targetFormat: ValidFormat
+  onFormatChange: (fmt: ValidFormat) => void
   onConvert: () => void
   convertDisabled: boolean
   status: ConverterStatus
@@ -241,6 +242,7 @@ export function DropZone({
         {fileInfo ? (
           <>
             <p
+              id="source-info"
               style={{
                 color: 'var(--cp-muted)',
                 fontSize: '0.8rem',
@@ -248,8 +250,10 @@ export function DropZone({
                 letterSpacing: '0.1em',
               }}
             >
-              {fileInfo.sourceFormat.toUpperCase()} — {fileInfo.width}×{fileInfo.height} —{' '}
-              {formatFileSize(fileInfo.file.size)}
+              <span id="source-details">
+                {fileInfo.sourceFormat.toUpperCase()} — {fileInfo.width}×{fileInfo.height} —{' '}
+                {formatFileSize(fileInfo.file.size)}
+              </span>
             </p>
             <p
               style={{
@@ -314,6 +318,7 @@ export function DropZone({
             {/* Left: format buttons or metadata stats */}
             {isDone && result ? (
               <div
+                id="result-area"
                 style={{
                   flex: 1,
                   borderRight: '1px solid var(--cp-cyan)',
@@ -321,6 +326,16 @@ export function DropZone({
                   alignItems: 'stretch',
                 }}
               >
+                <span
+                  id="result-details"
+                  style={{ display: 'none' }}
+                  aria-hidden="true"
+                >
+                  {formatFileSize(result.inputSize)} → {formatFileSize(result.outputSize)} —{' '}
+                  {result.elapsedMs < 1000
+                    ? `${result.elapsedMs} ms`
+                    : `${(result.elapsedMs / 1000).toFixed(1)} s`}
+                </span>
                 {/* Size stat */}
                 <div
                   style={{
@@ -454,6 +469,7 @@ export function DropZone({
                     )}
                     <button
                       key={fmt}
+                      data-format={fmt}
                       onClick={() => onFormatChange(fmt)}
                       onMouseEnter={() => setHoveredFormat(fmt)}
                       onMouseLeave={() => setHoveredFormat(null)}
@@ -518,8 +534,10 @@ export function DropZone({
             >
               {isDone && result ? (
                 <a
+                  id="download-link"
                   href={result.blobUrl}
                   download={result.filename}
+                  data-output-size={result.outputSize}
                   onClick={onDownloadClick}
                   onMouseEnter={() => setIsDownloadHovered(true)}
                   onMouseLeave={() => setIsDownloadHovered(false)}
@@ -562,6 +580,7 @@ export function DropZone({
                 </a>
               ) : (
                 <button
+                  id="convert-btn"
                   disabled={convertDisabled}
                   onClick={onConvert}
                   onMouseEnter={() => setIsExecuteHovered(true)}
