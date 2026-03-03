@@ -8,6 +8,10 @@ pub enum ImageFormat {
     WebP,
     Gif,
     Bmp,
+    Tiff,
+    Ico,
+    Tga,
+    Qoi,
 }
 
 impl ImageFormat {
@@ -32,13 +36,18 @@ impl ImageFormat {
             image::ImageFormat::WebP => Some(Self::WebP),
             image::ImageFormat::Gif => Some(Self::Gif),
             image::ImageFormat::Bmp => Some(Self::Bmp),
+            image::ImageFormat::Tiff => Some(Self::Tiff),
+            image::ImageFormat::Ico => Some(Self::Ico),
+            image::ImageFormat::Tga => Some(Self::Tga),
+            image::ImageFormat::Qoi => Some(Self::Qoi),
             _ => None,
         }
     }
 
     /// Parses a format name string into an `ImageFormat`.
     ///
-    /// Accepts lowercase names: `"png"`, `"jpeg"`, `"jpg"`, `"webp"`, `"gif"`, `"bmp"`.
+    /// Accepts lowercase names: `"png"`, `"jpeg"`, `"jpg"`, `"webp"`, `"gif"`, `"bmp"`,
+    /// `"tiff"`, `"tif"`, `"ico"`, `"tga"`, `"qoi"`.
     ///
     /// Returns an error if the string is not a recognized format name.
     pub fn from_name(name: &str) -> Result<Self, FormatError> {
@@ -48,6 +57,10 @@ impl ImageFormat {
             "webp" => Ok(Self::WebP),
             "gif" => Ok(Self::Gif),
             "bmp" => Ok(Self::Bmp),
+            "tiff" | "tif" => Ok(Self::Tiff),
+            "ico" => Ok(Self::Ico),
+            "tga" => Ok(Self::Tga),
+            "qoi" => Ok(Self::Qoi),
             _ => Err(FormatError::UnknownName(name.to_owned())),
         }
     }
@@ -61,6 +74,10 @@ impl ImageFormat {
             Self::Jpeg => Ok(image::ImageFormat::Jpeg),
             Self::Gif => Ok(image::ImageFormat::Gif),
             Self::Bmp => Ok(image::ImageFormat::Bmp),
+            Self::Tiff => Ok(image::ImageFormat::Tiff),
+            Self::Ico => Ok(image::ImageFormat::Ico),
+            Self::Tga => Ok(image::ImageFormat::Tga),
+            Self::Qoi => Ok(image::ImageFormat::Qoi),
             Self::WebP => Err(FormatError::EncodeUnsupported(self)),
         }
     }
@@ -73,6 +90,10 @@ impl ImageFormat {
             Self::WebP => "webp",
             Self::Gif => "gif",
             Self::Bmp => "bmp",
+            Self::Tiff => "tiff",
+            Self::Ico => "ico",
+            Self::Tga => "tga",
+            Self::Qoi => "qoi",
         }
     }
 }
@@ -174,6 +195,54 @@ mod tests {
         buf
     }
 
+    fn tiff_bytes() -> Vec<u8> {
+        let img = image::RgbImage::new(1, 1);
+        let mut buf = Vec::new();
+        image::DynamicImage::ImageRgb8(img)
+            .write_to(
+                &mut std::io::Cursor::new(&mut buf),
+                image::ImageFormat::Tiff,
+            )
+            .unwrap();
+        buf
+    }
+
+    fn ico_bytes() -> Vec<u8> {
+        let img = image::RgbaImage::new(16, 16);
+        let mut buf = Vec::new();
+        image::DynamicImage::ImageRgba8(img)
+            .write_to(
+                &mut std::io::Cursor::new(&mut buf),
+                image::ImageFormat::Ico,
+            )
+            .unwrap();
+        buf
+    }
+
+    fn tga_bytes() -> Vec<u8> {
+        let img = image::RgbImage::new(1, 1);
+        let mut buf = Vec::new();
+        image::DynamicImage::ImageRgb8(img)
+            .write_to(
+                &mut std::io::Cursor::new(&mut buf),
+                image::ImageFormat::Tga,
+            )
+            .unwrap();
+        buf
+    }
+
+    fn qoi_bytes() -> Vec<u8> {
+        let img = image::RgbImage::new(1, 1);
+        let mut buf = Vec::new();
+        image::DynamicImage::ImageRgb8(img)
+            .write_to(
+                &mut std::io::Cursor::new(&mut buf),
+                image::ImageFormat::Qoi,
+            )
+            .unwrap();
+        buf
+    }
+
     // --- Detection tests ---
 
     #[test]
@@ -209,6 +278,35 @@ mod tests {
         let bytes = webp_bytes();
         let fmt = ImageFormat::detect_from_bytes(&bytes).unwrap();
         assert_eq!(fmt, ImageFormat::WebP);
+    }
+
+    #[test]
+    fn detect_tiff() {
+        let bytes = tiff_bytes();
+        let fmt = ImageFormat::detect_from_bytes(&bytes).unwrap();
+        assert_eq!(fmt, ImageFormat::Tiff);
+    }
+
+    #[test]
+    fn detect_ico() {
+        let bytes = ico_bytes();
+        let fmt = ImageFormat::detect_from_bytes(&bytes).unwrap();
+        assert_eq!(fmt, ImageFormat::Ico);
+    }
+
+    #[test]
+    fn detect_tga_unrecognized() {
+        // TGA has no magic bytes, so image::guess_format() cannot identify it.
+        // TGA is supported as an encode target but not auto-detected from input bytes.
+        let bytes = tga_bytes();
+        assert!(ImageFormat::detect_from_bytes(&bytes).is_err());
+    }
+
+    #[test]
+    fn detect_qoi() {
+        let bytes = qoi_bytes();
+        let fmt = ImageFormat::detect_from_bytes(&bytes).unwrap();
+        assert_eq!(fmt, ImageFormat::Qoi);
     }
 
     // --- Error tests ---
@@ -270,6 +368,28 @@ mod tests {
     }
 
     #[test]
+    fn from_name_tiff() {
+        assert_eq!(ImageFormat::from_name("tiff").unwrap(), ImageFormat::Tiff);
+        assert_eq!(ImageFormat::from_name("tif").unwrap(), ImageFormat::Tiff);
+        assert_eq!(ImageFormat::from_name("TIFF").unwrap(), ImageFormat::Tiff);
+    }
+
+    #[test]
+    fn from_name_ico() {
+        assert_eq!(ImageFormat::from_name("ico").unwrap(), ImageFormat::Ico);
+    }
+
+    #[test]
+    fn from_name_tga() {
+        assert_eq!(ImageFormat::from_name("tga").unwrap(), ImageFormat::Tga);
+    }
+
+    #[test]
+    fn from_name_qoi() {
+        assert_eq!(ImageFormat::from_name("qoi").unwrap(), ImageFormat::Qoi);
+    }
+
+    #[test]
     fn from_name_unknown() {
         let result = ImageFormat::from_name("avif");
         assert!(matches!(result, Err(FormatError::UnknownName(_))));
@@ -297,6 +417,26 @@ mod tests {
         assert_eq!(
             ImageFormat::Bmp.to_image_format().unwrap(),
             image::ImageFormat::Bmp
+        );
+    }
+
+    #[test]
+    fn to_image_format_tier2_encodable() {
+        assert_eq!(
+            ImageFormat::Tiff.to_image_format().unwrap(),
+            image::ImageFormat::Tiff
+        );
+        assert_eq!(
+            ImageFormat::Ico.to_image_format().unwrap(),
+            image::ImageFormat::Ico
+        );
+        assert_eq!(
+            ImageFormat::Tga.to_image_format().unwrap(),
+            image::ImageFormat::Tga
+        );
+        assert_eq!(
+            ImageFormat::Qoi.to_image_format().unwrap(),
+            image::ImageFormat::Qoi
         );
     }
 

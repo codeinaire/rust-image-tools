@@ -18,6 +18,10 @@ const MIME_TYPES: Record<string, string> = {
   gif: 'image/gif',
   bmp: 'image/bmp',
   webp: 'image/webp',
+  tiff: 'image/tiff',
+  ico: 'image/x-icon',
+  tga: 'image/x-tga',
+  qoi: 'image/qoi',
 }
 
 type TimingRate = { base: number; perMp: number }

@@ -1,20 +1,9 @@
 import { useState, useEffect } from 'preact/hooks'
-import { useConverter, formatFileSize } from '../hooks/useConverter'
+import { useConverter } from '../hooks/useConverter'
 import { DropZone } from './DropZone'
-import { FormatSelector } from './FormatSelector'
-import { ProgressBar } from './ProgressBar'
-import { ResultArea } from './ResultArea'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
-import type { FileInfo } from '../hooks/useConverter'
-
-const GIF_SLOW_THRESHOLD_MP = 2
-
 const CLIP_LG =
   'polygon(28px 0%, 100% 0%, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0% 100%, 0% 28px)'
-
-function formatSourceDetails(fileInfo: FileInfo): string {
-  return `${fileInfo.sourceFormat.toUpperCase()} — ${fileInfo.width}×${fileInfo.height} — ${formatFileSize(fileInfo.file.size)}`
-}
 
 export function ImageConverter() {
   const { state, converter, handleFile, handleConvert } = useConverter()
@@ -35,10 +24,6 @@ export function ImageConverter() {
   }, [])
 
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
-  const gifWarning =
-    targetFormat === 'gif' &&
-    state.fileInfo !== null &&
-    state.fileInfo.megapixels >= GIF_SLOW_THRESHOLD_MP
 
   function onDownloadClick() {
     if (state.fileInfo && state.result) {
@@ -86,48 +71,19 @@ export function ImageConverter() {
           </div>
         )}
 
-        <DropZone onFile={handleFile} fileInfo={state.fileInfo} />
-
-        {state.fileInfo && (
-          <div id="source-info" style={{ fontSize: '0.8rem', letterSpacing: '0.05em' }}>
-            <span style={{ color: 'var(--cp-cyan)' }}>{state.fileInfo.file.name}</span>
-            <span id="source-details" style={{ marginLeft: '0.5rem', color: 'var(--cp-muted)' }}>
-              {formatSourceDetails(state.fileInfo)}
-            </span>
-          </div>
-        )}
-
-        {gifWarning && (
-          <div
-            style={{
-              background: 'rgba(255, 230, 0, 0.05)',
-              border: '1px solid var(--cp-yellow)',
-              padding: '0.75rem 1rem',
-              color: 'var(--cp-yellow)',
-              fontSize: '0.8rem',
-              letterSpacing: '0.05em',
-            }}
-            role="status"
-          >
-            ⚠ GIF encoding requires color quantization (256-color palette). This can be slow for
-            large images.
-          </div>
-        )}
-
-        <FormatSelector
-          value={targetFormat}
-          onChange={setTargetFormat}
+        <DropZone
+          onFile={handleFile}
+          fileInfo={state.fileInfo}
+          targetFormat={targetFormat}
+          onFormatChange={setTargetFormat}
           onConvert={() => handleConvert(targetFormat)}
-          disabled={!canConvert}
-        />
-
-        <ProgressBar
+          convertDisabled={!canConvert}
           status={state.status}
+          result={state.result}
           estimatedMs={state.estimatedMs}
           showProgress={state.showProgress}
+          onDownloadClick={onDownloadClick}
         />
-
-        <ResultArea result={state.result} onDownloadClick={onDownloadClick} />
       </section>
     </div>
   )

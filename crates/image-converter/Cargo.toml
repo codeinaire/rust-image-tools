@@ -26,6 +26,10 @@ image = { version = "0.25", default-features = false, features = [
     "gif",
     "webp",
     "bmp",
+    "ico",
+    "tga",
+    "qoi",
+    "tiff",
     # default-features = false disables rayon (multithreading) which breaks WASM.
     # Only the codecs listed here are compiled in, keeping the .wasm binary smaller.
 ] }

@@ -21,9 +21,9 @@ const LETTERS: { ch: string; dur: number; delay: number }[] = [
   { ch: 'Z', dur: 8.2, delay: 3.7 },
 ]
 
-const title = 'Free Image Converter — PNG, JPEG, WebP, GIF, BMP | Online & Private'
+const title = 'Free Image Converter — PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, TGA | Online & Private'
 const description =
-  'Convert images between PNG, JPEG, WebP, GIF, and BMP instantly in your browser. No upload to any server — 100% private, free, and fast.'
+  'Convert images between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, and TGA instantly in your browser. No upload to any server — 100% private, free, and fast.'
 const canonical = 'https://[domain]/'
 
 const faqSchema = {
@@ -51,7 +51,7 @@ const faqSchema = {
       name: 'What image formats are supported?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'You can convert between PNG, JPEG, WebP, GIF, and BMP. All five formats are supported as both input and output.',
+        text: 'You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported as both input and output. TGA is supported as an output format only.',
       },
     },
     {
@@ -65,6 +65,15 @@ const faqSchema = {
   ],
 }
 ---
+
+<style>
+  @media (max-width: 480px) {
+    .cp-tagline {
+      letter-spacing: 0.08em !important;
+      font-size: 0.75rem !important;
+    }
+  }
+</style>
 
 <Base title={title} description={description} canonical={canonical}>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
@@ -97,10 +106,8 @@ const faqSchema = {
     <div
       style="text-align: center; padding: 1rem 1rem 0; border-bottom: 1px solid var(--cp-border);"
     >
-      <p
-        style="color: var(--cp-text); font-size: 0.85rem; letter-spacing: 0.25em; padding-bottom: 1rem;"
-      >
-        ◆ &nbsp; FAST &nbsp;·&nbsp; FUTURISTIC &nbsp;·&nbsp; FREE &nbsp; ◆
+      <p class="cp-tagline" style="color: var(--cp-text); font-size: 0.85rem; letter-spacing: 0.25em; padding-bottom: 1rem; white-space: nowrap;">
+        ◆ FAST · FUTURISTIC · FREE ◆
       </p>
     </div>
   </div>
@@ -287,6 +294,65 @@ const faqSchema = {
             Uncompressed bitmap format. Large files but universal compatibility and no quality loss.
           </p>
         </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+          >
+            TIFF
+          </h3>
+          <p
+            style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
+          >
+            High-quality format used in professional and print workflows. Common output from cameras
+            and scanners. Lossless with large file sizes.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+          >
+            ICO
+          </h3>
+          <p
+            style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
+          >
+            Windows icon format. Convert any image to ICO for use as a favicon or application icon.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+          >
+            QOI
+          </h3>
+          <p
+            style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
+          >
+            Quite OK Image — a fast, lossless modern format. Encodes and decodes 3–10× faster than
+            PNG for similar file sizes. Great for pipelines that need speed over compression ratio.
+          </p>
+        </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+          >
+            TGA
+          </h3>
+          <p
+            style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
+          >
+            Legacy format from the graphics and game industry. Supported as an output format — convert
+            any image to TGA for use in tools and pipelines that require it.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -336,8 +402,9 @@ const faqSchema = {
           <p
             style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
           >
-            You can convert between PNG, JPEG, WebP, GIF, and BMP. All five formats are supported as
-            both input and output.
+            You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported
+            as both input and output. TGA is supported as an output format only (TGA files cannot be
+            auto-detected from file contents and must be converted from another format).
           </p>
         </details>
         <details

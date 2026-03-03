@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'preact/hooks'
+import { createPortal } from 'preact/compat'
 import { formatFileSize } from '../hooks/useConverter'
 import type { FileInfo, ConversionResult, ConverterStatus } from '../hooks/useConverter'
 
@@ -17,7 +18,8 @@ type Props = {
 }
 
 const CUT = 20
-const FORMATS = ['png', 'jpeg', 'webp', 'gif', 'bmp']
+const TOP_FORMATS = ['png', 'jpeg', 'webp', 'gif']
+const MORE_FORMATS = ['bmp', 'qoi', 'ico', 'tiff', 'tga']
 
 function truncateMiddle(name: string, maxLen = 50): string {
   if (name.length <= maxLen) return name
@@ -41,11 +43,15 @@ export function DropZone({
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const barRef = useRef<HTMLDivElement>(null)
+  const moreButtonRef = useRef<HTMLButtonElement>(null)
+  const moreDropdownRef = useRef<HTMLDivElement>(null)
+  const [morePos, setMorePos] = useState({ bottom: 0, left: 0 })
   const [isDragOver, setIsDragOver] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [dims, setDims] = useState({ w: 0, h: 0 })
   const [controlsVisible, setControlsVisible] = useState(false)
   const [hoveredFormat, setHoveredFormat] = useState<string | null>(null)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [isExecuteHovered, setIsExecuteHovered] = useState(false)
   const [isDownloadHovered, setIsDownloadHovered] = useState(false)
 
@@ -85,6 +91,24 @@ export function DropZone({
       barRef.current.style.width = '100%'
     }
   }, [status, estimatedMs])
+
+  useEffect(() => {
+    if (!moreOpen) return
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        moreButtonRef.current?.contains(e.target as Node) ||
+        moreDropdownRef.current?.contains(e.target as Node)
+      )
+        return
+      setMoreOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [moreOpen])
+
+  useEffect(() => {
+    setMoreOpen(false)
+  }, [status])
 
   function handleDragOver(e: DragEvent) {
     e.preventDefault()
@@ -140,6 +164,7 @@ export function DropZone({
   }
 
   const isDone = status === 'done' && result !== null
+  const isMoreSelected = MORE_FORMATS.includes(targetFormat)
 
   const sign = result && result.changePercent >= 0 ? '+' : ''
   const changeColor =
@@ -161,6 +186,7 @@ export function DropZone({
         position: 'relative',
         background: isDragOver ? 'var(--cp-panel-light)' : 'var(--cp-panel)',
         transition: 'background 0.2s',
+        clipPath: `polygon(${CUT}px 0, 100% 0, 100% calc(100% - ${CUT}px), calc(100% - ${CUT}px) 100%, 0 100%, 0 ${CUT}px)`,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -245,14 +271,14 @@ export function DropZone({
               letterSpacing: '0.1em',
             }}
           >
-            PNG · JPEG · WEBP · GIF · BMP — UP TO 200 MB
+            PNG · JPEG · WEBP · GIF · BMP · TIFF · ICO · QOI — UP TO 200 MB
           </p>
         )}
         <input
           ref={inputRef}
           id="file-input"
           type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif,image/bmp"
+          accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/tiff,image/x-icon,image/qoi"
           class="hidden"
           onChange={handleInputChange}
         />
@@ -413,7 +439,7 @@ export function DropZone({
                   display: 'flex',
                 }}
               >
-                {FORMATS.map((fmt, i) => (
+                {TOP_FORMATS.map((fmt, i) => (
                   <>
                     {i > 0 && (
                       <div
@@ -437,13 +463,56 @@ export function DropZone({
                     </button>
                   </>
                 ))}
+                <div
+                  style={{
+                    width: '1px',
+                    background: 'var(--cp-cyan)',
+                    opacity: 0.25,
+                    flexShrink: 0,
+                  }}
+                />
+                <button
+                  ref={moreButtonRef}
+                  onClick={() => {
+                    if (moreButtonRef.current) {
+                      const rect = moreButtonRef.current.getBoundingClientRect()
+                      setMorePos({ bottom: window.innerHeight - rect.top + 4, left: rect.left })
+                    }
+                    setMoreOpen((o) => !o)
+                  }}
+                  style={{
+                    flex: '0 0 auto',
+                    height: '100%',
+                    padding: '0 0.6rem',
+                    border: 'none',
+                    background: isMoreSelected
+                      ? 'rgba(255,230,0,0.1)'
+                      : moreOpen
+                        ? 'rgba(0,245,255,0.08)'
+                        : 'transparent',
+                    color: isMoreSelected
+                      ? 'var(--cp-yellow)'
+                      : moreOpen
+                        ? 'var(--cp-cyan)'
+                        : 'var(--cp-muted)',
+                    fontFamily: "'Share Tech Mono', monospace",
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.12em',
+                    cursor: 'pointer',
+                    transition: 'background 0.15s, color 0.15s',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {isMoreSelected ? targetFormat.toUpperCase() : '···'}
+                </button>
               </div>
             )}
 
             {/* Right: download or execute */}
             <div
+              class="w-fit sm:w-[35%]"
               style={{
-                flex: 1,
+                flexShrink: 0,
                 clipPath: `polygon(0% 0%, 100% 0%, 100% calc(100% - ${CUT}px), calc(100% - ${CUT}px) 100%, 0% 100%)`,
               }}
             >
@@ -470,9 +539,26 @@ export function DropZone({
                     textDecoration: 'none',
                     transition: 'background 0.15s, box-shadow 0.2s',
                     whiteSpace: 'nowrap',
+                    padding: '0 1.35rem',
                   }}
                 >
-                  DOWNLOAD
+                  <span class="hidden sm:inline">DOWNLOAD</span>
+                  <svg
+                    class="sm:hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 15V3" />
+                    <path d="M7 10l5 5 5-5" />
+                    <path d="M3 18h18v3H3z" />
+                  </svg>
                 </a>
               ) : (
                 <button
@@ -496,15 +582,81 @@ export function DropZone({
                     transition:
                       'clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1) 0.08s, background 0.15s, box-shadow 0.2s',
                     whiteSpace: 'nowrap',
+                    padding: '0 1.35rem',
                   }}
                 >
-                  EXECUTE
+                  <span class="hidden sm:inline">EXECUTE</span>
+                  <svg
+                    class="sm:hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    stroke="none"
+                  >
+                    <polygon points="5,3 19,12 5,21" />
+                  </svg>
                 </button>
               )}
             </div>
           </div>
         </div>
       )}
+
+      {/* MORE dropdown — portalled to body to escape clip-path on the outer container */}
+      {moreOpen &&
+        createPortal(
+          <div
+            ref={moreDropdownRef}
+            style={{
+              position: 'fixed',
+              bottom: `${morePos.bottom}px`,
+              left: `${morePos.left}px`,
+              background: 'var(--cp-panel)',
+              border: '1px solid var(--cp-cyan)',
+              boxShadow: '0 0 20px var(--cp-cyan-glow-subtle), 0 4px 24px rgba(0,0,0,0.6)',
+              zIndex: 1000,
+            }}
+          >
+            {MORE_FORMATS.map((fmt) => (
+              <div
+                key={fmt}
+                onClick={() => {
+                  onFormatChange(fmt)
+                  setMoreOpen(false)
+                }}
+                style={{
+                  padding: '0.5rem 0.75rem',
+                  fontFamily: "'Share Tech Mono', monospace",
+                  letterSpacing: '0.1em',
+                  fontSize: '0.8rem',
+                  cursor: 'pointer',
+                  color: fmt === targetFormat ? 'var(--cp-yellow)' : 'var(--cp-text)',
+                  background: fmt === targetFormat ? 'rgba(255,230,0,0.06)' : 'transparent',
+                  borderLeft:
+                    fmt === targetFormat ? '2px solid var(--cp-yellow)' : '2px solid transparent',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={(e) => {
+                  if (fmt !== targetFormat) {
+                    ;(e.currentTarget as HTMLElement).style.background = 'rgba(0,245,255,0.06)'
+                    ;(e.currentTarget as HTMLElement).style.color = 'var(--cp-cyan)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (fmt !== targetFormat) {
+                    ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+                    ;(e.currentTarget as HTMLElement).style.color = 'var(--cp-text)'
+                  }
+                }}
+              >
+                {fmt.toUpperCase()}
+              </div>
+            ))}
+          </div>,
+          document.body,
+        )}
     </div>
   )
 }
