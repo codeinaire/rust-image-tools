@@ -8,6 +8,7 @@ import {
   trackValidationRejected,
 } from '../analytics'
 import type { ImageConverter } from '../lib/image-converter'
+import { ValidFormat } from '../types'
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100

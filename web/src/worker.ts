@@ -70,7 +70,7 @@ async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
     throw new Error("Failed to get 2D context from OffscreenCanvas.");
   }
   const imageData = new ImageData(
-    new Uint8ClampedArray(rgba.buffer),
+    new Uint8ClampedArray(rgba.buffer as ArrayBuffer),
     dims.width,
     dims.height,
   );

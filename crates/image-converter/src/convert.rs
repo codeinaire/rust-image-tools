@@ -24,7 +24,7 @@ pub fn convert(input: Vec<u8>, target: ImageFormat) -> Result<Vec<u8>, ConvertEr
 
     let decoded = image::load_from_memory(&input).map_err(ConvertError::Decode)?;
 
-    // Drop the input buffer now that decoding is complete — frees memory before encoding.
+    // Drop the input buffer now that decoding is complete due to the limited memory environment of WASM. This allows the memory used by the input bytes to be freed before we attempt to encode the output, which can help avoid OOM errors when processing large images.
     drop(input);
 
     let mut output_buf = Vec::new();

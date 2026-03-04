@@ -16,6 +16,7 @@
   --cp-cyan-glow-subtle: rgba(0, 245, 255, 0.1);
   --cp-cyan-glow: rgba(0, 245, 255, 0.3);
   --cp-cyan-glow-strong: rgba(0, 245, 255, 0.5);
+  --cp-cyan-glow-soft: rgba(0, 245, 255, 0.2);
   --cp-yellow-glow: rgba(255, 230, 0, 0.4);
   --cp-yellow-glow-strong: rgba(255, 230, 0, 0.5);
   --cp-magenta-bg: rgba(255, 0, 128, 0.08);
