@@ -6,23 +6,14 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
-// Type alias for the converter exposed on window by main.ts
-type Converter = {
-  ensureReady: () => Promise<number>
-  detectFormat: (data: Uint8Array) => Promise<string>
-  convertImageTimed: (
-    data: Uint8Array,
-    fmt: string,
-  ) => Promise<{ data: Uint8Array; conversionMs: number }>
-  getDimensions: (data: Uint8Array) => Promise<{ width: number; height: number }>
-}
-
-declare global {
-  interface Window {
-    __converter: Converter
-  }
-}
-
+/**
+ * Web Worker and WASM lifecycle tests.
+ *
+ * Verifies that the WASM module initialises inside the Worker without errors,
+ * that the Worker correctly handles conversion requests and structured error
+ * responses, that sequential conversions produce stable output without stale
+ * state, and that large buffer transfers complete without crashing or hanging.
+ */
 test.describe('Worker lifecycle', () => {
   test('WASM initializes in Worker without errors', async ({ page }) => {
     const pageErrors: string[] = []
@@ -76,7 +67,7 @@ test.describe('Worker lifecycle', () => {
 
     const errorMessage = await page.evaluate(async () => {
       await window.__converter.ensureReady()
-      const garbage = new Uint8Array([0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x00])
+      const garbage = new Uint8Array([0xde, 0xad, 0xbe, 0xef, 0x00, 0x00])
       try {
         await window.__converter.convertImageTimed(garbage, 'jpeg')
         return null // should not reach here

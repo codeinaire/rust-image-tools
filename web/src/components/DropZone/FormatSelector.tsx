@@ -106,6 +106,7 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
           }}
         />
         <button
+          id="more-formats-btn"
           ref={moreButtonRef}
           onClick={() => {
             if (moreButtonRef.current) {
@@ -159,6 +160,7 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
               return (
                 <div
                   key={fmt}
+                  data-format={fmt}
                   onClick={() => {
                     onFormatChange(fmt)
                     setMoreOpen(false)

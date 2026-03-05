@@ -18,6 +18,15 @@ async function selectFormat(page: Page, fmt: string): Promise<void> {
   }
 }
 
+/**
+ * Input validation and guard tests.
+ *
+ * Verifies that files exceeding the 200 MB size limit and images exceeding the
+ * 100 MP dimension limit are rejected with user-friendly error messages before
+ * any conversion is attempted. Also checks that the Worker runs off the main
+ * thread (no frame-rate drops during conversion) and that blob URLs are revoked
+ * when a new file is selected to prevent memory leaks.
+ */
 test.describe('Validation guards', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
@@ -51,7 +60,7 @@ test.describe('Validation guards', () => {
 
     const errorText = await page.locator('#error-message').textContent()
     expect(errorText).toMatch(/too large/i)
-    expect(errorText).toMatch(/200/)  // matches "200 MB" or "200.0 MB"
+    expect(errorText).toMatch(/200/) // matches "200 MB" or "200.0 MB"
 
     // File was rejected so no fileInfo is loaded — convert button should not be present
     await expect(page.locator('#convert-btn')).not.toBeAttached()
@@ -93,26 +102,24 @@ test.describe('Validation guards', () => {
 
     // While the conversion is happening (Worker thread), the main thread should
     // remain responsive. We verify this by sampling RAF timestamps.
-    const frameTimes = await page.evaluate(
-      async (): Promise<number[]> => {
-        return new Promise((resolve) => {
-          const times: number[] = []
-          let lastTime = performance.now()
+    const frameTimes = await page.evaluate(async (): Promise<number[]> => {
+      return new Promise((resolve) => {
+        const times: number[] = []
+        let lastTime = performance.now()
 
-          function tick(ts: number) {
-            const delta = ts - lastTime
-            lastTime = ts
-            times.push(delta)
-            if (times.length < 10) {
-              requestAnimationFrame(tick)
-            } else {
-              resolve(times)
-            }
+        function tick(ts: number) {
+          const delta = ts - lastTime
+          lastTime = ts
+          times.push(delta)
+          if (times.length < 10) {
+            requestAnimationFrame(tick)
+          } else {
+            resolve(times)
           }
-          requestAnimationFrame(tick)
-        })
-      },
-    )
+        }
+        requestAnimationFrame(tick)
+      })
+    })
 
     // Verify that no frame took longer than 1000 ms (would indicate main-thread blocking)
     const maxFrameMs = Math.max(...frameTimes.slice(1)) // skip first delta which may be large

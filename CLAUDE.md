@@ -63,6 +63,12 @@ Client-side web app that converts images between formats using Rust compiled to 
 - Use `wasm-pack test --headless --chrome` for WASM-specific tests
 - Test error paths, not just happy paths
 
+## TypeScript Testing
+
+- Unit tests go in `web/tests/unit/` (picked up by Vitest)
+- E2E tests go in `web/tests/e2e/` (picked up by Playwright)
+- Never place test files next to source files in `src/`
+
 ## TypeScript Coding Conventions
 
 - Use strict TypeScript (`"strict": true` in tsconfig)

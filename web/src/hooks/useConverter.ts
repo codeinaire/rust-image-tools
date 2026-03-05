@@ -9,6 +9,7 @@ import {
 } from '../analytics'
 import type { ImageConverter } from '../lib/image-converter'
 import { ValidFormat } from '../types'
+import { normalizeHeic } from '../lib/heic'
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
@@ -157,7 +158,8 @@ export function useConverter(): {
       showProgress: false,
     }))
 
-    const buffer = await file.arrayBuffer()
+    const normalizedFile = await normalizeHeic(file)
+    const buffer = await normalizedFile.arrayBuffer()
     const bytes = new Uint8Array(buffer)
 
     try {

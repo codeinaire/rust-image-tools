@@ -111,11 +111,15 @@ export function DropZone({
 
   const borderColor = isDragOver ? 'var(--cp-yellow)' : 'var(--cp-cyan)'
 
+  const isReading = status === 'reading'
+
   const mainText = isDragOver
     ? '[ RELEASE TO UPLOAD ]'
-    : fileInfo
-      ? `[ ${truncateMiddle(fileInfo.file.name)} ]`
-      : 'DRAG & DROP IMAGE — OR CLICK TO SELECT'
+    : isReading
+      ? '[ DECODING... ]'
+      : fileInfo
+        ? `[ ${truncateMiddle(fileInfo.file.name)} ]`
+        : 'DRAG & DROP IMAGE — OR CLICK TO SELECT'
 
   const { w, h } = dims
   const points = w > 0 ? `${CUT},0 ${w},0 ${w},${h - CUT} ${w - CUT},${h} 0,${h} 0,${CUT}` : ''
@@ -179,9 +183,44 @@ export function DropZone({
         style={{ padding: '2.5rem 2rem', textAlign: 'center', cursor: 'pointer' }}
         onClick={() => inputRef.current?.click()}
       >
-        <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
-          {mainText}
-        </p>
+        {isReading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Rotating diamond with glow */}
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+              fill="none"
+              style={{
+                animation: 'cp-spin 1.4s linear infinite',
+                filter: 'drop-shadow(0 0 6px var(--cp-cyan)) drop-shadow(0 0 14px var(--cp-cyan-glow))',
+              }}
+            >
+              <polygon points="16,2 30,16 16,30 2,16" stroke="var(--cp-cyan)" stroke-width="1.5" />
+              <polygon points="16,8 24,16 16,24 8,16" stroke="var(--cp-cyan)" stroke-width="1" stroke-opacity="0.35" />
+              <circle cx="16" cy="16" r="2" fill="var(--cp-cyan)" />
+            </svg>
+            {/* Glowing pulsing text */}
+            <p style={{ color: 'var(--cp-cyan)', fontSize: '1.125rem', letterSpacing: '0.12em', animation: 'cp-glow-pulse 1.4s ease-in-out infinite' }}>
+              {mainText}
+            </p>
+            {/* Sweep scan bar */}
+            <div style={{ width: '10rem', height: '2px', background: 'var(--cp-border)', overflow: 'hidden', position: 'relative' }}>
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                width: '25%',
+                background: 'linear-gradient(90deg, transparent, var(--cp-cyan), transparent)',
+                animation: 'cp-scan 1.4s ease-in-out infinite',
+                boxShadow: '0 0 8px var(--cp-cyan-glow-strong)',
+              }} />
+            </div>
+          </div>
+        ) : (
+          <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
+            {mainText}
+          </p>
+        )}
         {fileInfo ? (
           <>
             <p
@@ -210,22 +249,34 @@ export function DropZone({
             </p>
           </>
         ) : (
-          <p
-            style={{
-              color: 'var(--cp-text)',
-              fontSize: '0.8rem',
-              marginTop: '0.5rem',
-              letterSpacing: '0.1em',
-            }}
-          >
-            PNG · JPEG · WEBP · GIF · BMP · TIFF · ICO · QOI — UP TO 200 MB
-          </p>
+          <>
+            <p
+              style={{
+                color: 'var(--cp-text)',
+                fontSize: '0.8rem',
+                marginTop: '0.5rem',
+                letterSpacing: '0.1em',
+              }}
+            >
+              PNG · JPEG · WEBP · GIF · BMP · TIFF · ICO · QOI — UP TO 200 MB
+            </p>
+            <p
+              style={{
+                color: 'var(--cp-muted)',
+                fontSize: '0.7rem',
+                marginTop: '0.25rem',
+                letterSpacing: '0.1em',
+              }}
+            >
+              HEIC/HEIF accepted as input only
+            </p>
+          </>
         )}
         <input
           ref={inputRef}
           id="file-input"
           type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/tiff,image/x-icon,image/qoi"
+          accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/tiff,image/x-icon,image/qoi,image/heic,image/heif,.heic,.heif"
           class="hidden"
           onChange={handleInputChange}
         />
