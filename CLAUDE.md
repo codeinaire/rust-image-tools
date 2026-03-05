@@ -75,6 +75,11 @@ Client-side web app that converts images between formats using Rust compiled to 
 - Prefer `const` over `let`; never use `var`
 - Use explicit types for function signatures; allow inference for local variables
 - Use `async/await` over raw Promises
+- Avoid using type coercion unless it's absolutely necessary. Try every other option except type coercion
+- Avoid using the `any` type
+- Use descriptive variable names
+- If an expression is very verbose and it can be asigned to a variable to make it easier to understand do it
+- Add JSDocs to all functions, what's especially important is a function description
 
 ## Linting & Formatting
 
