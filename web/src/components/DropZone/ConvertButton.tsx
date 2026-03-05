@@ -10,7 +10,7 @@ export function ConvertButton({ convertDisabled, onConvert, controlsVisible }: P
   const [isHovered, setIsHovered] = useState(false)
 
   const background = convertDisabled
-    ? 'rgba(255,230,0,0.15)'
+    ? 'var(--cp-yellow-bg-light)'
     : isHovered
       ? '#b8a000'
       : 'var(--cp-yellow)'

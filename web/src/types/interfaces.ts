@@ -39,7 +39,7 @@ export interface DetectFormatSuccessResponse {
   type: MessageType.DetectFormat;
   id: number;
   success: true;
-  format: string;
+  format: ValidFormat;
 }
 
 export interface ConvertImageSuccessResponse {

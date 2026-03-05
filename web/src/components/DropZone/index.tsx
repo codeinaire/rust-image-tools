@@ -104,7 +104,8 @@ export function DropZone({
   }
 
   function handleInputChange(e: Event) {
-    const file = (e.target as HTMLInputElement).files?.[0]
+    if (!(e.target instanceof HTMLInputElement)) return
+    const file = e.target.files?.[0]
     if (file) onFile(file, 'file_picker')
   }
 
@@ -237,7 +238,7 @@ export function DropZone({
           <div
             style={{
               height: '2px',
-              background: 'rgba(255,230,0,0.12)',
+              background: 'var(--cp-yellow-bg-medium)',
               opacity: showProgress ? 1 : 0,
               transition: 'opacity 0.3s',
             }}

@@ -80,7 +80,7 @@ export class ImageConverter {
   }
 
   /// Detect the format of an image from its raw bytes.
-  async detectFormat(data: Uint8Array): Promise<string> {
+  async detectFormat(data: Uint8Array): Promise<ValidFormat> {
     await this.ready
     const id = this.nextRequestId++
     const response = await this.sendRequest({ type: MessageType.DetectFormat, id, data })

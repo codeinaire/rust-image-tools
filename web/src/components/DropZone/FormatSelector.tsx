@@ -23,9 +23,10 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
   useEffect(() => {
     if (!moreOpen) return
     function handleClickOutside(e: MouseEvent) {
+      if (!(e.target instanceof Node)) return
       if (
-        moreButtonRef.current?.contains(e.target as Node) ||
-        moreDropdownRef.current?.contains(e.target as Node)
+        moreButtonRef.current?.contains(e.target) ||
+        moreDropdownRef.current?.contains(e.target)
       )
         return
       setMoreOpen(false)
@@ -46,9 +47,9 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
       height: '100%',
       border: 'none',
       background: isSelected
-        ? 'rgba(255,230,0,0.1)'
+        ? 'var(--cp-yellow-bg-dim)'
         : isHov
-          ? 'rgba(0,245,255,0.08)'
+          ? 'var(--cp-cyan-bg-dim)'
           : 'transparent',
       color: isSelected ? 'var(--cp-yellow)' : isHov ? 'var(--cp-cyan)' : 'var(--cp-muted)',
       fontFamily: "'Share Tech Mono', monospace",
@@ -68,7 +69,7 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
           flex: 1,
           clipPath: controlsVisible ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
           transition: 'clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1)',
-          background: 'rgba(0, 245, 255, 0.03)',
+          background: 'var(--cp-cyan-bg-faint)',
           borderRight: '1px solid var(--cp-cyan)',
           display: 'flex',
         }}
@@ -114,14 +115,13 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
             setMoreOpen((o) => !o)
           }}
           style={{
-            flex: '0 0 auto',
+            flex: 1,
             height: '100%',
-            padding: '0 0.6rem',
             border: 'none',
             background: isMoreSelected
-              ? 'rgba(255,230,0,0.1)'
+              ? 'var(--cp-yellow-bg-dim)'
               : moreOpen
-                ? 'rgba(0,245,255,0.08)'
+                ? 'var(--cp-cyan-bg-dim)'
                 : 'transparent',
             color: isMoreSelected
               ? 'var(--cp-yellow)'
@@ -133,7 +133,6 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
             letterSpacing: '0.12em',
             cursor: 'pointer',
             transition: 'background 0.15s, color 0.15s',
-            whiteSpace: 'nowrap',
           }}
         >
           {isMoreSelected ? targetFormat.toUpperCase() : '···'}
@@ -150,7 +149,7 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
               left: `${morePos.left}px`,
               background: 'var(--cp-panel)',
               border: '1px solid var(--cp-cyan)',
-              boxShadow: '0 0 20px var(--cp-cyan-glow-subtle), 0 4px 24px rgba(0,0,0,0.6)',
+              boxShadow: '0 0 20px var(--cp-cyan-glow-subtle), 0 4px 24px var(--cp-shadow)',
               zIndex: 1000,
             }}
           >
@@ -173,7 +172,7 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
                     fontSize: '0.8rem',
                     cursor: 'pointer',
                     color: isSelected ? 'var(--cp-yellow)' : isHov ? 'var(--cp-cyan)' : 'var(--cp-text)',
-                    background: isSelected ? 'rgba(255,230,0,0.06)' : isHov ? 'rgba(0,245,255,0.06)' : 'transparent',
+                    background: isSelected ? 'var(--cp-yellow-bg-subtle)' : isHov ? 'var(--cp-cyan-bg)' : 'transparent',
                     borderLeft: isSelected ? '2px solid var(--cp-yellow)' : '2px solid transparent',
                     whiteSpace: 'nowrap',
                     transition: 'background 0.15s, color 0.15s',

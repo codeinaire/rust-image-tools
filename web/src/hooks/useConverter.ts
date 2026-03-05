@@ -199,7 +199,7 @@ export function useConverter(): {
         fileInfo: {
           file,
           bytes,
-          sourceFormat: format as ValidFormat,
+          sourceFormat: format,
           megapixels,
           width: dimensions.width,
           height: dimensions.height,
@@ -251,7 +251,7 @@ export function useConverter(): {
       const elapsedMs = Math.round(performance.now() - startTime)
 
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
-      const blob = new Blob([resultBytes.buffer as ArrayBuffer], { type: mimeType })
+      const blob = new Blob([resultBytes], { type: mimeType })
       const blobUrl = URL.createObjectURL(blob)
       blobUrlRef.current = blobUrl
 
