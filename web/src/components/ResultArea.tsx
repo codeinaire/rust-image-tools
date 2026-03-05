@@ -18,7 +18,7 @@ export function ResultArea({ result, onDownloadClick }: Props) {
     <div
       id="result-area"
       style={{
-        background: 'rgba(0, 0, 0, 0.3)',
+        background: 'var(--cp-shadow-soft)',
         border: '1px solid var(--cp-border)',
         padding: '1rem',
       }}

@@ -1,4 +1,4 @@
-import { MessageType } from '../types'
+import { MessageType, ValidFormat } from '../types'
 import type { WorkerRequest, WorkerResponse, ImageDimensions } from '../types'
 
 type PendingRequest = {
@@ -80,7 +80,7 @@ export class ImageConverter {
   }
 
   /// Detect the format of an image from its raw bytes.
-  async detectFormat(data: Uint8Array): Promise<string> {
+  async detectFormat(data: Uint8Array): Promise<ValidFormat> {
     await this.ready
     const id = this.nextRequestId++
     const response = await this.sendRequest({ type: MessageType.DetectFormat, id, data })
@@ -91,7 +91,7 @@ export class ImageConverter {
   }
 
   /// Convert an image to the specified target format. Returns the converted bytes.
-  async convertImage(data: Uint8Array, targetFormat: string): Promise<Uint8Array> {
+  async convertImage(data: Uint8Array, targetFormat: ValidFormat): Promise<Uint8Array> {
     const { data: result } = await this.convertImageTimed(data, targetFormat)
     return result
   }
@@ -99,7 +99,7 @@ export class ImageConverter {
   /// Convert an image and return the result with Worker-side conversion timing.
   async convertImageTimed(
     data: Uint8Array,
-    targetFormat: string,
+    targetFormat: ValidFormat,
   ): Promise<{ data: Uint8Array; conversionMs: number }> {
     await this.ready
     const id = this.nextRequestId++

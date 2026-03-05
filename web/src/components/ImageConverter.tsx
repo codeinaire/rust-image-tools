@@ -2,12 +2,21 @@ import { useState, useEffect } from 'preact/hooks'
 import { useConverter } from '../hooks/useConverter'
 import { DropZone } from './DropZone'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
+import { ValidFormat } from '../types'
+import type { ImageConverter as ImageConverterLib } from '../lib/image-converter'
+
+declare global {
+  interface Window {
+    __converter: ImageConverterLib | undefined
+  }
+}
+
 const CLIP_LG =
   'polygon(28px 0%, 100% 0%, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0% 100%, 0% 28px)'
 
 export function ImageConverter() {
   const { state, converter, handleFile, handleConvert } = useConverter()
-  const [targetFormat, setTargetFormat] = useState('png')
+  const [targetFormat, setTargetFormat] = useState<ValidFormat>(ValidFormat.Png)
 
   useEffect(() => {
     initAnalytics()
@@ -20,7 +29,7 @@ export function ImageConverter() {
         console.error('[image-converter] Failed to initialize:', err)
       })
     // Expose for integration tests
-    ;(window as unknown as Record<string, unknown>)['__converter'] = converter
+    window.__converter = converter
   }, [])
 
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
@@ -42,7 +51,7 @@ export function ImageConverter() {
         padding: '2px',
         background: 'var(--cp-cyan)',
         clipPath: CLIP_LG,
-        filter: 'drop-shadow(0 0 14px rgba(0, 245, 255, 0.3))',
+        filter: 'drop-shadow(0 0 14px var(--cp-cyan-glow))',
       }}
     >
       {/* Inner panel: dark background */}
@@ -58,7 +67,7 @@ export function ImageConverter() {
           <div
             id="error-display"
             style={{
-              background: 'rgba(255, 0, 128, 0.08)',
+              background: 'var(--cp-magenta-bg)',
               border: '1px solid var(--cp-magenta)',
               padding: '0.75rem 1rem',
               color: '#ff80bf',

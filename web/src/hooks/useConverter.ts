@@ -8,6 +8,7 @@ import {
   trackValidationRejected,
 } from '../analytics'
 import type { ImageConverter } from '../lib/image-converter'
+import { ValidFormat } from '../types'
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
@@ -39,8 +40,8 @@ const TIMING_RATES: Record<string, TimingRate> = {
 const TIMING_FALLBACK: TimingRate = { base: 30, perMp: 50 }
 
 function estimateConversionMs(
-  sourceFormat: string,
-  targetFormat: string,
+  sourceFormat: ValidFormat,
+  targetFormat: ValidFormat,
   megapixels: number,
 ): number {
   const key = `${sourceFormat}->${targetFormat}`
@@ -57,7 +58,7 @@ export function formatFileSize(bytes: number): string {
 export type FileInfo = {
   file: File
   bytes: Uint8Array
-  sourceFormat: string
+  sourceFormat: ValidFormat
   megapixels: number
   width: number
   height: number
@@ -72,7 +73,7 @@ export type ConversionResult = {
   elapsedMs: number
   filename: string
   extension: string
-  targetFormat: string
+  targetFormat: ValidFormat
 }
 
 export type ConverterStatus = 'idle' | 'reading' | 'converting' | 'done' | 'error'
@@ -90,7 +91,7 @@ export function useConverter(): {
   state: ConverterState
   converter: ImageConverter
   handleFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => Promise<void>
-  handleConvert: (targetFormat: string) => Promise<void>
+  handleConvert: (targetFormat: ValidFormat) => Promise<void>
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
@@ -215,7 +216,7 @@ export function useConverter(): {
     }
   }
 
-  async function handleConvert(targetFormat: string): Promise<void> {
+  async function handleConvert(targetFormat: ValidFormat): Promise<void> {
     const { fileInfo, status } = state
     if (!fileInfo || status === 'converting') return
 
@@ -250,14 +251,14 @@ export function useConverter(): {
       const elapsedMs = Math.round(performance.now() - startTime)
 
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
-      const blob = new Blob([resultBytes.buffer as ArrayBuffer], { type: mimeType })
+      const blob = new Blob([resultBytes], { type: mimeType })
       const blobUrl = URL.createObjectURL(blob)
       blobUrlRef.current = blobUrl
 
       const changePercent =
         ((resultBytes.byteLength - fileInfo.file.size) / fileInfo.file.size) * 100
       const baseName = fileInfo.file.name.replace(/\.[^.]+$/, '')
-      const extension = targetFormat === 'jpeg' ? 'jpg' : targetFormat
+      const extension = targetFormat === ValidFormat.Jpeg ? 'jpg' : targetFormat
 
       trackConversionCompleted({
         source_format: fileInfo.sourceFormat,

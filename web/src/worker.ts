@@ -8,7 +8,7 @@ import init, {
   get_dimensions,
 } from "../../crates/image-converter/pkg/image_converter.js";
 
-import { MessageType } from "./types";
+import { MessageType, ValidFormat } from "./types";
 import type { WorkerRequest, WorkerResponse } from "./types";
 
 async function initialize(): Promise<void> {
@@ -41,9 +41,16 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
   }
 };
 
+function isValidFormat(value: string): value is ValidFormat {
+  return Object.values(ValidFormat).some((fmt) => fmt === value)
+}
+
 function handleDetectFormat(id: number, data: Uint8Array): void {
   try {
     const format = detect_format(data);
+    if (!isValidFormat(format)) {
+      throw new Error(`Unrecognized image format: ${format}`)
+    }
     const response: WorkerResponse = {
       type: MessageType.DetectFormat,
       id,
@@ -56,13 +63,27 @@ function handleDetectFormat(id: number, data: Uint8Array): void {
   }
 }
 
+function parseDimensions(value: unknown): { width: number; height: number } {
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    'width' in value &&
+    'height' in value &&
+    typeof value.width === 'number' &&
+    typeof value.height === 'number'
+  ) {
+    return value
+  }
+  throw new Error('Unexpected shape returned from get_dimensions')
+}
+
 async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
   if (!("OffscreenCanvas" in globalThis)) {
     throw new Error(
       "WebP output requires OffscreenCanvas, which is not supported in this browser.",
     );
   }
-  const dims = get_dimensions(data) as { width: number; height: number };
+  const dims = parseDimensions(get_dimensions(data));
   const rgba = decode_to_rgba(data);
   const canvas = new OffscreenCanvas(dims.width, dims.height);
   const ctx = canvas.getContext("2d");
@@ -83,12 +104,12 @@ async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
 async function handleConvertImage(
   id: number,
   data: Uint8Array,
-  targetFormat: string,
+  targetFormat: ValidFormat,
 ): Promise<void> {
   try {
     const start = performance.now();
     let result: Uint8Array;
-    if (targetFormat === "webp") {
+    if (targetFormat === ValidFormat.WebP) {
       result = await encodeWebpViaCanvas(data);
     } else {
       result = convert_image(data, targetFormat);
@@ -110,7 +131,7 @@ async function handleConvertImage(
 
 function handleGetDimensions(id: number, data: Uint8Array): void {
   try {
-    const dims = get_dimensions(data) as { width: number; height: number };
+    const dims = parseDimensions(get_dimensions(data));
     const response: WorkerResponse = {
       type: MessageType.GetDimensions,
       id,

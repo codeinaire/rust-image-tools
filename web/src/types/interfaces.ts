@@ -1,59 +1,48 @@
-export enum MessageType {
-  Init = "init",
-  DetectFormat = "detect_format",
-  ConvertImage = "convert_image",
-  GetDimensions = "get_dimensions",
-  Error = "error",
-}
+import { MessageType, ValidFormat } from './enums'
 
 // Request types (main thread → worker)
 
-interface DetectFormatRequest {
+export interface DetectFormatRequest {
   type: MessageType.DetectFormat;
   id: number;
   data: Uint8Array;
 }
 
-interface ConvertImageRequest {
+export interface ConvertImageRequest {
   type: MessageType.ConvertImage;
   id: number;
   data: Uint8Array;
-  targetFormat: string;
+  targetFormat: ValidFormat;
 }
 
-interface GetDimensionsRequest {
+export interface GetDimensionsRequest {
   type: MessageType.GetDimensions;
   id: number;
   data: Uint8Array;
 }
 
-export type WorkerRequest =
-  | DetectFormatRequest
-  | ConvertImageRequest
-  | GetDimensionsRequest;
-
 // Response types (worker → main thread)
 
-interface InitSuccessResponse {
+export interface InitSuccessResponse {
   type: MessageType.Init;
   success: true;
   initMs: number;
 }
 
-interface InitErrorResponse {
+export interface InitErrorResponse {
   type: MessageType.Init;
   success: false;
   error: string;
 }
 
-interface DetectFormatSuccessResponse {
+export interface DetectFormatSuccessResponse {
   type: MessageType.DetectFormat;
   id: number;
   success: true;
-  format: string;
+  format: ValidFormat;
 }
 
-interface ConvertImageSuccessResponse {
+export interface ConvertImageSuccessResponse {
   type: MessageType.ConvertImage;
   id: number;
   success: true;
@@ -61,7 +50,7 @@ interface ConvertImageSuccessResponse {
   conversionMs: number;
 }
 
-interface GetDimensionsSuccessResponse {
+export interface GetDimensionsSuccessResponse {
   type: MessageType.GetDimensions;
   id: number;
   success: true;
@@ -69,19 +58,11 @@ interface GetDimensionsSuccessResponse {
   height: number;
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
   type: MessageType.Error;
   id: number;
   error: string;
 }
-
-export type WorkerResponse =
-  | InitSuccessResponse
-  | InitErrorResponse
-  | DetectFormatSuccessResponse
-  | ConvertImageSuccessResponse
-  | GetDimensionsSuccessResponse
-  | ErrorResponse;
 
 export interface ImageDimensions {
   width: number;

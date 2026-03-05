@@ -16,10 +16,23 @@
   --cp-cyan-glow-subtle: rgba(0, 245, 255, 0.1);
   --cp-cyan-glow: rgba(0, 245, 255, 0.3);
   --cp-cyan-glow-strong: rgba(0, 245, 255, 0.5);
+  --cp-cyan-glow-soft: rgba(0, 245, 255, 0.2);
+  --cp-cyan-bg-faint: rgba(0, 245, 255, 0.03);
+  --cp-cyan-bg: rgba(0, 245, 255, 0.06);
+  --cp-cyan-bg-dim: rgba(0, 245, 255, 0.08);
   --cp-yellow-glow: rgba(255, 230, 0, 0.4);
   --cp-yellow-glow-strong: rgba(255, 230, 0, 0.5);
-  --cp-magenta-bg: rgba(255, 0, 128, 0.08);
+  --cp-yellow-glow-soft: rgba(255, 230, 0, 0.2);
   --cp-yellow-bg: rgba(255, 230, 0, 0.05);
+  --cp-yellow-bg-subtle: rgba(255, 230, 0, 0.06);
+  --cp-yellow-bg-dim: rgba(255, 230, 0, 0.1);
+  --cp-yellow-bg-medium: rgba(255, 230, 0, 0.12);
+  --cp-yellow-bg-light: rgba(255, 230, 0, 0.15);
+  --cp-magenta-bg: rgba(255, 0, 128, 0.08);
+  --cp-shadow-faint: rgba(0, 0, 0, 0.06);
+  --cp-shadow-soft: rgba(0, 0, 0, 0.3);
+  --cp-shadow: rgba(0, 0, 0, 0.6);
+  --cp-shadow-strong: rgba(0, 0, 0, 0.7);
 }
 
 /* ─── Global Base ─────────────────────────────────────────────────────── */
@@ -38,8 +51,8 @@ body::after {
     0deg,
     transparent,
     transparent 3px,
-    rgba(0, 0, 0, 0.06) 3px,
-    rgba(0, 0, 0, 0.06) 4px
+    var(--cp-shadow-faint) 3px,
+    var(--cp-shadow-faint) 4px
   );
   pointer-events: none;
   z-index: 1000;
