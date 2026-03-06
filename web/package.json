@@ -11,9 +11,13 @@
     "dev:full": "npm run build:wasm && astro dev",
     "build": "npm run build:wasm && astro build",
     "preview": "astro preview",
+    "test": "vitest run",
     "tests": "npm run test:rust && npm run test:e2e",
     "test:rust": "cargo test --manifest-path ../crates/image-converter/Cargo.toml",
     "test:e2e": "npx playwright test",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "bundle-size": "node ../scripts/bundle-size.mjs",
     "bundle-size:build": "node ../scripts/bundle-size.mjs --build"
   },
