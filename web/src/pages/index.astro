@@ -51,7 +51,7 @@ const faqSchema = {
       name: 'What image formats are supported?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported as both input and output. TGA is supported as an output format only.',
+        text: 'You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported as both input and output. TGA is output only. HEIC/HEIF is accepted as input only — drop an iPhone photo to convert it to any supported format.',
       },
     },
     {
@@ -60,6 +60,14 @@ const faqSchema = {
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'Files up to 200 MB are supported. Images can be up to 100 megapixels.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why can\'t I export to HEIC?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'HEIC encoding is not supported because the HEVC video codec it relies on is covered by patents held by the MPEG LA patent pool. Implementing an encoder would require a commercial licence. HEIC input is supported — you can open any HEIC file and convert it to a patent-free format like PNG, WebP, or JPEG.',
       },
     },
   ],
@@ -353,6 +361,22 @@ const faqSchema = {
             any image to TGA for use in tools and pipelines that require it.
           </p>
         </div>
+        <div
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem;"
+        >
+          <h3
+            style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+          >
+            HEIC / HEIF
+          </h3>
+          <p
+            style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
+          >
+            Apple's default camera format on iPhone and iPad. Accepted as an input — drop a HEIC file
+            to convert it to PNG, JPEG, WebP, or any other supported format. HEIC output is not
+            supported.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -403,8 +427,8 @@ const faqSchema = {
             style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
           >
             You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported
-            as both input and output. TGA is supported as an output format only (TGA files cannot be
-            auto-detected from file contents and must be converted from another format).
+            as both input and output. TGA is output only. HEIC/HEIF is accepted as input only — drop
+            an iPhone photo to convert it to any supported format.
           </p>
         </details>
         <details
@@ -418,6 +442,22 @@ const faqSchema = {
             style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
           >
             Files up to 200 MB are supported. Images can be up to 100 megapixels.
+          </p>
+        </details>
+        <details
+          class="cyber-details"
+          style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
+        >
+          <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+            Why can't I export to HEIC?
+          </summary>
+          <p
+            style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
+          >
+            HEIC encoding is not supported because the HEVC video codec it relies on is covered by
+            patents held by the MPEG LA patent pool. Implementing an encoder would require a
+            commercial licence. HEIC input is supported — you can open any HEIC file and convert it
+            to a patent-free format like PNG, WebP, or JPEG.
           </p>
         </details>
       </div>

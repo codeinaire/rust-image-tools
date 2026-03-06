@@ -1,9 +1,11 @@
 import { test, expect, type Page } from '@playwright/test'
+import { existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
+const HEIC_FIXTURE = join(FIXTURES, 'sample.heic')
 
 const TOP_FORMATS = ['png', 'jpeg', 'webp', 'gif']
 
@@ -20,6 +22,14 @@ async function selectFormat(page: Page, fmt: string): Promise<void> {
   }
 }
 
+/**
+ * End-to-end conversion tests.
+ *
+ * Tests the full user-facing pipeline: file selection or drag-and-drop →
+ * format detection → conversion → download. Covers the happy path for common
+ * formats, HEIC input normalisation, UI metadata display, main-thread
+ * responsiveness during conversion, and blob URL cleanup.
+ */
 test.describe('End-to-end conversion', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
@@ -146,11 +156,48 @@ test.describe('End-to-end conversion', () => {
     console.log(`[E2E] Error shown for corrupted file: "${errorText}"`)
   })
 
+  test('HEIC upload: file is decoded and source info appears', async ({ page }) => {
+    await page.locator('#file-input').setInputFiles(HEIC_FIXTURE)
+
+    // Normalisation can take a few seconds while heic-to WASM loads
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 30_000 })
+
+    // Normalised to PNG before reaching the Rust pipeline, so format shows as PNG
+    const detailsText = await page.locator('#source-details').textContent()
+    expect(detailsText).toMatch(/PNG/i)
+
+    console.log(`[E2E] HEIC decoded — source details: "${detailsText}"`)
+  })
+
+  test('HEIC → JPEG: full pipeline produces valid JPEG blob', async ({ page }) => {
+    await page.locator('#file-input').setInputFiles(HEIC_FIXTURE)
+    await expect(page.locator('#source-info')).toBeVisible({ timeout: 30_000 })
+
+    await page.locator('[data-format="jpeg"]').click()
+    await page.locator('#convert-btn').click()
+
+    await expect(page.locator('#result-area')).toBeVisible({ timeout: 30_000 })
+
+    const href = await page.locator('#download-link').getAttribute('href')
+    expect(href).toMatch(/^blob:/)
+
+    const result = await page.evaluate(async (blobUrl: string) => {
+      const res = await fetch(blobUrl)
+      const buf = await res.arrayBuffer()
+      const bytes = new Uint8Array(buf)
+      return { size: bytes.byteLength, isJpeg: bytes[0] === 0xff && bytes[1] === 0xd8 }
+    }, href!)
+
+    expect(result.size).toBeGreaterThan(0)
+    expect(result.isJpeg).toBe(true)
+
+    console.log(`[PERF E2E] HEIC → JPEG | output: ${result.size} bytes`)
+  })
+
   test('Multiple format conversions produce correct MIME types', async ({ page }) => {
     const formats: Array<{ fmt: string; magic: number[] }> = [
       { fmt: 'jpeg', magic: [0xff, 0xd8, 0xff] }, // JPEG SOI + APP marker
-      { fmt: 'gif', magic: [0x47, 0x49, 0x46] }, // GIF87a or GIF89a
-      { fmt: 'bmp', magic: [0x42, 0x4d] }, // BM
+      { fmt: 'webp', magic: [0x52, 0x49, 0x46, 0x46] }, // RIFF
     ]
 
     for (const { fmt, magic } of formats) {

@@ -6,20 +6,14 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
-type Converter = {
-  ensureReady: () => Promise<number>
-  convertImageTimed: (
-    data: Uint8Array,
-    fmt: string,
-  ) => Promise<{ data: Uint8Array; conversionMs: number }>
-}
-
-declare global {
-  interface Window {
-    __converter: Converter
-  }
-}
-
+/**
+ * Format output verification tests.
+ *
+ * Calls the WASM converter directly via `window.__converter` (bypassing the UI)
+ * to verify that each supported output format produces bytes with the correct
+ * magic header. Also covers ICO dimension enforcement and a round-trip smoke
+ * test across all tier-2 formats.
+ */
 test.describe('Tier-2 format conversions', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
@@ -88,10 +82,7 @@ test.describe('Tier-2 format conversions', () => {
 
     const result = await page.evaluate(async (bytes: number[]) => {
       const data = new Uint8Array(bytes)
-      const { data: output, conversionMs } = await window.__converter.convertImageTimed(
-        data,
-        'ico',
-      )
+      const { data: output, conversionMs } = await window.__converter.convertImageTimed(data, 'ico')
       return { size: output.byteLength, conversionMs, header: Array.from(output.slice(0, 4)) }
     }, pngBytes)
 
@@ -139,10 +130,7 @@ test.describe('Tier-2 format conversions', () => {
 
     const result = await page.evaluate(async (bytes: number[]) => {
       const data = new Uint8Array(bytes)
-      const { data: output, conversionMs } = await window.__converter.convertImageTimed(
-        data,
-        'tga',
-      )
+      const { data: output, conversionMs } = await window.__converter.convertImageTimed(data, 'tga')
       return { size: output.byteLength, conversionMs }
     }, pngBytes)
 
@@ -158,10 +146,7 @@ test.describe('Tier-2 format conversions', () => {
 
     const result = await page.evaluate(async (bytes: number[]) => {
       const data = new Uint8Array(bytes)
-      const { data: output, conversionMs } = await window.__converter.convertImageTimed(
-        data,
-        'qoi',
-      )
+      const { data: output, conversionMs } = await window.__converter.convertImageTimed(data, 'qoi')
       return { size: output.byteLength, conversionMs, header: Array.from(output.slice(0, 4)) }
     }, pngBytes)
 

@@ -6,8 +6,8 @@
  * to bundle-sizes.md at the project root.
  *
  * Usage (from project root or web/):
- *   npm run bundle-size              # Analyse existing builds
- *   npm run bundle-size:build        # Clean + build everything, then analyse
+ *   npm run bundle-size -- --title="my-feature"              # Analyse existing builds
+ *   npm run bundle-size:build -- --title="my-feature"        # Clean + build everything, then analyse
  *
  * Requires:
  *   twiggy  (cargo install twiggy)
@@ -30,6 +30,14 @@ const PATHS = {
 }
 
 const BUILD = process.argv.includes('--build')
+
+const titleArg = process.argv.find((a) => a.startsWith('--title='))
+if (!titleArg) {
+  console.error('✗ Missing required --title=<name> argument')
+  console.error('  Example: npm run bundle-size -- --title="heic-support"')
+  process.exit(1)
+}
+const TITLE = titleArg.slice('--title='.length)
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
@@ -222,9 +230,10 @@ Use \`npm run bundle-size:build\` to clean, rebuild, and then measure.
 > because function names are stripped in the release build.
 > JS/CSS contributors are the largest files from the most recent Astro build in \`dist/\`.
 
-| Date | Asset | Raw | Gzip | Top Contributor #1 | Top Contributor #2 | Top Contributor #3 |
-|------|-------|-----|------|-------------------|-------------------|-------------------|
+| Date | Branch | Asset | Raw | Gzip | Top Contributor #1 | Top Contributor #2 | Top Contributor #3 |
+|------|--------|-------|-----|------|-------------------|-------------------|-------------------|
 `
+
 
 function initMarkdown() {
   if (!existsSync(PATHS.output)) {
@@ -232,19 +241,28 @@ function initMarkdown() {
   }
 }
 
-function appendRows(date, wasm, js, css) {
+// Inserts new rows immediately after the table header separator line so that
+// the newest entries always appear at the top of the table.
+function prependRows(date, branch, wasm, js, css) {
   const totalRaw = wasm.raw + js.raw + css.raw
   const totalGz = wasm.gz + js.gz + css.gz
 
-  const rows = [
-    `| ${date} | WASM        | ${fmt(wasm.raw)} | ${fmt(wasm.gz)} | ${wasm.top3[0]} | ${wasm.top3[1]} | ${wasm.top3[2]} |`,
-    `| ${date} | JS          | ${fmt(js.raw)}   | ${fmt(js.gz)}   | ${js.top3[0]}   | ${js.top3[1]}   | ${js.top3[2]}   |`,
-    `| ${date} | CSS         | ${fmt(css.raw)}  | ${fmt(css.gz)}  | ${css.top3[0]}  | ${css.top3[1]}  | ${css.top3[2]}  |`,
-    `| ${date} | **Total**   | **${fmt(totalRaw)}** | **${fmt(totalGz)}** | | | |`,
-    '',
-  ].join('\n')
+  const rows =
+    `| ${date} | ${branch} | WASM      | ${fmt(wasm.raw)} | ${fmt(wasm.gz)} | ${wasm.top3[0]} | ${wasm.top3[1]} | ${wasm.top3[2]} |\n` +
+    `| ${date} | ${branch} | JS        | ${fmt(js.raw)}   | ${fmt(js.gz)}   | ${js.top3[0]}   | ${js.top3[1]}   | ${js.top3[2]}   |\n` +
+    `| ${date} | ${branch} | CSS       | ${fmt(css.raw)}  | ${fmt(css.gz)}  | ${css.top3[0]}  | ${css.top3[1]}  | ${css.top3[2]}  |\n` +
+    `| ${date} | ${branch} | **Total** | **${fmt(totalRaw)}** | **${fmt(totalGz)}** | | | |\n`
 
-  writeFileSync(PATHS.output, readFileSync(PATHS.output, 'utf8') + rows)
+  const content = readFileSync(PATHS.output, 'utf8')
+
+  // Find the table header row (| Date ...) then skip past it and the separator
+  // line beneath it, regardless of separator style (|---|  or  | --- |).
+  const headerIndex = content.indexOf('\n| Date ')
+  if (headerIndex === -1) throw new Error('Could not find table header in bundle-sizes.md')
+  const afterHeader = content.indexOf('\n', headerIndex + 1) // end of header line
+  const insertPos = content.indexOf('\n', afterHeader + 1) + 1 // end of separator line
+  const newContent = content.slice(0, insertPos) + rows + content.slice(insertPos)
+  writeFileSync(PATHS.output, newContent)
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -278,7 +296,7 @@ const totalRaw = wasm.raw + js.raw + css.raw
 const totalGz = wasm.gz + js.gz + css.gz
 
 initMarkdown()
-appendRows(date, wasm, js, css)
+prependRows(date, TITLE, wasm, js, css)
 
 console.log(`
 ┌─────────┬──────────────┬──────────────┐

@@ -58,6 +58,33 @@ body::after {
   z-index: 1000;
 }
 
+/* ─── Spinner & Loading ───────────────────────────────────────────────── */
+@keyframes cp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cp-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes cp-glow-pulse {
+  0%, 100% {
+    text-shadow: 0 0 6px var(--cp-cyan-glow), 0 0 14px var(--cp-cyan-glow-soft);
+    opacity: 1;
+  }
+  50% {
+    text-shadow: 0 0 12px var(--cp-cyan-glow-strong), 0 0 28px var(--cp-cyan-glow);
+    opacity: 0.85;
+  }
+}
+
 /* ─── Ticker Animation ────────────────────────────────────────────────── */
 @keyframes ticker-scroll {
   from {

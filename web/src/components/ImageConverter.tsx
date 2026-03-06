@@ -3,13 +3,7 @@ import { useConverter } from '../hooks/useConverter'
 import { DropZone } from './DropZone'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
 import { ValidFormat } from '../types'
-import type { ImageConverter as ImageConverterLib } from '../lib/image-converter'
 
-declare global {
-  interface Window {
-    __converter: ImageConverterLib | undefined
-  }
-}
 
 const CLIP_LG =
   'polygon(28px 0%, 100% 0%, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0% 100%, 0% 28px)'
@@ -28,8 +22,9 @@ export function ImageConverter() {
       .catch((err: Error) => {
         console.error('[image-converter] Failed to initialize:', err)
       })
-    // Expose for integration tests
-    window.__converter = converter
+    // Expose for integration tests. Cast needed because convertImageTimed takes
+    // ValidFormat (string enum) but the window type uses string for spec-file compatibility.
+    window.__converter = converter as unknown as typeof window.__converter
   }, [])
 
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
