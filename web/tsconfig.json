@@ -1,6 +1,12 @@
 {
   "compilerOptions": {
     "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "target": "ES2020",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -11,5 +17,14 @@
     "jsxImportSource": "preact",
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.astro", ".astro/types.d.ts", "tests/**/*.ts", "playwright.config.ts"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.astro",
+    ".astro/types.d.ts",
+    "tests/**/*.ts",
+    "playwright.config.ts",
+    "astro.config.ts",
+    "vitest.config.ts"
+  ]
 }
