@@ -10,6 +10,9 @@ export default defineConfig({
   publicDir: './static',
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['heic-to'],
+    },
     server: {
       fs: {
         // Allow serving files from the repo root so the worker can reach

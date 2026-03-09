@@ -21,6 +21,10 @@ type Props = {
   onDownloadClick: () => void
   /** Optional hint format to display when no file is loaded (e.g. 'heic' on HEIC landing pages). */
   initialFormat?: ValidFormat | 'heic' | undefined
+  /** Source format for the page (set on conversion landing pages). */
+  pageFromFormat?: string
+  /** Target format for the page (set on conversion landing pages). */
+  pageToFormat?: ValidFormat
 }
 
 const CUT = 20
@@ -44,6 +48,8 @@ export function DropZone({
   showProgress,
   onDownloadClick,
   initialFormat,
+  pageFromFormat,
+  pageToFormat,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -251,6 +257,17 @@ export function DropZone({
               click to change
             </p>
           </>
+        ) : pageFromFormat && pageToFormat ? (
+          <p
+            style={{
+              color: 'var(--cp-text)',
+              fontSize: '0.8rem',
+              marginTop: '0.5rem',
+              letterSpacing: '0.1em',
+            }}
+          >
+            {pageFromFormat.toUpperCase()} TO {pageToFormat.toUpperCase()} — UP TO 200 MB
+          </p>
         ) : (
           <>
             <p
@@ -315,6 +332,30 @@ export function DropZone({
             {/* Left: format buttons or result stats */}
             {isDone && result ? (
               <ResultStats result={result} />
+            ) : pageToFormat ? (
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  clipPath: controlsVisible ? 'inset(0 0% 0 0)' : 'inset(0 100% 0 0)',
+                  transition: 'clip-path 0.55s cubic-bezier(0.4, 0, 0.2, 1)',
+                  background: 'var(--cp-yellow-bg-dim)',
+                  borderRight: '1px solid var(--cp-cyan)',
+                }}
+              >
+                <span
+                  style={{
+                    color: 'var(--cp-yellow)',
+                    fontFamily: "'Share Tech Mono', monospace",
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.12em',
+                  }}
+                >
+                  {pageToFormat.toUpperCase()}
+                </span>
+              </div>
             ) : (
               <FormatSelector
                 targetFormat={targetFormat}
@@ -326,11 +367,12 @@ export function DropZone({
 
             {/* Right: download or execute */}
             <div
-              class="w-fit sm:w-[35%]"
               style={{
+                flex: pageToFormat && !isDone ? 1 : undefined,
                 flexShrink: 0,
                 clipPath: `polygon(0% 0%, 100% 0%, 100% calc(100% - ${CUT}px), calc(100% - ${CUT}px) 100%, 0% 100%)`,
               }}
+              class={pageToFormat && !isDone ? undefined : 'w-fit sm:w-[35%]'}
             >
               {isDone && result ? (
                 <DownloadButton result={result} onDownloadClick={onDownloadClick} />

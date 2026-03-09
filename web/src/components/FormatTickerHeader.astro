@@ -7,7 +7,7 @@ interface Props {
 const { fromName, toName } = Astro.props
 
 const TICKER_REPEATS = 8
-const tickerText = `${fromName} → ${toName}`
+const tickerText = `${fromName} TO ${toName}`
 
 const TICKER_CONTAINER_STYLE =
   "font-family: 'Space Grotesk', monospace; font-size: clamp(7rem, 9vw, 9rem); font-weight: 900; letter-spacing: 0.06em; line-height: 1; padding: 0 0.22em; white-space: nowrap;"
@@ -16,6 +16,14 @@ const LETTER_SHADOW =
 ---
 
 <style>
+  @keyframes ticker-scroll-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
   @media (max-width: 480px) {
     .cp-tagline {
       letter-spacing: 0.08em !important;
@@ -31,7 +39,7 @@ const LETTER_SHADOW =
   <h1 class="sr-only">{fromName} to {toName} Converter — Image Toolz</h1>
   <div
     aria-hidden="true"
-    style="display: flex; width: max-content; animation: ticker-scroll 20s linear infinite; will-change: transform;"
+    style="display: flex; width: max-content; animation: ticker-scroll-reverse 20s linear infinite; will-change: transform;"
   >
     {
       Array.from({ length: TICKER_REPEATS }, (_, i) => (

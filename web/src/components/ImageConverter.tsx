@@ -4,13 +4,17 @@ import { DropZone } from './DropZone'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
 import { ValidFormat } from '../types'
 
-
 const CLIP_LG =
   'polygon(28px 0%, 100% 0%, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0% 100%, 0% 28px)'
 
-export function ImageConverter() {
+interface Props {
+  initialFrom?: string
+  initialTo?: ValidFormat
+}
+
+export function ImageConverter({ initialFrom, initialTo }: Props = {}) {
   const { state, converter, handleFile, handleConvert } = useConverter()
-  const [targetFormat, setTargetFormat] = useState<ValidFormat>(ValidFormat.Png)
+  const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
 
   useEffect(() => {
     initAnalytics()
@@ -87,7 +91,9 @@ export function ImageConverter() {
           estimatedMs={state.estimatedMs}
           showProgress={state.showProgress}
           onDownloadClick={onDownloadClick}
-          initialFormat={initialFrom}
+          initialFormat={initialFrom as ValidFormat | 'heic' | undefined}
+          pageFromFormat={initialFrom}
+          pageToFormat={initialTo}
         />
       </section>
     </div>
