@@ -1,0 +1,56 @@
+---
+interface Props {
+  fromName: string
+  toName: string
+}
+
+const { fromName, toName } = Astro.props
+
+const TICKER_REPEATS = 8
+const tickerText = `${fromName} → ${toName}`
+
+const TICKER_CONTAINER_STYLE =
+  "font-family: 'Space Grotesk', monospace; font-size: clamp(7rem, 9vw, 9rem); font-weight: 900; letter-spacing: 0.06em; line-height: 1; padding: 0 0.22em; white-space: nowrap;"
+const LETTER_SHADOW =
+  '0 1px 0 #b8a800, 0 2px 0 #a09200, 0 3px 0 #887c00, 0 4px 0 #706600, 0 5px 0 #585000, 0 6px 12px var(--cp-shadow-strong), 0 0 20px var(--cp-yellow), 0 0 60px var(--cp-yellow-glow-strong), 0 0 100px var(--cp-yellow-glow-soft)'
+---
+
+<style>
+  @media (max-width: 480px) {
+    .cp-tagline {
+      letter-spacing: 0.08em !important;
+      font-size: 0.75rem !important;
+    }
+  }
+</style>
+
+<div
+  style="width: 100%; overflow-x: hidden; background: linear-gradient(to bottom, var(--cp-panel) 50%, var(--cp-bg) 100%); padding-bottom: 1rem; padding-top: 1rem;"
+>
+  <!-- Screen-reader title (ticker is aria-hidden) -->
+  <h1 class="sr-only">{fromName} to {toName} Converter — Image Toolz</h1>
+  <div
+    aria-hidden="true"
+    style="display: flex; width: max-content; animation: ticker-scroll 20s linear infinite; will-change: transform;"
+  >
+    {
+      Array.from({ length: TICKER_REPEATS }, (_, i) => (
+        <span style={TICKER_CONTAINER_STYLE}>
+          <span
+            style={`display: inline-block; color: var(--cp-yellow); text-shadow: ${LETTER_SHADOW};`}
+          >
+            {tickerText}
+          </span>
+        </span>
+      ))
+    }
+  </div>
+  <!-- Tagline strip -->
+  <div
+    style="text-align: center; padding: 1rem 1rem 0; border-bottom: 1px solid var(--cp-border);"
+  >
+    <p class="cp-tagline" style="color: var(--cp-text); font-size: 0.85rem; letter-spacing: 0.25em; padding-bottom: 1rem; white-space: nowrap;">
+      ◆ FAST · FUTURISTIC · FREE ◆
+    </p>
+  </div>
+</div>

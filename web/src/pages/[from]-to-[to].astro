@@ -1,0 +1,173 @@
+---
+import Base from '../layouts/Base.astro'
+import FormatTickerHeader from '../components/FormatTickerHeader.astro'
+import { ImageConverter } from '../components/ImageConverter'
+import { buildFormatPairs, type FormatPair } from '../data/format-pairs'
+import { ValidFormat } from '../types'
+import formatCopy from '../data/format-copy.json'
+
+export function getStaticPaths() {
+  const pairs = buildFormatPairs()
+  return pairs.map((pair) => ({
+    params: { from: pair.from, to: pair.to },
+    props: { pair },
+  }))
+}
+
+interface Props {
+  pair: FormatPair
+}
+
+const { pair } = Astro.props
+
+const copy = formatCopy[pair.slug as keyof typeof formatCopy]
+if (!copy) {
+  throw new Error(`Missing copy for slug "${pair.slug}" in format-copy.json`)
+}
+
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: pair.h1,
+  description: pair.description,
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Any (browser-based)',
+  browserRequirements: 'Requires WebAssembly support',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  url: pair.canonical,
+}
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: copy.faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+}
+
+// Build related pairs: same from (excl. current) + same to (excl. current), deduped, max 6
+const allPairs = buildFormatPairs()
+const sameFrom = allPairs.filter((p) => p.from === pair.from && p.slug !== pair.slug)
+const sameTo = allPairs.filter((p) => p.to === pair.to && p.slug !== pair.slug)
+const seen = new Set<string>()
+const relatedPairs: FormatPair[] = []
+for (const p of [...sameFrom, ...sameTo]) {
+  if (!seen.has(p.slug)) {
+    seen.add(p.slug)
+    relatedPairs.push(p)
+  }
+}
+relatedPairs.sort((a, b) => a.slug.localeCompare(b.slug))
+const limitedRelated = relatedPairs.slice(0, 6)
+
+// Split body into paragraphs on double newline
+const bodyParagraphs = copy.body.split('\n\n').filter((p) => p.trim().length > 0)
+
+// Determine initialFrom for the converter:
+// For HEIC pages, pass undefined (source is detected from file).
+// For ValidFormat pages, pass the ValidFormat value.
+const isHeicSource = pair.from === 'heic'
+const initialFrom = isHeicSource ? undefined : (pair.from as ValidFormat)
+---
+
+<Base title={pair.title} description={pair.description} canonical={pair.canonical}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <FormatTickerHeader fromName={pair.fromMeta.displayName} toName={pair.toMeta.displayName} />
+
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <h2
+      style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1.25rem; letter-spacing: 0.1em; margin-bottom: 1rem;"
+    >
+      {copy.headline}
+    </h2>
+    <p style="color: var(--cp-text); font-size: 0.9rem; line-height: 1.7; margin-bottom: 2rem;">
+      {copy.description}
+    </p>
+
+    <!-- Converter widget -->
+    <ImageConverter client:only="preact" initialFrom={initialFrom} initialTo={pair.to} />
+
+    <!-- Body content -->
+    <section style="margin-top: 3rem;">
+      {bodyParagraphs.map((paragraph) => (
+        <p style="color: var(--cp-text); font-size: 0.85rem; line-height: 1.75; margin-bottom: 1.25rem;">
+          {paragraph}
+        </p>
+      ))}
+    </section>
+
+    <!-- FAQ section -->
+    <section style="margin-top: 3rem;">
+      <h2
+        style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
+      >
+        // FAQ
+      </h2>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        {copy.faqs.map((faq) => (
+          <details
+            class="cyber-details"
+            style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
+          >
+            <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+              {faq.question}
+            </summary>
+            <p
+              style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
+            >
+              {faq.answer}
+            </p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <!-- Related converters -->
+    {limitedRelated.length > 0 && (
+      <section style="margin-top: 3rem;">
+        <h2
+          style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
+        >
+          // RELATED CONVERTERS
+        </h2>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {limitedRelated.map((rp) => (
+            <a
+              href={`/${rp.slug}`}
+              style="display: block; background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem; text-decoration: none; transition: background 0.2s;"
+            >
+              <span
+                style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+              >
+                {rp.fromMeta.displayName} → {rp.toMeta.displayName}
+              </span>
+              <p
+                style="color: var(--cp-text); font-size: 0.75rem; margin-top: 0.4rem; line-height: 1.5;"
+              >
+                {rp.h1}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+
+  <!-- Footer -->
+  <footer
+    style="margin-top: 3rem; border-top: 1px solid var(--cp-border); background: var(--cp-panel);"
+  >
+    <div class="max-w-4xl mx-auto px-4 py-6" style="text-align: center;">
+      <p style="color: var(--cp-muted); font-size: 0.85rem; letter-spacing: 0.2em;">
+        ◆ &nbsp;<span style="color: var(--cp-text);">WELCOME TO THE FUTURE</span> &nbsp; ◆
+      </p>
+    </div>
+  </footer>
+</Base>

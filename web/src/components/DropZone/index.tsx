@@ -19,6 +19,8 @@ type Props = {
   estimatedMs: number
   showProgress: boolean
   onDownloadClick: () => void
+  /** Optional hint format to display when no file is loaded (e.g. 'heic' on HEIC landing pages). */
+  initialFormat?: ValidFormat | 'heic' | undefined
 }
 
 const CUT = 20
@@ -41,6 +43,7 @@ export function DropZone({
   estimatedMs,
   showProgress,
   onDownloadClick,
+  initialFormat,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)

@@ -87,6 +87,7 @@ export function ImageConverter() {
           estimatedMs={state.estimatedMs}
           showProgress={state.showProgress}
           onDownloadClick={onDownloadClick}
+          initialFormat={initialFrom}
         />
       </section>
     </div>

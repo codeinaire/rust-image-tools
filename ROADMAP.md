@@ -427,7 +427,7 @@ Create dedicated landing pages for high-value format conversion keyword pairs (e
 
 ### Cons
 
-- Requires careful URL routing in Parcel (or a static site generator approach)
+- Requires careful URL routing in Vite (or a static site generator approach)
 - Each page needs unique `<title>` and `<meta name="description">` — can't just be injected by JS since search engines may not execute JS for crawling
 - If using a SPA approach, the static HTML must be pre-generated for each URL path (SSG)
 - Maintaining N×M pages (every format pair) grows unwieldy as formats are added
@@ -435,7 +435,7 @@ Create dedicated landing pages for high-value format conversion keyword pairs (e
 ### Architectural Considerations
 
 - **Approach A (URL params, JS-only):** Read `?from=webp&to=png` from `window.location.search` and pre-select dropdowns. Fast to build, but Google may or may not fully crawl JS-rendered titles/meta tags.
-- **Approach B (Static HTML per path, Parcel):** Use a script to generate separate HTML files for each format pair with hardcoded titles/meta. Each file is the same template but with different meta tags. Parcel builds all of them. This is the recommended approach for SEO.
+- **Approach B (Static HTML per path, Vite):** Use a script to generate separate HTML files for each format pair with hardcoded titles/meta. Each file is the same template but with different meta tags. Vite builds all of them. This is the recommended approach for SEO.
 - **Approach C (Netlify/Cloudflare redirects + edge functions):** Route `/png-to-jpeg` to `index.html?from=png&to=jpeg` at the CDN layer, and use an edge function to inject the correct title/description into the HTML head before serving. Complex but eliminates build-time generation.
 - Start with Approach B (static HTML generation) — a simple Node script can generate the files before build.
 
@@ -948,7 +948,7 @@ Convert the app into a Progressive Web App (PWA) with a service worker that cach
 - Service worker lifecycle is notoriously tricky: cache invalidation on deploys, update UX, error handling for cache misses
 - WASM binary and JS bundle must be served with correct CORS headers (already the case for WASM, but service workers add a layer)
 - The `COOP`/`COEP` headers required for `SharedArrayBuffer` (for future cancellation/threading) interact with service workers — need to be careful
-- Parcel 2 has limited first-class PWA support; may need to eject or add a plugin
+- Vite has limited first-class PWA support out of the box; use `vite-plugin-pwa` for full support
 
 ### Architectural Considerations
 
@@ -956,8 +956,7 @@ Convert the app into a Progressive Web App (PWA) with a service worker that cach
 - Write a service worker using Workbox (Google's SW library) or manually — Workbox handles cache strategies cleanly
 - Cache strategy: Cache-first for WASM binary, Network-first for HTML (to pick up updates)
 - Register the SW in `main.ts` (`navigator.serviceWorker.register('/sw.js')`)
-- Parcel: add a custom `sw.js` entry point or use `parcel-reporter-static-files-copy` to include the SW file
-- Consider using `vite-plugin-pwa` if Parcel proves limiting — or switch to Vite (see Feature 16)
+- Vite: add a custom `sw.js` entry point or use `vite-plugin-pwa` to include the SW file
 
 ### Bundle Size Impact
 
@@ -986,7 +985,7 @@ Convert the app into a Progressive Web App (PWA) with a service worker that cach
 - [ ] Handle service worker updates: show "Update available — reload" banner
 - [ ] Test offline functionality: disconnect network, verify conversion still works
 - [ ] Test `Add to Home Screen` on Android Chrome and iOS Safari
-- [ ] Verify cache-busting works on deploy (Parcel adds content hashes to filenames — SW should update automatically)
+- [ ] Verify cache-busting works on deploy (Vite adds content hashes to filenames — SW should update automatically)
 
 ### Additional Notes
 
@@ -1161,14 +1160,14 @@ Refactor the frontend from vanilla TypeScript to React (or a lightweight alterna
 
 - Significant migration effort — every file in `web/src/` needs rewriting
 - React adds bundle size (~40–50 KB gzipped for React + ReactDOM; ~4 KB for Preact)
-- The current Parcel setup works well with vanilla TS; React requires either Parcel 2's React preset (works) or switching to Vite (recommended)
+- The current Vite setup works well with vanilla TS; React/Preact requires adding the appropriate Vite plugin (e.g., `@vitejs/plugin-react` or `@preact/preset-vite`)
 - SEO: the current vanilla TS approach has all static content in `index.html`, fully crawlable. React's client-side rendering may require SSR or static generation (Next.js) to preserve SEO — significant additional complexity
 - The existing `ImageConverter` class and Worker integration are clean and can be preserved as-is; the migration touches only the UI layer
 
 ### Architectural Considerations
 
 - **Preact over React**: Preact is API-compatible with React but 1/10th the size (~3 KB). For a tool with no React ecosystem dependencies, Preact is the right choice.
-- **Bundler**: Switch from Parcel to Vite — better React/Preact DX, faster HMR, better PWA plugin support (see Feature 13), first-class WASM support
+- **Bundler**: Vite — better React/Preact DX, faster HMR, better PWA plugin support (see Feature 13), first-class WASM support
 - **SEO risk**: The format-specific landing pages (Feature 6) depend on static HTML content. With a React SPA, this breaks unless using Next.js or Astro. Consider Astro as the frontend framework: static HTML generation + React/Preact islands for the interactive converter.
 - **Component structure**:
   ```
@@ -1199,7 +1198,7 @@ Refactor the frontend from vanilla TypeScript to React (or a lightweight alterna
 | JavaScript — **React + ReactDOM**     | +~280–350 KB         | +~100–130 KB     | React 18 production build; app code stays same size                 |
 | JavaScript — **Astro island**         | +~15–25 KB           | +~5–9 KB         | Astro runtime for hydrating the converter island                    |
 | CSS                                   | 0                    | 0                | Tailwind classes remain the same                                    |
-| Bundler switch (Parcel → Vite)        | −5–15%               | −5–15%           | Vite's Rollup-based tree-shaking typically produces smaller bundles |
+| Vite (Rollup-based bundling)          | −5–15%               | −5–15%           | Vite's Rollup-based tree-shaking typically produces smaller bundles |
 | **Grand total (Preact)**              | **+~8–12 KB**        | **+~3–5 KB**     | Strongly recommended                                                |
 | **Grand total (React)**               | **+~280–350 KB**     | **+~100–130 KB** | Avoid unless ecosystem lock-in is required                          |
 
@@ -1207,7 +1206,7 @@ Refactor the frontend from vanilla TypeScript to React (or a lightweight alterna
 
 ### Broad Todo List
 
-- [ ] Evaluate and decide: React vs. Preact, Parcel vs. Vite, SPA vs. Astro
+- [ ] Evaluate and decide: React vs. Preact, SPA vs. Astro
 - [ ] Set up new build toolchain (Vite + Preact recommended)
 - [ ] Create project structure with component directories
 - [ ] Migrate `ImageConverter` class to a React Context + custom hooks (`useConverter`, `useWorker`)
