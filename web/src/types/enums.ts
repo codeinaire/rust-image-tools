@@ -10,6 +10,9 @@ export enum ValidFormat {
   Tga = 'tga',
 }
 
+/** ValidFormat extended with HEIC, which is input-only and not a conversion target. */
+export type InputFormat = ValidFormat | 'heic'
+
 export enum MessageType {
   Init = "init",
   DetectFormat = "detect_format",

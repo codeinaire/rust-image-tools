@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'preact/hooks'
 import { formatFileSize } from '../../hooks/useConverter'
 import type { FileInfo, ConversionResult, ConverterStatus } from '../../hooks/useConverter'
 import { ValidFormat } from '../../types'
+import type { InputFormat } from '../../types'
 import { FormatSelector } from './FormatSelector'
 import { ConvertButton } from './ConvertButton'
 import { DownloadButton } from './DownloadButton'
@@ -19,12 +20,10 @@ type Props = {
   estimatedMs: number
   showProgress: boolean
   onDownloadClick: () => void
-  /** Optional hint format to display when no file is loaded (e.g. 'heic' on HEIC landing pages). */
-  initialFormat?: ValidFormat | 'heic' | undefined
   /** Source format for the page (set on conversion landing pages). */
-  pageFromFormat?: string
+  pageFromFormat?: InputFormat | undefined
   /** Target format for the page (set on conversion landing pages). */
-  pageToFormat?: ValidFormat
+  pageToFormat?: InputFormat | undefined
 }
 
 const CUT = 20
@@ -47,7 +46,6 @@ export function DropZone({
   estimatedMs,
   showProgress,
   onDownloadClick,
-  initialFormat,
   pageFromFormat,
   pageToFormat,
 }: Props) {
@@ -193,7 +191,14 @@ export function DropZone({
         onClick={() => inputRef.current?.click()}
       >
         {isReading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.75rem',
+            }}
+          >
             {/* Rotating diamond with glow */}
             <svg
               width="32"
@@ -202,27 +207,50 @@ export function DropZone({
               fill="none"
               style={{
                 animation: 'cp-spin 1.4s linear infinite',
-                filter: 'drop-shadow(0 0 6px var(--cp-cyan)) drop-shadow(0 0 14px var(--cp-cyan-glow))',
+                filter:
+                  'drop-shadow(0 0 6px var(--cp-cyan)) drop-shadow(0 0 14px var(--cp-cyan-glow))',
               }}
             >
               <polygon points="16,2 30,16 16,30 2,16" stroke="var(--cp-cyan)" stroke-width="1.5" />
-              <polygon points="16,8 24,16 16,24 8,16" stroke="var(--cp-cyan)" stroke-width="1" stroke-opacity="0.35" />
+              <polygon
+                points="16,8 24,16 16,24 8,16"
+                stroke="var(--cp-cyan)"
+                stroke-width="1"
+                stroke-opacity="0.35"
+              />
               <circle cx="16" cy="16" r="2" fill="var(--cp-cyan)" />
             </svg>
             {/* Glowing pulsing text */}
-            <p style={{ color: 'var(--cp-cyan)', fontSize: '1.125rem', letterSpacing: '0.12em', animation: 'cp-glow-pulse 1.4s ease-in-out infinite' }}>
+            <p
+              style={{
+                color: 'var(--cp-cyan)',
+                fontSize: '1.125rem',
+                letterSpacing: '0.12em',
+                animation: 'cp-glow-pulse 1.4s ease-in-out infinite',
+              }}
+            >
               {mainText}
             </p>
             {/* Sweep scan bar */}
-            <div style={{ width: '10rem', height: '2px', background: 'var(--cp-border)', overflow: 'hidden', position: 'relative' }}>
-              <div style={{
-                position: 'absolute',
-                inset: 0,
-                width: '25%',
-                background: 'linear-gradient(90deg, transparent, var(--cp-cyan), transparent)',
-                animation: 'cp-scan 1.4s ease-in-out infinite',
-                boxShadow: '0 0 8px var(--cp-cyan-glow-strong)',
-              }} />
+            <div
+              style={{
+                width: '10rem',
+                height: '2px',
+                background: 'var(--cp-border)',
+                overflow: 'hidden',
+                position: 'relative',
+              }}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '25%',
+                  background: 'linear-gradient(90deg, transparent, var(--cp-cyan), transparent)',
+                  animation: 'cp-scan 1.4s ease-in-out infinite',
+                  boxShadow: '0 0 8px var(--cp-cyan-glow-strong)',
+                }}
+              />
             </div>
           </div>
         ) : (

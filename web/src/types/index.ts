@@ -1,4 +1,5 @@
 export { ValidFormat, MessageType } from './enums'
+export type { InputFormat } from './enums'
 export type {
   DetectFormatRequest,
   ConvertImageRequest,

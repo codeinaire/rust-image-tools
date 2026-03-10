@@ -3,9 +3,9 @@ import Base from '../layouts/Base.astro'
 import FormatTickerHeader from '../components/FormatTickerHeader.astro'
 import { ImageConverter } from '../components/ImageConverter'
 import { buildFormatPairs, type FormatPair } from '../data/format-pairs'
-import { ValidFormat } from '../types'
 import formatCopy from '../data/format-copy.json'
 
+/** Generates one static page per format conversion pair (e.g. /png-to-jpeg). */
 export function getStaticPaths() {
   const pairs = buildFormatPairs()
   return pairs.map((pair) => ({
@@ -20,7 +20,7 @@ interface Props {
 
 const { pair } = Astro.props
 
-const copy = formatCopy[pair.slug as keyof typeof formatCopy]
+const copy = formatCopy[pair.slug]
 if (!copy) {
   throw new Error(`Missing copy for slug "${pair.slug}" in format-copy.json`)
 }
@@ -84,14 +84,10 @@ const bodyIcons = [
   'M16 3l4 4-4 4 M20 7H4 M8 21l-4-4 4-4 M4 17h16',
 ]
 
-// Determine initialFrom for the converter:
-// For HEIC pages, pass undefined (source is detected from file).
-// For ValidFormat pages, pass the ValidFormat value.
 const isHeicSource = pair.from === 'heic'
-const initialFrom = isHeicSource ? undefined : (pair.from as ValidFormat)
 ---
 
-<Base title={pair.title} description={pair.description} canonical={pair.canonical}>
+<Base title={pair.title} description={pair.description} canonical={pair.canonical} skipDefaultSchema>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 

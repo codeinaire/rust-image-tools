@@ -1,4 +1,5 @@
 import { ValidFormat } from '../types'
+import type { InputFormat } from '../types'
 
 /** Display metadata for a single image format. */
 export interface FormatMeta {
@@ -81,8 +82,8 @@ export const HEIC_META: FormatMeta = {
 
 /** A single format conversion pair with all SEO and display metadata. */
 export interface FormatPair {
-  /** ValidFormat value or 'heic' for HEIC source pages */
-  from: string
+  /** Source format — a ValidFormat value or 'heic' for HEIC source pages */
+  from: InputFormat
   to: ValidFormat
   slug: string
   title: string
@@ -93,7 +94,7 @@ export interface FormatPair {
   toMeta: FormatMeta
 }
 
-const BASE_URL = 'https://imagetoolz.app'
+import { BASE_URL } from '../constants'
 
 /**
  * Builds the complete list of format conversion pairs.

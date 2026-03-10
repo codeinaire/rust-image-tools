@@ -41,6 +41,7 @@
     "vite": "^6"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
     "heic-to": "^1.4.2",
     "posthog-js": "^1.347.2"
   }

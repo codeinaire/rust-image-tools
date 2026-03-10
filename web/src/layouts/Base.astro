@@ -1,13 +1,16 @@
 ---
 import '../styles.css'
+import { BASE_URL } from '../constants'
 
 interface Props {
   title: string
   description: string
   canonical?: string
+  /** When true, skip the default WebApplication JSON-LD (page provides its own). */
+  skipDefaultSchema?: boolean
 }
 
-const { title, description, canonical } = Astro.props
+const { title, description, canonical, skipDefaultSchema = false } = Astro.props
 
 const webAppSchema = {
   '@context': 'https://schema.org',
@@ -47,13 +50,13 @@ const webAppSchema = {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     {canonical && <meta property="og:url" content={canonical} />}
-    <meta property="og:image" content="https://imagetoolz.app/og-image.png" />
+    <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
 
-    <!-- Structured Data: WebApplication -->
-    <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+    <!-- Structured Data: WebApplication (skipped when page provides its own) -->
+    {!skipDefaultSchema && <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />}
 
     <!-- Google Fonts: Space Grotesk (ticker) + Orbitron (display) + Share Tech Mono (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

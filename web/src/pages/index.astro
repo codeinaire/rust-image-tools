@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro'
 import { ImageConverter } from '../components/ImageConverter'
+import { BASE_URL } from '../constants'
 
 const TICKER_REPEATS = 8
 const TICKER_CONTAINER_STYLE =
@@ -24,7 +25,7 @@ const LETTERS: { ch: string; dur: number; delay: number }[] = [
 const title = 'Free Image Converter — PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, TGA | Online & Private'
 const description =
   'Convert images between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, and TGA instantly in your browser. No upload to any server — 100% private, free, and fast.'
-const canonical = 'https://imagetoolz.app/'
+const canonical = `${BASE_URL}/`
 
 const faqSchema = {
   '@context': 'https://schema.org',
