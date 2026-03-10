@@ -1,0 +1,1681 @@
+{
+  "png-to-jpeg": {
+    "headline": "Convert PNG to JPEG — free, private, instant",
+    "description": "Convert PNG to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting PNG to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Because JPEG uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG (Portable Network Graphics) is a lossless raster image format that supports full transparency via an alpha channel. It is the dominant format for screenshots, web graphics, and images that require pixel-perfect accuracy."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG (Joint Photographic Experts Group) is a lossy image format optimised for photographic content. It achieves high compression ratios by discarding fine detail the human eye is unlikely to notice, making it the standard for photos on the web."
+      },
+      {
+        "question": "Will converting PNG to JPEG lose quality?",
+        "answer": "Yes, JPEG is lossy. The degree of quality loss depends on the compression level. For photographic content the loss is usually imperceptible at quality 80–90%, but sharp edges, text, and flat-colour graphics will show visible artifacts. Transparency is not preserved — transparent pixels become white."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-webp": {
+    "headline": "Convert PNG to WebP — smaller files, same quality",
+    "description": "Convert PNG to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting PNG to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Because WebP uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless image format with alpha-channel transparency support, widely used for web graphics, screenshots, and images requiring precision."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern image format developed by Google. It supports lossless and lossy compression as well as transparency, and consistently produces smaller files than PNG or JPEG at comparable quality."
+      },
+      {
+        "question": "Will converting PNG to WebP lose quality?",
+        "answer": "Not if you use lossless WebP, which preserves every pixel exactly. Image Toolz converts PNG to lossless WebP by default, so transparency and sharp edges are maintained with no quality loss."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-gif": {
+    "headline": "Convert PNG to GIF — browser-based, no upload",
+    "description": "Convert PNG to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting PNG to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format supporting millions of colours and full alpha-channel transparency. It is the standard for graphics and screenshots on the web."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF (Graphics Interchange Format) is a legacy format supporting up to 256 colours and animation. Despite its age it remains common for simple animations and reaction images."
+      },
+      {
+        "question": "Will converting PNG to GIF lose quality?",
+        "answer": "Yes. GIF is limited to 256 colours, so a full-colour PNG will undergo colour quantisation. Images with gradients or many distinct colours will show banding. Simple icons and flat-colour graphics convert well."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-bmp": {
+    "headline": "Convert PNG to BMP — uncompressed bitmap output",
+    "description": "Convert PNG to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting PNG to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the PNG source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless compressed image format with transparency support, widely used for web graphics and screenshots."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP (Bitmap) is an uncompressed raster format. Files are large because no compression is applied, but the format is universally supported on Windows and compatible with many legacy applications."
+      },
+      {
+        "question": "Will converting PNG to BMP lose quality?",
+        "answer": "No. BMP stores raw pixel data, so no quality is lost compared to the PNG source. The resulting file will simply be larger due to the lack of compression."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-qoi": {
+    "headline": "Convert PNG to QOI — faster lossless encoding",
+    "description": "Convert PNG to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting PNG to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a widely supported lossless format used for web images, graphics, and screenshots."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI (Quite OK Image) is a lossless format optimised for encode/decode speed rather than compression ratio. It is 3–10× faster than PNG and useful in developer and tooling contexts."
+      },
+      {
+        "question": "Will converting PNG to QOI lose quality?",
+        "answer": "No. QOI is lossless. Every pixel is preserved exactly. The main trade-off is limited ecosystem support compared to PNG."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-ico": {
+    "headline": "Convert PNG to ICO — create favicons from any image",
+    "description": "Convert PNG to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting PNG to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless image format commonly used for web graphics, screenshots, and source artwork."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format, used for favicons, desktop application icons, and Windows Explorer thumbnails. It can embed multiple icon sizes in a single file."
+      },
+      {
+        "question": "Will converting PNG to ICO lose quality?",
+        "answer": "Minimal loss. ICO files typically store images at small sizes (16×16, 32×32, 64×64). If your PNG is large, it will be downscaled. For best results use a clean square PNG as the source."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-tiff": {
+    "headline": "Convert PNG to TIFF — professional lossless output",
+    "description": "Convert PNG to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting PNG to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless compressed format widely used for web images, graphics, and general-purpose photography."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a flexible lossless format used in professional photography, print production, and archival workflows. It supports high bit depth, multiple layers, and is natively supported by professional image editors."
+      },
+      {
+        "question": "Will converting PNG to TIFF lose quality?",
+        "answer": "No. Both PNG and TIFF are lossless formats. Every pixel is preserved exactly in the conversion."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "png-to-tga": {
+    "headline": "Convert PNG to TGA — game and 3D pipeline output",
+    "description": "Convert PNG to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "PNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting PNG to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the PNG source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless compressed format with transparency support, used widely across the web and in digital art."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA (Truevision Graphics Adapter) is a legacy raster format common in 3D graphics and game development toolchains. It is output-only in Image Toolz."
+      },
+      {
+        "question": "Will converting PNG to TGA lose quality?",
+        "answer": "No. TGA stores uncompressed pixel data, so the conversion from PNG is lossless. File sizes will be larger than the source PNG."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-png": {
+    "headline": "Convert JPEG to PNG — lossless output from a photo",
+    "description": "Convert JPEG to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting JPEG to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Note that converting from a lossy source (JPEG) to a lossless target (PNG) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format optimised for photographic images. It achieves high compression by discarding fine detail, making it the standard format for photos on the web and from digital cameras."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format that preserves every pixel exactly. It supports full alpha-channel transparency and is the standard for graphics and screenshots."
+      },
+      {
+        "question": "Will converting JPEG to PNG lose quality?",
+        "answer": "No additional quality is lost. The PNG output is a lossless copy of the JPEG — but detail already removed by JPEG compression is not recovered. The PNG will be larger than the JPEG but visually identical."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-webp": {
+    "headline": "Convert JPEG to WebP — smaller photos, same look",
+    "description": "Convert JPEG to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting JPEG to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Note that converting from a lossy source (JPEG) to a lossless target (WebP) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is the dominant format for photographs, using lossy compression to achieve small file sizes. It is the standard output format for digital cameras and smartphones."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is Google's modern format offering both lossy and lossless compression. It consistently outperforms JPEG in file size at comparable quality and is supported by all major browsers."
+      },
+      {
+        "question": "Will converting JPEG to WebP lose quality?",
+        "answer": "Minimal additional loss. The WebP output is re-encoded from the JPEG source, which may introduce a small amount of additional compression artifact. At quality 80–90% the difference is usually imperceptible."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-gif": {
+    "headline": "Convert JPEG to GIF — in your browser, no upload",
+    "description": "Convert JPEG to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting JPEG to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Note that converting from a lossy source (JPEG) to a lossless target (GIF) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy compressed format for photographs, supporting millions of colours and achieving high compression ratios for photo-realistic images."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours that supports animation and indexed transparency. It remains common for simple animations on the web."
+      },
+      {
+        "question": "Will converting JPEG to GIF lose quality?",
+        "answer": "Yes, significantly for photographic content. GIF's 256-colour palette cannot represent the full range of colours in a JPEG photograph, resulting in visible banding. The format is better suited to flat-colour graphics."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-bmp": {
+    "headline": "Convert JPEG to BMP — uncompressed bitmap from a photo",
+    "description": "Convert JPEG to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting JPEG to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the JPEG source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy compressed format for photographs, achieving small files by discarding detail the eye is unlikely to notice."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed raster format native to Windows. Files are large but universally compatible with Windows software and hardware that requires raw pixel data."
+      },
+      {
+        "question": "Will converting JPEG to BMP lose quality?",
+        "answer": "No additional quality is lost. The BMP is a lossless copy of what the JPEG decoded to. The file will be much larger than the source JPEG."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-qoi": {
+    "headline": "Convert JPEG to QOI — fast lossless output",
+    "description": "Convert JPEG to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting JPEG to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Note that converting from a lossy source (JPEG) to a lossless target (QOI) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format for photographs used across the web and as the default output format for most cameras."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format designed for speed. It encodes and decodes 3–10× faster than PNG and produces similar file sizes."
+      },
+      {
+        "question": "Will converting JPEG to QOI lose quality?",
+        "answer": "No additional loss. QOI captures every pixel from the decoded JPEG exactly. JPEG compression artifacts already in the source are preserved, but no new loss is introduced."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-ico": {
+    "headline": "Convert JPEG to ICO — favicon from a photo",
+    "description": "Convert JPEG to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting JPEG to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format for photographs commonly used across the web and as the default output for digital cameras and phone cameras."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for favicons and application icons. It can embed multiple sizes within a single file."
+      },
+      {
+        "question": "Will converting JPEG to ICO lose quality?",
+        "answer": "Icons are typically displayed at small sizes, so downscaling from a large JPEG is expected. Quality is acceptable for most favicon use cases at standard sizes."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-tiff": {
+    "headline": "Convert JPEG to TIFF — professional print-ready output",
+    "description": "Convert JPEG to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting JPEG to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Note that converting from a lossy source (JPEG) to a lossless target (TIFF) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format optimised for photographs. Its high compression makes it dominant on the web, though the lossy nature makes it less ideal for repeated editing."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in print, photography, and archival workflows. It is natively supported by all major image editing applications."
+      },
+      {
+        "question": "Will converting JPEG to TIFF lose quality?",
+        "answer": "No additional loss. The TIFF is a lossless copy of the decoded JPEG. Artifacts already in the JPEG remain, but no new compression is applied."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "jpeg-to-tga": {
+    "headline": "Convert JPEG to TGA — for 3D and game pipelines",
+    "description": "Convert JPEG to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "JPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting JPEG to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the JPEG source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy photographic format that achieves small file sizes through compression, commonly used across the web and by digital cameras."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA (Truevision Graphics Adapter) is an uncompressed legacy format used in 3D modeling and game development toolchains."
+      },
+      {
+        "question": "Will converting JPEG to TGA lose quality?",
+        "answer": "No additional loss. The TGA output contains the raw decoded pixels from the JPEG with no further compression. JPEG artifacts present in the source are preserved."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-png": {
+    "headline": "Convert WebP to PNG — lossless output, full compatibility",
+    "description": "Convert WebP to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting WebP to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Note that converting from a lossy source (WebP) to a lossless target (PNG) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format by Google supporting lossy and lossless compression. It is dominant on the web but has limited support in desktop software and operating system viewers."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format with universal compatibility across all operating systems, browsers, and image editing applications."
+      },
+      {
+        "question": "Will converting WebP to PNG lose quality?",
+        "answer": "No additional quality is lost. The PNG captures the decoded WebP pixels exactly. If the source WebP was lossy, those artifacts remain but no new compression is applied."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-jpeg": {
+    "headline": "Convert WebP to JPEG — universal photo compatibility",
+    "description": "Convert WebP to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting WebP to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Because JPEG uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is Google's modern image format offering superior compression over JPEG and PNG. It is widely used on the web but lacks support in many desktop applications."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is the universal photograph format supported by every image viewer, application, and platform on the planet."
+      },
+      {
+        "question": "Will converting WebP to JPEG lose quality?",
+        "answer": "Yes, JPEG is lossy. If the source WebP was also lossy, this is a second generation of compression. For best results keep quality at 85 or above. The loss is usually imperceptible for photographic content."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-gif": {
+    "headline": "Convert WebP to GIF — browser-based, no upload",
+    "description": "Convert WebP to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting WebP to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Note that converting from a lossy source (WebP) to a lossless target (GIF) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format supporting full colour depth with both lossy and lossless compression modes."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours. It supports animation and simple transparency but struggles with photographic or full-colour content."
+      },
+      {
+        "question": "Will converting WebP to GIF lose quality?",
+        "answer": "Yes. GIF's 256-colour palette will cause visible colour banding on photographic or gradient-heavy WebP images. Simple flat-colour graphics convert without noticeable degradation."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-bmp": {
+    "headline": "Convert WebP to BMP — uncompressed output",
+    "description": "Convert WebP to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting WebP to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the WebP source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern compressed format by Google, producing small files with high visual quality."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format. Files are large but are universally readable by Windows applications without needing codec support."
+      },
+      {
+        "question": "Will converting WebP to BMP lose quality?",
+        "answer": "No additional quality is lost. The BMP contains the raw decoded pixels from the WebP. If the source WebP was lossy, those artifacts remain, but no new compression is applied."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-qoi": {
+    "headline": "Convert WebP to QOI — fast lossless developer format",
+    "description": "Convert WebP to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting WebP to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Note that converting from a lossy source (WebP) to a lossless target (QOI) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format offering high compression efficiency. It is widely used for web images but has limited support in developer tooling outside of Google's ecosystem."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI (Quite OK Image) is a lossless format designed for fast encode/decode, making it useful in performance-sensitive developer pipelines."
+      },
+      {
+        "question": "Will converting WebP to QOI lose quality?",
+        "answer": "No additional loss. The QOI output captures every decoded pixel from the WebP. Lossy WebP artifacts in the source are preserved, but no new compression is applied."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-ico": {
+    "headline": "Convert WebP to ICO — favicon from a WebP image",
+    "description": "Convert WebP to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting WebP to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is Google's modern image format, widely used for web images and increasingly as a source format for graphics."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format. It is the standard for browser favicons and desktop application icons."
+      },
+      {
+        "question": "Will converting WebP to ICO lose quality?",
+        "answer": "Icons are displayed at small sizes, so downscaling is expected. Start with a large, clean WebP source for best results at 16×16 and 32×32 icon sizes."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-tiff": {
+    "headline": "Convert WebP to TIFF — professional lossless output",
+    "description": "Convert WebP to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting WebP to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Note that converting from a lossy source (WebP) to a lossless target (TIFF) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern web format by Google supporting both lossy and lossless compression. It is increasingly used as a source format for web and digital assets."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in photography, print production, and archival. It is natively supported by all major image editing applications."
+      },
+      {
+        "question": "Will converting WebP to TIFF lose quality?",
+        "answer": "No additional quality is lost. The TIFF is a lossless copy of the decoded WebP. For lossless WebP sources, the TIFF is pixel-perfect."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "webp-to-tga": {
+    "headline": "Convert WebP to TGA — for 3D and game toolchains",
+    "description": "Convert WebP to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "WebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting WebP to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the WebP source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern compressed format by Google, used widely on the web and increasingly in digital art workflows."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA (Truevision Graphics Adapter) is an uncompressed legacy format common in 3D modeling, game engines, and digital art pipelines."
+      },
+      {
+        "question": "Will converting WebP to TGA lose quality?",
+        "answer": "No additional loss. TGA stores raw pixel data, so no new compression is applied. Lossy WebP artifacts in the source are preserved."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-png": {
+    "headline": "Convert GIF to PNG — lossless output with transparency",
+    "description": "Convert GIF to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting GIF to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours. It supports animation and simple one-bit transparency, and remains widely used for simple animations on the web."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format supporting full colour depth and alpha-channel transparency. It is the standard for web graphics and screenshots."
+      },
+      {
+        "question": "Will converting GIF to PNG lose quality?",
+        "answer": "No. PNG is lossless and supports more colours than GIF. The conversion faithfully represents all the pixel data in the GIF, including transparency."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-jpeg": {
+    "headline": "Convert GIF to JPEG — compact photo output",
+    "description": "Convert GIF to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting GIF to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Because JPEG uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format with a 256-colour palette and support for animation and indexed transparency."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format optimised for photographs and widely compatible across all platforms and applications."
+      },
+      {
+        "question": "Will converting GIF to JPEG lose quality?",
+        "answer": "Yes. JPEG adds lossy compression to the already colour-limited GIF source. Transparency is lost — transparent areas become white. Output quality depends on the JPEG quality setting."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-webp": {
+    "headline": "Convert GIF to WebP — modern format, smaller file",
+    "description": "Convert GIF to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting GIF to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Because WebP uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format supporting 256 colours, animation, and indexed transparency. It is common for simple web animations."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format by Google supporting full colour depth, both lossy and lossless compression, and animation — a strict upgrade from GIF in most use cases."
+      },
+      {
+        "question": "Will converting GIF to WebP lose quality?",
+        "answer": "Not with lossless WebP. The colour palette is expanded and all pixels are preserved. With lossy WebP, small artifacts may appear but file sizes will be significantly smaller."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-bmp": {
+    "headline": "Convert GIF to BMP — uncompressed output",
+    "description": "Convert GIF to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting GIF to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the GIF source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format with a 256-colour palette, supporting animation and indexed transparency."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format storing raw pixel data. Files are large but universally compatible with Windows applications."
+      },
+      {
+        "question": "Will converting GIF to BMP lose quality?",
+        "answer": "No additional quality is lost. The BMP faithfully represents the decoded GIF pixels. GIF's 256-colour limit means colours were already reduced before conversion."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-qoi": {
+    "headline": "Convert GIF to QOI — fast lossless output",
+    "description": "Convert GIF to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting GIF to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format with a 256-colour palette supporting animation."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for encode/decode speed, useful in performance-sensitive developer pipelines."
+      },
+      {
+        "question": "Will converting GIF to QOI lose quality?",
+        "answer": "No. QOI is lossless and represents all pixel data from the decoded GIF exactly. The 256-colour limit of the GIF source is preserved but no new quality loss occurs."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-ico": {
+    "headline": "Convert GIF to ICO — icon format for Windows and browsers",
+    "description": "Convert GIF to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting GIF to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours with support for animation. Its simple transparency model makes it suitable for icon-like graphics."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the icon container format for Windows and browsers. It is used for favicons and desktop application icons."
+      },
+      {
+        "question": "Will converting GIF to ICO lose quality?",
+        "answer": "Minimal change. GIF is already limited to 256 colours, and ICO at small sizes will use the same palette. The main change is resizing to icon dimensions."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-tiff": {
+    "headline": "Convert GIF to TIFF — archival and print output",
+    "description": "Convert GIF to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting GIF to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format with a 256-colour palette, used for simple graphics and animations."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format for archival, photography, and print workflows."
+      },
+      {
+        "question": "Will converting GIF to TIFF lose quality?",
+        "answer": "No. TIFF is lossless. The output faithfully represents all decoded GIF pixels. GIF's colour limitations are preserved, but no new loss is introduced."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "gif-to-tga": {
+    "headline": "Convert GIF to TGA — game and 3D pipeline output",
+    "description": "Convert GIF to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "GIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting GIF to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the GIF source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format with a 256-colour palette, commonly used for animations and simple web graphics."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA is an uncompressed legacy format used in 3D modeling, game development, and digital art pipelines."
+      },
+      {
+        "question": "Will converting GIF to TGA lose quality?",
+        "answer": "No additional loss. TGA stores raw pixel data, so no new compression is applied to the decoded GIF pixels."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-png": {
+    "headline": "Convert BMP to PNG — compressed lossless output",
+    "description": "Convert BMP to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting BMP to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed raster format native to Windows. Files are large because every pixel is stored without compression."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless compressed format that achieves smaller files than BMP without losing any pixel data. It supports transparency and is universally compatible."
+      },
+      {
+        "question": "Will converting BMP to PNG lose quality?",
+        "answer": "No. PNG is lossless. Every pixel from the BMP is preserved exactly in the PNG output, which will simply be smaller due to compression."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-jpeg": {
+    "headline": "Convert BMP to JPEG — small compressed output",
+    "description": "Convert BMP to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting BMP to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format producing very large files. It is universally compatible but impractical for file sharing due to size."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format optimised for photographs. It achieves high compression ratios that make images practical to share and store."
+      },
+      {
+        "question": "Will converting BMP to JPEG lose quality?",
+        "answer": "Yes. JPEG is lossy. At quality 80–90% the loss is usually imperceptible for photographs. Fine text and hard edges may show artifacts at lower settings."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-webp": {
+    "headline": "Convert BMP to WebP — modern format, fraction of the size",
+    "description": "Convert BMP to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting BMP to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format. Files are very large because no compression is applied to the pixel data."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format by Google offering both lossless and lossy compression with significantly smaller files than BMP, PNG, or JPEG."
+      },
+      {
+        "question": "Will converting BMP to WebP lose quality?",
+        "answer": "Not with lossless WebP, which preserves every pixel exactly. With lossy WebP there is some compression artifact, but file sizes are dramatically smaller."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-gif": {
+    "headline": "Convert BMP to GIF — reduce to 256 colours",
+    "description": "Convert BMP to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting BMP to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format supporting full colour depth without compression."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours with support for animation and indexed transparency."
+      },
+      {
+        "question": "Will converting BMP to GIF lose quality?",
+        "answer": "Yes. GIF's 256-colour palette causes colour reduction. Photographic BMP images will show banding. Flat-colour or simple graphics convert acceptably."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-qoi": {
+    "headline": "Convert BMP to QOI — fast lossless alternative",
+    "description": "Convert BMP to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting BMP to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format, producing large files with raw pixel data."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for fast encode/decode in developer contexts."
+      },
+      {
+        "question": "Will converting BMP to QOI lose quality?",
+        "answer": "No. QOI is lossless. Every pixel is preserved exactly from the BMP source."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-ico": {
+    "headline": "Convert BMP to ICO — create Windows icons from BMP",
+    "description": "Convert BMP to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting BMP to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format. It is universally supported on Windows but produces large files."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for application icons and browser favicons."
+      },
+      {
+        "question": "Will converting BMP to ICO lose quality?",
+        "answer": "Minimal change. The image is scaled to icon sizes and packaged in the ICO container. Start with a large BMP for best icon quality."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-tiff": {
+    "headline": "Convert BMP to TIFF — professional lossless output",
+    "description": "Convert BMP to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting BMP to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format producing very large files with raw pixel data."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in photography, printing, and archival workflows."
+      },
+      {
+        "question": "Will converting BMP to TIFF lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly in the TIFF output."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "bmp-to-tga": {
+    "headline": "Convert BMP to TGA — for game and 3D pipelines",
+    "description": "Convert BMP to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "BMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting BMP to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the BMP source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format storing raw pixel data."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA is an uncompressed legacy format used in 3D modeling, game development, and digital art."
+      },
+      {
+        "question": "Will converting BMP to TGA lose quality?",
+        "answer": "No. Both formats store uncompressed pixel data. The conversion is lossless."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-png": {
+    "headline": "Convert QOI to PNG — universal lossless output",
+    "description": "Convert QOI to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting QOI to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format designed for fast encode/decode in developer contexts. It has limited support outside of tooling ecosystems."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format with universal compatibility across all platforms, browsers, and image editors."
+      },
+      {
+        "question": "Will converting QOI to PNG lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly in the PNG output."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-jpeg": {
+    "headline": "Convert QOI to JPEG — shareable compressed output",
+    "description": "Convert QOI to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting QOI to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Because JPEG uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format used in developer tooling. It has excellent encode/decode speed but limited consumer support."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is the universal photographic format, supported by every platform and application."
+      },
+      {
+        "question": "Will converting QOI to JPEG lose quality?",
+        "answer": "Yes. JPEG is lossy. The degree of quality loss depends on the compression setting. At quality 80–90% the loss is usually imperceptible for photographic content."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-webp": {
+    "headline": "Convert QOI to WebP — modern web-ready format",
+    "description": "Convert QOI to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting QOI to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Because WebP uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for speed in developer pipelines. It is not supported in consumer browsers or image viewers."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format by Google with broad browser support, offering both lossless and lossy compression."
+      },
+      {
+        "question": "Will converting QOI to WebP lose quality?",
+        "answer": "Not with lossless WebP. With lossy WebP there is some compression artifact but file sizes are much smaller."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-gif": {
+    "headline": "Convert QOI to GIF — 256-colour output from a QOI image",
+    "description": "Convert QOI to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting QOI to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format for developer pipelines with fast encode/decode performance."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours with support for animation."
+      },
+      {
+        "question": "Will converting QOI to GIF lose quality?",
+        "answer": "Yes. GIF's 256-colour limit causes colour reduction. Images with gradients will show banding. Flat-colour graphics convert well."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-bmp": {
+    "headline": "Convert QOI to BMP — uncompressed Windows format",
+    "description": "Convert QOI to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting QOI to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the QOI source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for encode/decode speed in developer tooling."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format with universal Windows application compatibility."
+      },
+      {
+        "question": "Will converting QOI to BMP lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-ico": {
+    "headline": "Convert QOI to ICO — favicon from a QOI image",
+    "description": "Convert QOI to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting QOI to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless developer format with fast encode/decode performance."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the icon container format used for browser favicons and Windows application icons."
+      },
+      {
+        "question": "Will converting QOI to ICO lose quality?",
+        "answer": "Minimal change. The image is scaled to icon dimensions. Start with a large, clear square QOI for best results."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-tiff": {
+    "headline": "Convert QOI to TIFF — professional lossless output",
+    "description": "Convert QOI to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting QOI to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for speed in developer contexts."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format for photography, print production, and archival."
+      },
+      {
+        "question": "Will converting QOI to TIFF lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "qoi-to-tga": {
+    "headline": "Convert QOI to TGA — for game and 3D pipelines",
+    "description": "Convert QOI to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "QOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting QOI to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the QOI source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless developer format with fast encode/decode speed."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA is an uncompressed legacy format used in game development and 3D graphics pipelines."
+      },
+      {
+        "question": "Will converting QOI to TGA lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-png": {
+    "headline": "Convert ICO to PNG — extract icons as PNG images",
+    "description": "Convert ICO to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting ICO to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format, embedding one or more images at different sizes for use as application icons or browser favicons."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format with universal compatibility and transparency support."
+      },
+      {
+        "question": "Will converting ICO to PNG lose quality?",
+        "answer": "No. The PNG output is a lossless copy of the largest icon image in the ICO file."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-jpeg": {
+    "headline": "Convert ICO to JPEG — shareable image from an icon",
+    "description": "Convert ICO to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting ICO to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for application icons and browser favicons."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy compressed format universally compatible with all platforms and applications."
+      },
+      {
+        "question": "Will converting ICO to JPEG lose quality?",
+        "answer": "Yes. JPEG is lossy, and icons are typically small, so downscaling artifacts may be visible. Transparency is replaced with a white background."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-webp": {
+    "headline": "Convert ICO to WebP — efficient modern format from an icon",
+    "description": "Convert ICO to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting ICO to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format embedding images for use as application icons and favicons."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format by Google supporting both lossless and lossy compression, widely supported in browsers."
+      },
+      {
+        "question": "Will converting ICO to WebP lose quality?",
+        "answer": "Not with lossless WebP. With lossy WebP there is minimal compression artifact for icon-sized imagery."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-gif": {
+    "headline": "Convert ICO to GIF — icon to GIF format",
+    "description": "Convert ICO to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting ICO to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for favicons and application icons."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours with support for animation and indexed transparency."
+      },
+      {
+        "question": "Will converting ICO to GIF lose quality?",
+        "answer": "Minimal loss for simple icon graphics. If the icon has many colours or gradients, colour banding may appear."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-bmp": {
+    "headline": "Convert ICO to BMP — uncompressed icon output",
+    "description": "Convert ICO to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting ICO to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the ICO source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for application icons and browser favicons."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format with universal Windows application compatibility."
+      },
+      {
+        "question": "Will converting ICO to BMP lose quality?",
+        "answer": "No. The BMP is a lossless copy of the icon artwork extracted from the ICO."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-qoi": {
+    "headline": "Convert ICO to QOI — fast lossless output from an icon",
+    "description": "Convert ICO to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting ICO to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format embedding images at various sizes."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for fast encode/decode in developer contexts."
+      },
+      {
+        "question": "Will converting ICO to QOI lose quality?",
+        "answer": "No. QOI is lossless. Every pixel from the icon is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-tiff": {
+    "headline": "Convert ICO to TIFF — professional lossless from an icon",
+    "description": "Convert ICO to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting ICO to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for favicons and application icons."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format for photography, print, and archival."
+      },
+      {
+        "question": "Will converting ICO to TIFF lose quality?",
+        "answer": "No. TIFF is lossless. The icon artwork is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "ico-to-tga": {
+    "headline": "Convert ICO to TGA — game pipeline output from an icon",
+    "description": "Convert ICO to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "ICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting ICO to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the ICO source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA is an uncompressed legacy format used in game development and 3D graphics pipelines."
+      },
+      {
+        "question": "Will converting ICO to TGA lose quality?",
+        "answer": "No. TGA stores raw pixel data. Every pixel from the icon is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-png": {
+    "headline": "Convert TIFF to PNG — web-ready lossless output",
+    "description": "Convert TIFF to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting TIFF to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in photography, print production, and archival workflows."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless format universally supported across the web and consumer applications."
+      },
+      {
+        "question": "Will converting TIFF to PNG lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-jpeg": {
+    "headline": "Convert TIFF to JPEG — small shareable output from a TIFF",
+    "description": "Convert TIFF to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting TIFF to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Because JPEG uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in photography and print production. Files are large and not suited to web sharing."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is a lossy format for photographs, universally supported and producing small, shareable files."
+      },
+      {
+        "question": "Will converting TIFF to JPEG lose quality?",
+        "answer": "Yes. JPEG is lossy. For photographic content, quality 80–90% produces imperceptible loss. Print-quality detail at very high resolution may show artifact at lower settings."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-webp": {
+    "headline": "Convert TIFF to WebP — efficient web delivery from a TIFF",
+    "description": "Convert TIFF to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting TIFF to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Because WebP uses lossy compression, some fine detail may be lost in the conversion — but for photographic content the difference is usually imperceptible. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a lossless professional format for photography and print. Files are large and unsuitable for direct web delivery."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is a modern format by Google offering efficient compression for web delivery, supported by all modern browsers."
+      },
+      {
+        "question": "Will converting TIFF to WebP lose quality?",
+        "answer": "Not with lossless WebP, which preserves every pixel. With lossy WebP there is minimal visible loss at standard quality settings."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-gif": {
+    "headline": "Convert TIFF to GIF — 256-colour output from a TIFF",
+    "description": "Convert TIFF to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting TIFF to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format supporting full colour depth and used in photography and print."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours, widely used for simple animations."
+      },
+      {
+        "question": "Will converting TIFF to GIF lose quality?",
+        "answer": "Yes, significantly for photographic content. GIF's 256-colour palette causes visible colour banding on full-colour TIFF images."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-bmp": {
+    "headline": "Convert TIFF to BMP — uncompressed Windows format from TIFF",
+    "description": "Convert TIFF to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting TIFF to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the TIFF source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format for photography and print workflows."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format universally compatible with Windows applications."
+      },
+      {
+        "question": "Will converting TIFF to BMP lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-qoi": {
+    "headline": "Convert TIFF to QOI — fast lossless for developer pipelines",
+    "description": "Convert TIFF to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting TIFF to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Both formats use lossless encoding, so the conversion preserves every pixel exactly — no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format for photography and print."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for fast encode/decode in developer tooling."
+      },
+      {
+        "question": "Will converting TIFF to QOI lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-ico": {
+    "headline": "Convert TIFF to ICO — favicon from a professional image",
+    "description": "Convert TIFF to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting TIFF to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used for high-resolution source artwork in photography and design."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for browser favicons and application icons."
+      },
+      {
+        "question": "Will converting TIFF to ICO lose quality?",
+        "answer": "The image is scaled to icon dimensions, which involves downscaling for large TIFF sources. Use a clean square TIFF for best favicon results."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "tiff-to-tga": {
+    "headline": "Convert TIFF to TGA — for 3D and game pipelines",
+    "description": "Convert TIFF to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "TIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting TIFF to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the TIFF source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in photography and print production."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA is an uncompressed legacy format used in game development and 3D graphics pipelines."
+      },
+      {
+        "question": "Will converting TIFF to TGA lose quality?",
+        "answer": "No. Both formats are lossless. Every pixel is preserved exactly."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-png": {
+    "headline": "Convert HEIC to PNG — open iPhone photos everywhere",
+    "description": "Convert HEIC to PNG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nPNG uses lossless compression with full alpha-channel transparency support. It preserves every pixel exactly, making it the standard choice for screenshots, logos, web graphics, and any image where precision matters. PNG files tend to be larger than lossy alternatives but guarantee no quality degradation.\n\nConverting HEIC to PNG is useful when you need your image in a format suited for web graphics, screenshots, logos, icons, digital art, and images requiring transparency. Note that converting from a lossy source (HEIC) to a lossless target (PNG) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC (High Efficiency Image Container) is Apple's default photo format on iPhone and iPad. It uses HEVC compression to produce files roughly half the size of equivalent JPEG photos at similar quality. It is not widely supported outside of Apple devices."
+      },
+      {
+        "question": "What is PNG?",
+        "answer": "PNG is a lossless image format with universal compatibility across all platforms, browsers, and image editing applications."
+      },
+      {
+        "question": "Will converting HEIC to PNG lose quality?",
+        "answer": "No additional quality is lost beyond what HEIC compression already applied. The PNG output is a lossless copy of the decoded HEIC pixel data."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-jpeg": {
+    "headline": "Convert HEIC to JPEG — share iPhone photos anywhere",
+    "description": "Convert HEIC to JPEG instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nJPEG uses lossy compression optimised for photographic content. It discards visual information the human eye is unlikely to notice, achieving compression ratios of 10:1 or higher with minimal perceptible quality loss. JPEG does not support transparency — any alpha channel is flattened against a white background.\n\nConverting HEIC to JPEG is useful when you need your image in a format suited for photographs, web images, email attachments, social media uploads, and any scenario where small file size matters more than pixel-perfect accuracy. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default photo format on iPhone and iPad, producing smaller files than JPEG using HEVC compression. It is not natively supported on Windows or most non-Apple platforms."
+      },
+      {
+        "question": "What is JPEG?",
+        "answer": "JPEG is the universal photograph format. It is supported by every platform, application, and service that accepts image files."
+      },
+      {
+        "question": "Will converting HEIC to JPEG lose quality?",
+        "answer": "Minimal loss. Both HEIC and JPEG are lossy formats. Re-encoding from HEIC to JPEG at high quality produces results that are visually indistinguishable from the original photo."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-webp": {
+    "headline": "Convert HEIC to WebP — modern web format from iPhone photos",
+    "description": "Convert HEIC to WebP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nWebP is a modern image format developed by Google that supports both lossy and lossless compression, as well as transparency and animation. Lossless WebP files are typically 25–35% smaller than equivalent PNGs, while lossy WebP achieves similar quality to JPEG at 25–34% smaller file sizes. All major browsers have supported WebP since 2020.\n\nConverting HEIC to WebP is useful when you need your image in a format suited for web optimisation, responsive images, progressive web apps, and any context where smaller files improve page load times. Note that converting from a lossy source (HEIC) to a lossless target (WebP) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default camera format on iPhone and iPad. It produces small, high-quality photos but is not supported outside of Apple's ecosystem."
+      },
+      {
+        "question": "What is WebP?",
+        "answer": "WebP is Google's modern format for the web, supported by all major browsers. It offers better compression than JPEG and is increasingly the preferred format for web images."
+      },
+      {
+        "question": "Will converting HEIC to WebP lose quality?",
+        "answer": "Minimal loss with lossy WebP at high quality settings. With lossless WebP the decoded HEIC pixels are preserved exactly — though HEIC's own compression artifacts remain."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-gif": {
+    "headline": "Convert HEIC to GIF — iPhone photos to GIF format",
+    "description": "Convert HEIC to GIF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nGIF is a legacy format dating to 1987 that supports animation and simple binary transparency. It is limited to a palette of 256 colours per frame, which means photographic content will undergo colour quantisation. Despite its age, GIF remains ubiquitous for short animations and reaction images across messaging platforms and social media.\n\nConverting HEIC to GIF is useful when you need your image in a format suited for short animations, reaction images, simple graphics with few colours, and legacy web content. Note that converting from a lossy source (HEIC) to a lossless target (GIF) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default photo format on iPhone and iPad, using HEVC compression."
+      },
+      {
+        "question": "What is GIF?",
+        "answer": "GIF is a legacy format limited to 256 colours, commonly used for simple animations."
+      },
+      {
+        "question": "Will converting HEIC to GIF lose quality?",
+        "answer": "Yes, significantly for photographic content. GIF's 256-colour palette causes colour reduction and banding in photos."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-bmp": {
+    "headline": "Convert HEIC to BMP — uncompressed output from iPhone photos",
+    "description": "Convert HEIC to BMP instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nBMP is an uncompressed raster format developed by Microsoft. It stores raw pixel data with no compression whatsoever, resulting in very large files but universal compatibility across Windows applications. BMP is most useful when a downstream tool or legacy application requires raw, uncompressed pixel data.\n\nConverting HEIC to BMP is useful when you need your image in a format suited for legacy Windows applications, game engines requiring uncompressed textures, hardware tools, and scenarios where decompression overhead must be zero. Since BMP stores raw pixel data, the resulting file will be significantly larger than the HEIC source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default photo format on iPhone and iPad, using HEVC compression to produce small, high-quality files."
+      },
+      {
+        "question": "What is BMP?",
+        "answer": "BMP is an uncompressed Windows format storing raw pixel data. Files are very large but universally compatible with Windows applications."
+      },
+      {
+        "question": "Will converting HEIC to BMP lose quality?",
+        "answer": "No additional loss. The BMP is a lossless copy of the decoded HEIC pixels. HEIC compression artifacts remain but no new loss is introduced."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-qoi": {
+    "headline": "Convert HEIC to QOI — fast lossless from iPhone photos",
+    "description": "Convert HEIC to QOI instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nQOI (Quite OK Image) is a modern lossless format designed for speed rather than maximum compression. It encodes and decodes 3–10x faster than PNG while producing files of comparable size. QOI is particularly valuable in developer toolchains, game asset pipelines, and real-time applications where CPU time is more important than file size.\n\nConverting HEIC to QOI is useful when you need your image in a format suited for game asset pipelines, real-time texture streaming, build tools, developer workflows, and any context where encode/decode speed is critical. Note that converting from a lossy source (HEIC) to a lossless target (QOI) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default photo format on iPhone and iPad."
+      },
+      {
+        "question": "What is QOI?",
+        "answer": "QOI is a lossless format optimised for fast encode/decode in developer pipelines."
+      },
+      {
+        "question": "Will converting HEIC to QOI lose quality?",
+        "answer": "No additional loss. The QOI is a lossless copy of the decoded HEIC pixels."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-ico": {
+    "headline": "Convert HEIC to ICO — favicon from an iPhone photo",
+    "description": "Convert HEIC to ICO instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nICO is the standard Windows icon container format used for favicons and application icons. A single ICO file can embed multiple resolutions (16x16, 32x32, 48x48, 256x256) so the operating system or browser can select the most appropriate size. ICO is the required format for the classic favicon.ico file that browsers request from every website.\n\nConverting HEIC to ICO is useful when you need your image in a format suited for website favicons, Windows desktop application icons, Windows Explorer thumbnails, and shortcut icons. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default camera format on iPhone and iPad."
+      },
+      {
+        "question": "What is ICO?",
+        "answer": "ICO is the Windows icon container format used for browser favicons and application icons."
+      },
+      {
+        "question": "Will converting HEIC to ICO lose quality?",
+        "answer": "The image is scaled to icon dimensions. Start with a square HEIC source for best icon quality."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-tiff": {
+    "headline": "Convert HEIC to TIFF — professional lossless from iPhone photos",
+    "description": "Convert HEIC to TIFF instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nTIFF is a flexible, high-quality image format widely used in professional photography, print production, and scientific imaging. It supports lossless compression, multiple layers, and high bit depths (16-bit per channel and beyond). TIFF files are typically large but preserve maximum image quality for archival and editing workflows.\n\nConverting HEIC to TIFF is useful when you need your image in a format suited for professional photography, print production, archival storage, scientific imaging, and high-quality image editing workflows. Note that converting from a lossy source (HEIC) to a lossless target (TIFF) preserves the existing quality but cannot recover detail already lost during the original compression. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default photo format on iPhone and iPad. It uses HEVC compression to produce compact, high-quality images."
+      },
+      {
+        "question": "What is TIFF?",
+        "answer": "TIFF is a professional lossless format used in photography, print production, and archival workflows."
+      },
+      {
+        "question": "Will converting HEIC to TIFF lose quality?",
+        "answer": "No additional loss. The TIFF is a lossless copy of the decoded HEIC pixels."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  },
+  "heic-to-tga": {
+    "headline": "Convert HEIC to TGA — iPhone photos for game pipelines",
+    "description": "Convert HEIC to TGA instantly in your browser with no server uploads. Your files stay on your device — 100% private, free, and fast.",
+    "body": "HEIC (High Efficiency Image Container) is Apple's default camera format on iPhone and iPad since iOS 11. It uses the HEVC video codec to achieve roughly 50% better compression than JPEG at equivalent quality. HEIC supports transparency, depth maps, and burst sequences. However, HEIC encoding requires a commercial HEVC licence, so this tool supports HEIC as an input-only format.\n\nTGA (Targa) is a legacy raster format from the graphics and game industry. It supports 24-bit and 32-bit colour with an optional alpha channel. While largely superseded by modern formats, TGA remains in use within certain game engines, 3D modelling tools, and video production pipelines that expect it as an interchange format.\n\nConverting HEIC to TGA is useful when you need your image in a format suited for game engine textures, 3D modelling pipelines, video production, legacy graphics tools, and specialised industrial applications. Since TGA stores raw pixel data, the resulting file will be significantly larger than the HEIC source, but no quality is lost. Image Toolz runs the entire conversion directly in your browser. Nothing is uploaded to any server — your files remain completely private on your device. The tool handles images up to 200 MB and most conversions complete in under a second.",
+    "faqs": [
+      {
+        "question": "What is HEIC?",
+        "answer": "HEIC is Apple's default photo format on iPhone and iPad, using HEVC compression."
+      },
+      {
+        "question": "What is TGA?",
+        "answer": "TGA is an uncompressed legacy format used in 3D modeling and game development pipelines."
+      },
+      {
+        "question": "Will converting HEIC to TGA lose quality?",
+        "answer": "No additional loss. TGA stores raw uncompressed pixel data from the decoded HEIC."
+      },
+      {
+        "question": "Is it safe to convert my files here?",
+        "answer": "Yes. All conversion runs entirely in your browser. Your images are never uploaded to any server and nothing leaves your device."
+      }
+    ]
+  }
+}
