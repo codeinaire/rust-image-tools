@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
@@ -30,7 +31,7 @@ async function selectFormat(page: Page, fmt: string): Promise<void> {
 test.describe('Validation guards', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    await page.waitForFunction(() => !!window.__converter)
+    await page.waitForFunction(() => Boolean(window.__converter))
     await page.evaluate(() => window.__converter.ensureReady())
   })
 
@@ -40,7 +41,7 @@ test.describe('Validation guards', () => {
     // Simulate a large file via a drop event with a fake File whose .size reports 201 MB.
     // We override the size property via a crafted object URL so the size check triggers
     // before any bytes reach the Worker.
-    await page.evaluate(async () => {
+    await page.evaluate(() => {
       const MAX_MB = 200
       // Build a File whose reported size exceeds the limit.
       // The actual data is tiny; we patch the `size` property via Object.defineProperty
@@ -51,9 +52,11 @@ test.describe('Validation guards', () => {
 
       const dt = new DataTransfer()
       dt.items.add(file)
-      document
-        .getElementById('drop-zone')!
-        .dispatchEvent(new DragEvent('drop', { bubbles: true, dataTransfer: dt }))
+      const dropZone = document.getElementById('drop-zone')
+      if (!dropZone) {
+        throw new Error('drop-zone not found')
+      }
+      dropZone.dispatchEvent(new DragEvent('drop', { bubbles: true, dataTransfer: dt }))
     })
 
     await expect(page.locator('#error-display')).toBeVisible({ timeout: 5_000 })
@@ -102,7 +105,7 @@ test.describe('Validation guards', () => {
 
     // While the conversion is happening (Worker thread), the main thread should
     // remain responsive. We verify this by sampling RAF timestamps.
-    const frameTimes = await page.evaluate(async (): Promise<number[]> => {
+    const frameTimes = await page.evaluate((): Promise<number[]> => {
       return new Promise((resolve) => {
         const times: number[] = []
         let lastTime = performance.now()
@@ -146,7 +149,6 @@ test.describe('Validation guards', () => {
     expect(firstBlobUrl).toMatch(/^blob:/)
 
     // Intercept URL.revokeObjectURL calls
-    const revokedUrls: string[] = []
     await page.evaluate(() => {
       const original = URL.revokeObjectURL.bind(URL)
       ;(window as unknown as Record<string, unknown>)['__revokedUrls'] = []

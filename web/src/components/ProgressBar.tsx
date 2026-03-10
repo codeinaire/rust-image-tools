@@ -1,17 +1,23 @@
 import { useRef, useEffect } from 'preact/hooks'
 import type { ConverterStatus } from '../hooks/useConverter'
 
-type Props = {
+interface Props {
   status: ConverterStatus
   estimatedMs: number
   showProgress: boolean
 }
 
-export function ProgressBar({ status, estimatedMs, showProgress }: Props) {
+export function ProgressBar({
+  status,
+  estimatedMs,
+  showProgress,
+}: Props): preact.JSX.Element | null {
   const barRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!barRef.current) return
+    if (!barRef.current) {
+      return
+    }
     if (status === 'converting') {
       barRef.current.style.transition = 'width 0ms ease-out'
       barRef.current.style.width = '0%'
@@ -21,14 +27,18 @@ export function ProgressBar({ status, estimatedMs, showProgress }: Props) {
           barRef.current.style.width = '90%'
         }
       })
-      return () => cancelAnimationFrame(raf)
+      return () => {
+        cancelAnimationFrame(raf)
+      }
     } else if (status === 'done') {
       barRef.current.style.transition = 'width 200ms ease-out'
       barRef.current.style.width = '100%'
     }
   }, [status, estimatedMs])
 
-  if (!showProgress) return null
+  if (!showProgress) {
+    return null
+  }
 
   return (
     <div>

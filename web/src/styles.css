@@ -75,12 +75,17 @@ body::after {
 }
 
 @keyframes cp-glow-pulse {
-  0%, 100% {
-    text-shadow: 0 0 6px var(--cp-cyan-glow), 0 0 14px var(--cp-cyan-glow-soft);
+  0%,
+  100% {
+    text-shadow:
+      0 0 6px var(--cp-cyan-glow),
+      0 0 14px var(--cp-cyan-glow-soft);
     opacity: 1;
   }
   50% {
-    text-shadow: 0 0 12px var(--cp-cyan-glow-strong), 0 0 28px var(--cp-cyan-glow);
+    text-shadow:
+      0 0 12px var(--cp-cyan-glow-strong),
+      0 0 28px var(--cp-cyan-glow);
     opacity: 0.85;
   }
 }

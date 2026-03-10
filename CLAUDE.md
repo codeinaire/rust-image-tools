@@ -83,8 +83,9 @@ Client-side web app that converts images between formats using Rust compiled to 
 
 ## Linting & Formatting
 
-- **Rust**: Run `cargo fmt` before committing. Run `cargo clippy` and fix all warnings.
-- **TypeScript**: Use standard Astro/TS defaults.
+- **Rust**: Run `cargo fmt` before committing. Run `cargo clippy -- -D warnings` and fix all warnings.
+- **TypeScript**: Run `cd web && npm run check:all` — this runs type checking, ESLint, and Prettier in sequence.
+- **Prettier**: Run `cd web && npm run format` to auto-fix formatting. Run `cd web && npm run format:check` to verify.
 - Treat all compiler warnings as errors — do not leave warnings unaddressed.
 
 ## Project Structure

@@ -106,10 +106,16 @@ export function buildFormatPairs(): FormatPair[] {
   const pairs: FormatPair[] = []
 
   for (const from of Object.values(ValidFormat)) {
-    if (!FORMAT_META[from].isInputFormat) continue
+    if (!FORMAT_META[from].isInputFormat) {
+      continue
+    }
     for (const to of Object.values(ValidFormat)) {
-      if (!FORMAT_META[to].isOutputFormat) continue
-      if (from === to) continue
+      if (!FORMAT_META[to].isOutputFormat) {
+        continue
+      }
+      if (from === to) {
+        continue
+      }
 
       const fromMeta = FORMAT_META[from]
       const toMeta = FORMAT_META[to]
@@ -131,7 +137,9 @@ export function buildFormatPairs(): FormatPair[] {
 
   // Append 9 HEIC-source pairs (one for each ValidFormat output)
   for (const to of Object.values(ValidFormat)) {
-    if (!FORMAT_META[to].isOutputFormat) continue
+    if (!FORMAT_META[to].isOutputFormat) {
+      continue
+    }
 
     const toMeta = FORMAT_META[to]
     const slug = `heic-to-${to}`

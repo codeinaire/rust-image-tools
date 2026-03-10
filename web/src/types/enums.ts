@@ -14,9 +14,9 @@ export enum ValidFormat {
 export type InputFormat = ValidFormat | 'heic'
 
 export enum MessageType {
-  Init = "init",
-  DetectFormat = "detect_format",
-  ConvertImage = "convert_image",
-  GetDimensions = "get_dimensions",
-  Error = "error",
+  Init = 'init',
+  DetectFormat = 'detect_format',
+  ConvertImage = 'convert_image',
+  GetDimensions = 'get_dimensions',
+  Error = 'error',
 }

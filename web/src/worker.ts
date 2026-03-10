@@ -1,53 +1,53 @@
 // TypeScript uses Window types by default; declare the Worker-specific postMessage overload.
-declare function postMessage(message: unknown, transfer?: Transferable[]): void;
+declare function postMessage(message: unknown, transfer?: Transferable[]): void
 
 import init, {
   convert_image,
   decode_to_rgba,
   detect_format,
   get_dimensions,
-} from "../../crates/image-converter/pkg/image_converter.js";
+} from '../../crates/image-converter/pkg/image_converter.js'
 
-import { MessageType, ValidFormat } from "./types";
-import type { WorkerRequest, WorkerResponse } from "./types";
+import { MessageType, ValidFormat } from './types'
+import type { WorkerRequest, WorkerResponse } from './types'
 
 async function initialize(): Promise<void> {
-  const start = performance.now();
+  const start = performance.now()
   try {
-    await init();
-    const initMs = Math.round(performance.now() - start);
-    const response: WorkerResponse = { type: MessageType.Init, success: true, initMs };
-    postMessage(response);
+    await init()
+    const initMs = Math.round(performance.now() - start)
+    const response: WorkerResponse = { type: MessageType.Init, success: true, initMs }
+    postMessage(response)
   } catch (e) {
-    const error = e instanceof Error ? e.message : String(e);
-    const response: WorkerResponse = { type: MessageType.Init, success: false, error };
-    postMessage(response);
+    const error = e instanceof Error ? e.message : String(e)
+    const response: WorkerResponse = { type: MessageType.Init, success: false, error }
+    postMessage(response)
   }
 }
 
 onmessage = (event: MessageEvent<WorkerRequest>) => {
-  const request = event.data;
+  const request = event.data
 
   switch (request.type) {
     case MessageType.DetectFormat:
-      handleDetectFormat(request.id, request.data);
-      break;
+      handleDetectFormat(request.id, request.data)
+      break
     case MessageType.ConvertImage:
-      void handleConvertImage(request.id, request.data, request.targetFormat);
-      break;
+      void handleConvertImage(request.id, request.data, request.targetFormat)
+      break
     case MessageType.GetDimensions:
-      handleGetDimensions(request.id, request.data);
-      break;
+      handleGetDimensions(request.id, request.data)
+      break
   }
-};
+}
 
 function isValidFormat(value: string): value is ValidFormat {
-  return Object.values(ValidFormat).some((fmt) => fmt === value)
+  return (Object.values(ValidFormat) as string[]).includes(value)
 }
 
 function handleDetectFormat(id: number, data: Uint8Array): void {
   try {
-    const format = detect_format(data);
+    const format = detect_format(data)
     if (!isValidFormat(format)) {
       throw new Error(`Unrecognized image format: ${format}`)
     }
@@ -56,49 +56,42 @@ function handleDetectFormat(id: number, data: Uint8Array): void {
       id,
       success: true,
       format,
-    };
-    postMessage(response);
+    }
+    postMessage(response)
   } catch (e) {
-    postError(id, e);
+    postError(id, e)
   }
 }
 
 function parseDimensions(value: unknown): { width: number; height: number } {
-  if (
-    typeof value === 'object' &&
-    value !== null &&
-    'width' in value &&
-    'height' in value &&
-    typeof value.width === 'number' &&
-    typeof value.height === 'number'
-  ) {
-    return value
+  if (typeof value === 'object' && value !== null && 'width' in value && 'height' in value) {
+    const obj = value as Record<string, unknown>
+    const w = obj['width']
+    const h = obj['height']
+    if (typeof w === 'number' && typeof h === 'number') {
+      return { width: w, height: h }
+    }
   }
   throw new Error('Unexpected shape returned from get_dimensions')
 }
 
 async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
-  if (!("OffscreenCanvas" in globalThis)) {
-    throw new Error(
-      "WebP output requires OffscreenCanvas, which is not supported in this browser.",
-    );
+  if (!('OffscreenCanvas' in globalThis)) {
+    throw new Error('WebP output requires OffscreenCanvas, which is not supported in this browser.')
   }
-  const dims = parseDimensions(get_dimensions(data));
-  const rgba = decode_to_rgba(data);
-  const canvas = new OffscreenCanvas(dims.width, dims.height);
-  const ctx = canvas.getContext("2d");
+  const dims = parseDimensions(get_dimensions(data))
+  const rgba = decode_to_rgba(data)
+  const canvas = new OffscreenCanvas(dims.width, dims.height)
+  const ctx = canvas.getContext('2d')
   if (!ctx) {
-    throw new Error("Failed to get 2D context from OffscreenCanvas.");
+    throw new Error('Failed to get 2D context from OffscreenCanvas.')
   }
-  const imageData = new ImageData(
-    new Uint8ClampedArray(rgba.buffer),
-    dims.width,
-    dims.height,
-  );
-  ctx.putImageData(imageData, 0, 0);
-  const blob = await canvas.convertToBlob({ type: "image/webp", quality: 0.85 });
-  const arrayBuffer = await blob.arrayBuffer();
-  return new Uint8Array(arrayBuffer);
+  const clampedArray = new Uint8ClampedArray(rgba.buffer as ArrayBuffer)
+  const imageData = new ImageData(clampedArray, dims.width, dims.height)
+  ctx.putImageData(imageData, 0, 0)
+  const blob = await canvas.convertToBlob({ type: 'image/webp', quality: 0.85 })
+  const arrayBuffer = await blob.arrayBuffer()
+  return new Uint8Array(arrayBuffer)
 }
 
 async function handleConvertImage(
@@ -107,49 +100,49 @@ async function handleConvertImage(
   targetFormat: ValidFormat,
 ): Promise<void> {
   try {
-    const start = performance.now();
-    let result: Uint8Array;
+    const start = performance.now()
+    let result: Uint8Array
     if (targetFormat === ValidFormat.WebP) {
-      result = await encodeWebpViaCanvas(data);
+      result = await encodeWebpViaCanvas(data)
     } else {
-      result = convert_image(data, targetFormat);
+      result = convert_image(data, targetFormat)
     }
-    const conversionMs = Math.round(performance.now() - start);
+    const conversionMs = Math.round(performance.now() - start)
     const response: WorkerResponse = {
       type: MessageType.ConvertImage,
       id,
       success: true,
       data: result,
       conversionMs,
-    };
+    }
     // Transfer the result buffer back to main thread (zero-copy, O(1))
-    postMessage(response, [result.buffer]);
+    postMessage(response, [result.buffer])
   } catch (e) {
-    postError(id, e);
+    postError(id, e)
   }
 }
 
 function handleGetDimensions(id: number, data: Uint8Array): void {
   try {
-    const dims = parseDimensions(get_dimensions(data));
+    const dims = parseDimensions(get_dimensions(data))
     const response: WorkerResponse = {
       type: MessageType.GetDimensions,
       id,
       success: true,
       width: dims.width,
       height: dims.height,
-    };
-    postMessage(response);
+    }
+    postMessage(response)
   } catch (e) {
-    postError(id, e);
+    postError(id, e)
   }
 }
 
 function postError(id: number, e: unknown): void {
-  const error = e instanceof Error ? e.message : String(e);
-  const response: WorkerResponse = { type: MessageType.Error, id, error };
-  postMessage(response);
+  const error = e instanceof Error ? e.message : String(e)
+  const response: WorkerResponse = { type: MessageType.Error, id, error }
+  postMessage(response)
 }
 
 // Initialize WASM immediately when the Worker is created
-initialize();
+void initialize()

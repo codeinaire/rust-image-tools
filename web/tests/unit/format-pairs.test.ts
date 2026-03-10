@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildFormatPairs, FORMAT_META } from '../../src/data/format-pairs'
+import { buildFormatPairs } from '../../src/data/format-pairs'
 import { ValidFormat } from '../../src/types'
 import formatCopy from '../../src/data/format-copy.json'
 

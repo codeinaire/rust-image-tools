@@ -511,7 +511,11 @@ mod tests {
     fn decode_rgba_png() {
         let png = make_png(4, 4);
         let rgba = decode_rgba(&png).unwrap();
-        assert_eq!(rgba.len(), 4 * 4 * 4, "RGBA pixels: width * height * 4 bytes");
+        assert_eq!(
+            rgba.len(),
+            4 * 4 * 4,
+            "RGBA pixels: width * height * 4 bytes"
+        );
     }
 
     #[test]
@@ -546,7 +550,11 @@ mod tests {
     fn decode_rgba_pixel_fidelity() {
         let (original, png_data) = make_patterned_png(8, 8);
         let rgba = decode_rgba(&png_data).unwrap();
-        assert_eq!(rgba, original.into_raw(), "Pixel data should match original RGBA image");
+        assert_eq!(
+            rgba,
+            original.into_raw(),
+            "Pixel data should match original RGBA image"
+        );
     }
 
     #[test]

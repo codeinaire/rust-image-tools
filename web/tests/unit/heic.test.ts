@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { isHeicMagicBytes, normalizeHeic } from '../heic'
+import { isHeicMagicBytes, normalizeHeic } from '../../src/lib/heic'
 
 // ---------------------------------------------------------------------------
 // isHeicMagicBytes
@@ -54,13 +54,17 @@ describe('isHeicMagicBytes', () => {
 
   it('returns false for a JPEG header', () => {
     // JPEG magic: FF D8 FF ...
-    const jpeg = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01])
+    const jpeg = new Uint8Array([
+      0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01,
+    ])
     expect(isHeicMagicBytes(jpeg)).toBe(false)
   })
 
   it('returns false for a WebP header', () => {
     // RIFF....WEBP
-    const webp = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50])
+    const webp = new Uint8Array([
+      0x52, 0x49, 0x46, 0x46, 0x00, 0x00, 0x00, 0x00, 0x57, 0x45, 0x42, 0x50,
+    ])
     expect(isHeicMagicBytes(webp)).toBe(false)
   })
 
@@ -101,7 +105,9 @@ describe('normalizeHeic', () => {
   })
 
   it('returns the original File unchanged when it is a JPEG', async () => {
-    const jpegBytes = new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01])
+    const jpegBytes = new Uint8Array([
+      0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x4a, 0x46, 0x49, 0x46, 0x00, 0x01,
+    ])
     const jpegFile = new File([jpegBytes], 'photo.jpg', { type: 'image/jpeg' })
 
     const result = await normalizeHeic(jpegFile)

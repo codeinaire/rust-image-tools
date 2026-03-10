@@ -1,7 +1,7 @@
-import { MessageType, ValidFormat } from '../types'
+import { MessageType, type ValidFormat } from '../types'
 import type { WorkerRequest, WorkerResponse, ImageDimensions } from '../types'
 
-type PendingRequest = {
+interface PendingRequest {
   resolve: (value: WorkerResponse) => void
   reject: (reason: Error) => void
 }
@@ -47,7 +47,9 @@ export class ImageConverter {
     }
 
     const pending = this.pendingRequests.get(response.id)
-    if (!pending) return
+    if (!pending) {
+      return
+    }
     this.pendingRequests.delete(response.id)
 
     if (response.type === MessageType.Error) {
@@ -74,29 +76,29 @@ export class ImageConverter {
     })
   }
 
-  /// Wait for the WASM module to finish loading. Returns init time in ms.
+  /** Wait for the WASM module to finish loading. Returns init time in ms. */
   ensureReady(): Promise<number> {
     return this.ready
   }
 
-  /// Detect the format of an image from its raw bytes.
+  /** Detect the format of an image from its raw bytes. */
   async detectFormat(data: Uint8Array): Promise<ValidFormat> {
     await this.ready
     const id = this.nextRequestId++
     const response = await this.sendRequest({ type: MessageType.DetectFormat, id, data })
-    if (response.type === MessageType.DetectFormat && response.success) {
+    if (response.type === MessageType.DetectFormat) {
       return response.format
     }
     throw new Error('Unexpected response type')
   }
 
-  /// Convert an image to the specified target format. Returns the converted bytes.
+  /** Convert an image to the specified target format. Returns the converted bytes. */
   async convertImage(data: Uint8Array, targetFormat: ValidFormat): Promise<Uint8Array> {
     const { data: result } = await this.convertImageTimed(data, targetFormat)
     return result
   }
 
-  /// Convert an image and return the result with Worker-side conversion timing.
+  /** Convert an image and return the result with Worker-side conversion timing. */
   async convertImageTimed(
     data: Uint8Array,
     targetFormat: ValidFormat,
@@ -109,18 +111,18 @@ export class ImageConverter {
       data,
       targetFormat,
     })
-    if (response.type === MessageType.ConvertImage && response.success) {
+    if (response.type === MessageType.ConvertImage) {
       return { data: response.data, conversionMs: response.conversionMs }
     }
     throw new Error('Unexpected response type')
   }
 
-  /// Read image dimensions without fully decoding pixel data.
+  /** Read image dimensions without fully decoding pixel data. */
   async getDimensions(data: Uint8Array): Promise<ImageDimensions> {
     await this.ready
     const id = this.nextRequestId++
     const response = await this.sendRequest({ type: MessageType.GetDimensions, id, data })
-    if (response.type === MessageType.GetDimensions && response.success) {
+    if (response.type === MessageType.GetDimensions) {
       return { width: response.width, height: response.height }
     }
     throw new Error('Unexpected response type')

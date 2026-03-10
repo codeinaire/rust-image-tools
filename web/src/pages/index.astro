@@ -22,7 +22,8 @@ const LETTERS: { ch: string; dur: number; delay: number }[] = [
   { ch: 'Z', dur: 8.2, delay: 3.7 },
 ]
 
-const title = 'Free Image Converter — PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, TGA | Online & Private'
+const title =
+  'Free Image Converter — PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, TGA | Online & Private'
 const description =
   'Convert images between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, and TGA instantly in your browser. No upload to any server — 100% private, free, and fast.'
 const canonical = `${BASE_URL}/`
@@ -65,7 +66,7 @@ const faqSchema = {
     },
     {
       '@type': 'Question',
-      name: 'Why can\'t I export to HEIC?',
+      name: "Why can't I export to HEIC?",
       acceptedAnswer: {
         '@type': 'Answer',
         text: 'HEIC encoding is not supported because the HEVC video codec it relies on is covered by patents held by the MPEG LA patent pool. Implementing an encoder would require a commercial licence. HEIC input is supported — you can open any HEIC file and convert it to a patent-free format like PNG, WebP, or JPEG.',
@@ -115,7 +116,10 @@ const faqSchema = {
     <div
       style="text-align: center; padding: 1rem 1rem 0; border-bottom: 1px solid var(--cp-border);"
     >
-      <p class="cp-tagline" style="color: var(--cp-text); font-size: 0.85rem; letter-spacing: 0.25em; padding-bottom: 1rem; white-space: nowrap;">
+      <p
+        class="cp-tagline"
+        style="color: var(--cp-text); font-size: 0.85rem; letter-spacing: 0.25em; padding-bottom: 1rem; white-space: nowrap;"
+      >
         ◆ FAST · FUTURISTIC · FREE ◆
       </p>
     </div>
@@ -358,8 +362,8 @@ const faqSchema = {
           <p
             style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
           >
-            Legacy format from the graphics and game industry. Supported as an output format — convert
-            any image to TGA for use in tools and pipelines that require it.
+            Legacy format from the graphics and game industry. Supported as an output format —
+            convert any image to TGA for use in tools and pipelines that require it.
           </p>
         </div>
         <div
@@ -373,8 +377,8 @@ const faqSchema = {
           <p
             style="color: var(--cp-text); font-size: 0.8rem; margin-top: 0.4rem; line-height: 1.5;"
           >
-            Apple's default camera format on iPhone and iPad. Accepted as an input — drop a HEIC file
-            to convert it to PNG, JPEG, WebP, or any other supported format. HEIC output is not
+            Apple's default camera format on iPhone and iPad. Accepted as an input — drop a HEIC
+            file to convert it to PNG, JPEG, WebP, or any other supported format. HEIC output is not
             supported.
           </p>
         </div>
@@ -427,9 +431,9 @@ const faqSchema = {
           <p
             style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
           >
-            You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported
-            as both input and output. TGA is output only. HEIC/HEIF is accepted as input only — drop
-            an iPhone photo to convert it to any supported format.
+            You can convert between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, and QOI — all supported as
+            both input and output. TGA is output only. HEIC/HEIF is accepted as input only — drop an
+            iPhone photo to convert it to any supported format.
           </p>
         </details>
         <details

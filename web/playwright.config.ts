@@ -3,8 +3,8 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: false,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  forbidOnly: Boolean(process.env['CI']),
+  retries: process.env['CI'] ? 2 : 0,
   workers: 1,
   reporter: 'list',
   use: {
@@ -21,7 +21,7 @@ export default defineConfig({
   webServer: {
     command: 'npx astro dev',
     url: 'http://localhost:4321',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env['CI'],
     timeout: 120 * 1000,
   },
 })

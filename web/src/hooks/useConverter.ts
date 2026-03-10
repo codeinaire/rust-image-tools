@@ -26,7 +26,10 @@ const MIME_TYPES: Record<string, string> = {
   qoi: 'image/qoi',
 }
 
-type TimingRate = { base: number; perMp: number }
+interface TimingRate {
+  base: number
+  perMp: number
+}
 const TIMING_RATES: Record<string, TimingRate> = {
   'jpeg->png': { base: 20, perMp: 40 },
   'png->jpeg': { base: 20, perMp: 25 },
@@ -51,12 +54,16 @@ function estimateConversionMs(
 }
 
 export function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  if (bytes < 1024) {
+    return `${bytes} B`
+  }
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`
+  }
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
-export type FileInfo = {
+export interface FileInfo {
   file: File
   bytes: Uint8Array
   sourceFormat: ValidFormat
@@ -65,7 +72,7 @@ export type FileInfo = {
   height: number
 }
 
-export type ConversionResult = {
+export interface ConversionResult {
   bytes: Uint8Array
   blobUrl: string
   inputSize: number
@@ -79,7 +86,7 @@ export type ConversionResult = {
 
 export type ConverterStatus = 'idle' | 'reading' | 'converting' | 'done' | 'error'
 
-export type ConverterState = {
+export interface ConverterState {
   status: ConverterStatus
   fileInfo: FileInfo | null
   result: ConversionResult | null
@@ -109,8 +116,12 @@ export function useConverter(): {
 
   useEffect(() => {
     return () => {
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current)
-      if (progressTimeoutRef.current !== null) clearTimeout(progressTimeoutRef.current)
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current)
+      }
+      if (progressTimeoutRef.current !== null) {
+        clearTimeout(progressTimeoutRef.current)
+      }
     }
   }, [])
 
@@ -220,7 +231,9 @@ export function useConverter(): {
 
   async function handleConvert(targetFormat: ValidFormat): Promise<void> {
     const { fileInfo, status } = state
-    if (!fileInfo || status === 'converting') return
+    if (!fileInfo || status === 'converting') {
+      return
+    }
 
     revokeBlobUrl()
     clearProgressTimeout()
@@ -253,7 +266,7 @@ export function useConverter(): {
       const elapsedMs = Math.round(performance.now() - startTime)
 
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
-      const blob = new Blob([resultBytes], { type: mimeType })
+      const blob = new Blob([resultBytes.buffer as ArrayBuffer], { type: mimeType })
       const blobUrl = URL.createObjectURL(blob)
       blobUrlRef.current = blobUrl
 

@@ -1,12 +1,12 @@
 import { useState } from 'preact/hooks'
 import type { ConversionResult } from '../../hooks/useConverter'
 
-type Props = {
+interface Props {
   result: ConversionResult
   onDownloadClick: () => void
 }
 
-export function DownloadButton({ result, onDownloadClick }: Props) {
+export function DownloadButton({ result, onDownloadClick }: Props): preact.JSX.Element {
   const [isHovered, setIsHovered] = useState(false)
 
   const background = isHovered ? '#00c8d4' : 'var(--cp-cyan)'
@@ -18,8 +18,12 @@ export function DownloadButton({ result, onDownloadClick }: Props) {
       download={result.filename}
       data-output-size={result.outputSize}
       onClick={onDownloadClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        setIsHovered(true)
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false)
+      }}
       style={{
         display: 'flex',
         alignItems: 'center',

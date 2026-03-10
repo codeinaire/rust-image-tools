@@ -1,13 +1,15 @@
 import { formatFileSize } from '../hooks/useConverter'
 import type { ConversionResult } from '../hooks/useConverter'
 
-type Props = {
+interface Props {
   result: ConversionResult | null
   onDownloadClick: () => void
 }
 
-export function ResultArea({ result, onDownloadClick }: Props) {
-  if (!result) return null
+export function ResultArea({ result, onDownloadClick }: Props): preact.JSX.Element | null {
+  if (!result) {
+    return null
+  }
 
   const sign = result.changePercent >= 0 ? '+' : ''
   const timeStr =

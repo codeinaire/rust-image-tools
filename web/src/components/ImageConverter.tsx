@@ -14,7 +14,7 @@ interface Props {
 }
 
 /** Top-level image converter widget with drop zone, format selection, and download. */
-export function ImageConverter({ initialFrom, initialTo }: Props = {}) {
+export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.JSX.Element {
   const { state, converter, handleFile, handleConvert } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
 
@@ -25,7 +25,7 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}) {
       .then((initMs) => {
         trackAppLoaded({ wasm_init_ms: initMs })
       })
-      .catch((err: Error) => {
+      .catch((err: unknown) => {
         console.error('[image-converter] Failed to initialize:', err)
       })
     // Expose for integration tests. Cast needed because convertImageTimed takes
@@ -82,11 +82,15 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}) {
         )}
 
         <DropZone
-          onFile={handleFile}
+          onFile={(file, method) => {
+            void handleFile(file, method)
+          }}
           fileInfo={state.fileInfo}
           targetFormat={targetFormat}
           onFormatChange={setTargetFormat}
-          onConvert={() => handleConvert(targetFormat)}
+          onConvert={() => {
+            void handleConvert(targetFormat)
+          }}
           convertDisabled={!canConvert}
           status={state.status}
           result={state.result}
