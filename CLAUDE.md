@@ -75,12 +75,40 @@ Client-side web app that converts images between formats using Rust compiled to 
 - Prefer `const` over `let`; never use `var`
 - Use explicit types for function signatures; allow inference for local variables
 - Use `async/await` over raw Promises
+- Avoid using type coercion unless it's absolutely necessary. Try every other option except type coercion.
+- Avoid using the `any` type
+- Use descriptive variable names
+- If an expression is very verbose and it can be asigned to a variable to make it easier to understand do it
+- Add JSDocs to all functions, what's especially important is a function description
 
 ## Linting & Formatting
 
 - **Rust**: Run `cargo fmt` before committing. Run `cargo clippy` and fix all warnings.
 - **TypeScript**: Use standard Astro/TS defaults.
 - Treat all compiler warnings as errors — do not leave warnings unaddressed.
+
+## Project Structure
+
+```
+crates/
+└── image-converter/
+    └── src/          # Rust/WASM library source (lib.rs + submodules)
+web/
+├── src/              # TypeScript frontend source (Astro pages, Preact components)
+├── tests/
+│   ├── unit/         # Vitest unit tests — never colocate with source
+│   └── e2e/          # Playwright e2e tests
+└── public/           # Static assets
+plans/                # Implementation plan files (YYYYMMDD-NN-title.md)
+research/             # Research documents (YYYYMMDD-NN-title.md)
+decisions/            # Decision records (YYYYMMDD-title.md)
+```
+
+**Rules:**
+
+- New Rust source files go in `crates/image-converter/src/` — never in project root or `web/`
+- New TypeScript components go in `web/src/` — follow the existing directory structure inside it
+- Test files go in `web/tests/unit/` or `web/tests/e2e/` — never next to source files
 
 ## Build Commands
 
