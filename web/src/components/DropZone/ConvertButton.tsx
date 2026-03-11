@@ -1,12 +1,16 @@
 import { useState } from 'preact/hooks'
 
-type Props = {
+interface Props {
   convertDisabled: boolean
   onConvert: () => void
   controlsVisible: boolean
 }
 
-export function ConvertButton({ convertDisabled, onConvert, controlsVisible }: Props) {
+export function ConvertButton({
+  convertDisabled,
+  onConvert,
+  controlsVisible,
+}: Props): preact.JSX.Element {
   const [isHovered, setIsHovered] = useState(false)
 
   const background = convertDisabled
@@ -20,8 +24,12 @@ export function ConvertButton({ convertDisabled, onConvert, controlsVisible }: P
       id="convert-btn"
       disabled={convertDisabled}
       onClick={onConvert}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        setIsHovered(true)
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false)
+      }}
       style={{
         width: '100%',
         height: '100%',

@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 test.describe('SEO landing pages', () => {
@@ -46,7 +47,7 @@ test.describe('SEO landing pages', () => {
     // initial target format will be JPEG based on the initialTo prop.
   })
 
-  test('sitemap contains format pair URLs after build', async () => {
+  test('sitemap contains format pair URLs after build', () => {
     const distDir = join(__dirname, '../../dist')
     const sitemapPath = join(distDir, 'sitemap-0.xml')
 

@@ -69,15 +69,16 @@ Run the appropriate gate after completing each step. Fix all failures before pro
 ### Rust changes
 ```bash
 cargo fmt --manifest-path crates/image-converter/Cargo.toml
+cargo fmt --manifest-path crates/image-converter/Cargo.toml -- --check
 cargo clippy --manifest-path crates/image-converter/Cargo.toml -- -D warnings
 cargo test --manifest-path crates/image-converter/Cargo.toml
 ```
 
 ### TypeScript / Astro changes
 ```bash
-cd web && npm run typecheck
-cd web && npm run lint
+cd web && npm run check:all
 ```
+This runs `typecheck`, `lint`, and `format:check` in sequence. If formatting fails, run `cd web && npm run format` to auto-fix, then re-run the check.
 
 ### New Astro page or route
 ```bash
@@ -102,7 +103,15 @@ cd web && npm run test:e2e
 ```
 
 ### Full verification (run at the end, after all steps complete)
-Run every command listed in the plan's `## Verification` section.
+Run every command listed in the plan's `## Verification` section. Additionally, always run the full static analysis suite:
+```bash
+# Rust
+cargo fmt --manifest-path crates/image-converter/Cargo.toml -- --check
+cargo clippy --manifest-path crates/image-converter/Cargo.toml -- -D warnings
+
+# TypeScript
+cd web && npm run check:all
+```
 
 </quality_gates>
 

@@ -87,7 +87,12 @@ const bodyIcons = [
 const isHeicSource = pair.from === 'heic'
 ---
 
-<Base title={pair.title} description={pair.description} canonical={pair.canonical} skipDefaultSchema>
+<Base
+  title={pair.title}
+  description={pair.description}
+  canonical={pair.canonical}
+  skipDefaultSchema
+>
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
 
@@ -95,41 +100,41 @@ const isHeicSource = pair.from === 'heic'
 
   <main class="max-w-4xl mx-auto px-4 py-8">
     <!-- Converter widget -->
-    <ImageConverter client:only="preact" initialFrom={isHeicSource ? 'heic' : pair.from} initialTo={pair.to} />
+    <ImageConverter
+      client:only="preact"
+      initialFrom={isHeicSource ? 'heic' : pair.from}
+      initialTo={pair.to}
+    />
 
     <!-- Body content -->
     <section style="margin-top: 3rem; display: flex; flex-direction: column; gap: 0.75rem;">
-      {bodyParagraphs.map((paragraph, i) => (
-        <div
-          style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1.25rem 1.5rem;"
-        >
-          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="var(--cp-cyan)"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              style="filter: drop-shadow(0 0 6px var(--cp-cyan-glow)); flex-shrink: 0;"
-            >
-              {(bodyIcons[i] ?? bodyIcons[2]).split(' M').map((segment, si) => (
-                <path d={si === 0 ? segment : `M${segment}`} />
-              ))}
-            </svg>
-            <h3
-              style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 0.8rem; letter-spacing: 0.12em;"
-            >
-              {bodyHeaders[i] ?? '// DETAILS'}
-            </h3>
+      {
+        bodyParagraphs.map((paragraph, i) => (
+          <div style="background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1.25rem 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--cp-cyan)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="filter: drop-shadow(0 0 6px var(--cp-cyan-glow)); flex-shrink: 0;"
+              >
+                {(bodyIcons[i] ?? bodyIcons[2]).split(' M').map((segment, si) => (
+                  <path d={si === 0 ? segment : `M${segment}`} />
+                ))}
+              </svg>
+              <h3 style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 0.8rem; letter-spacing: 0.12em;">
+                {bodyHeaders[i] ?? '// DETAILS'}
+              </h3>
+            </div>
+            <p style="color: var(--cp-text); font-size: 0.85rem; line-height: 1.75;">{paragraph}</p>
           </div>
-          <p style="color: var(--cp-text); font-size: 0.85rem; line-height: 1.75;">
-            {paragraph}
-          </p>
-        </div>
-      ))}
+        ))
+      }
     </section>
 
     <!-- FAQ section -->
@@ -140,53 +145,49 @@ const isHeicSource = pair.from === 'heic'
         // FAQ
       </h2>
       <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-        {copy.faqs.map((faq) => (
-          <details
-            class="cyber-details"
-            style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
-          >
-            <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
-              {faq.question}
-            </summary>
-            <p
-              style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;"
+        {
+          copy.faqs.map((faq) => (
+            <details
+              class="cyber-details"
+              style="background: var(--cp-panel); border: 1px solid var(--cp-border); padding: 1rem;"
             >
-              {faq.answer}
-            </p>
-          </details>
-        ))}
+              <summary style="color: var(--cp-text); font-size: 0.875rem; letter-spacing: 0.05em;">
+                {faq.question}
+              </summary>
+              <p style="margin-top: 0.75rem; color: var(--cp-text); font-size: 0.8rem; line-height: 1.6;">
+                {faq.answer}
+              </p>
+            </details>
+          ))
+        }
       </div>
     </section>
 
     <!-- Related converters -->
-    {limitedRelated.length > 0 && (
-      <section style="margin-top: 3rem;">
-        <h2
-          style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
-        >
-          // RELATED CONVERTERS
-        </h2>
-        <div class="grid sm:grid-cols-2 gap-3">
-          {limitedRelated.map((rp) => (
-            <a
-              href={`/${rp.slug}`}
-              style="display: block; background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem; text-decoration: none; transition: background 0.2s;"
-            >
-              <span
-                style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;"
+    {
+      limitedRelated.length > 0 && (
+        <section style="margin-top: 3rem;">
+          <h2 style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;">
+            // RELATED CONVERTERS
+          </h2>
+          <div class="grid sm:grid-cols-2 gap-3">
+            {limitedRelated.map((rp) => (
+              <a
+                href={`/${rp.slug}`}
+                style="display: block; background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem; text-decoration: none; transition: background 0.2s;"
               >
-                {rp.fromMeta.displayName} → {rp.toMeta.displayName}
-              </span>
-              <p
-                style="color: var(--cp-text); font-size: 0.75rem; margin-top: 0.4rem; line-height: 1.5;"
-              >
-                {rp.h1}
-              </p>
-            </a>
-          ))}
-        </div>
-      </section>
-    )}
+                <span style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;">
+                  {rp.fromMeta.displayName} → {rp.toMeta.displayName}
+                </span>
+                <p style="color: var(--cp-text); font-size: 0.75rem; margin-top: 0.4rem; line-height: 1.5;">
+                  {rp.h1}
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
   </main>
 
   <!-- Footer -->

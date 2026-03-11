@@ -37,11 +37,28 @@ For each changed file, read the **entire file** (not just the diff). Understand:
 - Imports, dependencies, and call sites
 - How the changed code interacts with surrounding code
 
-## Step 4: Review
+## Step 4: Run Static Analysis
+
+Before manual review, run the automated checks on the changed code:
+
+**If Rust files changed:**
+```bash
+cargo fmt --manifest-path crates/image-converter/Cargo.toml -- --check
+cargo clippy --manifest-path crates/image-converter/Cargo.toml -- -D warnings
+```
+
+**If TypeScript/Astro files changed:**
+```bash
+cd web && npm run check:all
+```
+
+Report any failures as HIGH-severity findings. These are objective, automated violations — no confidence threshold needed.
+
+## Step 5: Manual Review
 
 Apply the checklist below, filtered through the project's actual conventions. Work from CRITICAL to LOW.
 
-## Step 5: Report
+## Step 6: Report
 
 Use the output format at the end of this prompt. Only report findings where you are **>80% confident** it is a real problem.
 

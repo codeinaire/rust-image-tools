@@ -10,10 +10,7 @@ import type {
   ErrorResponse,
 } from './interfaces'
 
-export type WorkerRequest =
-  | DetectFormatRequest
-  | ConvertImageRequest
-  | GetDimensionsRequest
+export type WorkerRequest = DetectFormatRequest | ConvertImageRequest | GetDimensionsRequest
 
 export type WorkerResponse =
   | InitSuccessResponse

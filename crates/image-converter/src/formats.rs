@@ -211,10 +211,7 @@ mod tests {
         let img = image::RgbaImage::new(16, 16);
         let mut buf = Vec::new();
         image::DynamicImage::ImageRgba8(img)
-            .write_to(
-                &mut std::io::Cursor::new(&mut buf),
-                image::ImageFormat::Ico,
-            )
+            .write_to(&mut std::io::Cursor::new(&mut buf), image::ImageFormat::Ico)
             .unwrap();
         buf
     }
@@ -223,10 +220,7 @@ mod tests {
         let img = image::RgbImage::new(1, 1);
         let mut buf = Vec::new();
         image::DynamicImage::ImageRgb8(img)
-            .write_to(
-                &mut std::io::Cursor::new(&mut buf),
-                image::ImageFormat::Tga,
-            )
+            .write_to(&mut std::io::Cursor::new(&mut buf), image::ImageFormat::Tga)
             .unwrap();
         buf
     }
@@ -235,10 +229,7 @@ mod tests {
         let img = image::RgbImage::new(1, 1);
         let mut buf = Vec::new();
         image::DynamicImage::ImageRgb8(img)
-            .write_to(
-                &mut std::io::Cursor::new(&mut buf),
-                image::ImageFormat::Qoi,
-            )
+            .write_to(&mut std::io::Cursor::new(&mut buf), image::ImageFormat::Qoi)
             .unwrap();
         buf
     }

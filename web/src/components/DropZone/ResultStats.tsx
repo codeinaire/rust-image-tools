@@ -1,14 +1,13 @@
 import { formatFileSize } from '../../hooks/useConverter'
 import type { ConversionResult } from '../../hooks/useConverter'
 
-type Props = {
+interface Props {
   result: ConversionResult
 }
 
-export function ResultStats({ result }: Props) {
+export function ResultStats({ result }: Props): preact.JSX.Element {
   const sign = result.changePercent >= 0 ? '+' : ''
-  const changeColor =
-    result.changePercent <= 0 ? 'var(--cp-cyan)' : 'var(--cp-magenta, #ff3399)'
+  const changeColor = result.changePercent <= 0 ? 'var(--cp-cyan)' : 'var(--cp-magenta, #ff3399)'
 
   return (
     <div

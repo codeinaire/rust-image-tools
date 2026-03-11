@@ -1,14 +1,14 @@
 import { useState, useRef, useEffect } from 'preact/hooks'
 import { formatFileSize } from '../../hooks/useConverter'
 import type { FileInfo, ConversionResult, ConverterStatus } from '../../hooks/useConverter'
-import { ValidFormat } from '../../types'
+import type { ValidFormat } from '../../types'
 import type { InputFormat } from '../../types'
 import { FormatSelector } from './FormatSelector'
 import { ConvertButton } from './ConvertButton'
 import { DownloadButton } from './DownloadButton'
 import { ResultStats } from './ResultStats'
 
-type Props = {
+interface Props {
   onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => void
   fileInfo: FileInfo | null
   targetFormat: ValidFormat
@@ -29,7 +29,9 @@ type Props = {
 const CUT = 20
 
 function truncateMiddle(name: string, maxLen = 50): string {
-  if (name.length <= maxLen) return name
+  if (name.length <= maxLen) {
+    return name
+  }
   const half = Math.floor((maxLen - 1) / 2)
   return `${name.slice(0, half)}…${name.slice(-half)}`
 }
@@ -48,7 +50,7 @@ export function DropZone({
   onDownloadClick,
   pageFromFormat,
   pageToFormat,
-}: Props) {
+}: Props): preact.JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const barRef = useRef<HTMLDivElement>(null)
@@ -59,25 +61,35 @@ export function DropZone({
 
   useEffect(() => {
     const el = containerRef.current
-    if (!el) return
+    if (!el) {
+      return
+    }
     const obs = new ResizeObserver(() => {
       setDims({ w: el.offsetWidth, h: el.offsetHeight })
     })
     obs.observe(el)
-    return () => obs.disconnect()
+    return () => {
+      obs.disconnect()
+    }
   }, [])
 
   useEffect(() => {
     if (fileInfo) {
-      const id = requestAnimationFrame(() => setControlsVisible(true))
-      return () => cancelAnimationFrame(id)
+      const id = requestAnimationFrame(() => {
+        setControlsVisible(true)
+      })
+      return () => {
+        cancelAnimationFrame(id)
+      }
     } else {
       setControlsVisible(false)
     }
   }, [fileInfo])
 
   useEffect(() => {
-    if (!barRef.current) return
+    if (!barRef.current) {
+      return
+    }
     if (status === 'converting') {
       barRef.current.style.transition = 'width 0ms'
       barRef.current.style.width = '0%'
@@ -87,7 +99,9 @@ export function DropZone({
           barRef.current.style.width = '90%'
         }
       })
-      return () => cancelAnimationFrame(raf)
+      return () => {
+        cancelAnimationFrame(raf)
+      }
     } else if (status === 'done') {
       barRef.current.style.transition = 'width 200ms ease-out'
       barRef.current.style.width = '100%'
@@ -107,13 +121,19 @@ export function DropZone({
     e.preventDefault()
     setIsDragOver(false)
     const file = e.dataTransfer?.files[0]
-    if (file) onFile(file, 'drag_drop')
+    if (file) {
+      onFile(file, 'drag_drop')
+    }
   }
 
   function handleInputChange(e: Event) {
-    if (!(e.target instanceof HTMLInputElement)) return
+    if (!(e.target instanceof HTMLInputElement)) {
+      return
+    }
     const file = e.target.files?.[0]
-    if (file) onFile(file, 'file_picker')
+    if (file) {
+      onFile(file, 'file_picker')
+    }
   }
 
   const borderColor = isDragOver ? 'var(--cp-yellow)' : 'var(--cp-cyan)'
@@ -131,7 +151,7 @@ export function DropZone({
   const { w, h } = dims
   const points = w > 0 ? `${CUT},0 ${w},0 ${w},${h - CUT} ${w - CUT},${h} 0,${h} 0,${CUT}` : ''
 
-  const isDone = status === 'done' && result !== null
+  const doneResult = status === 'done' ? result : null
 
   return (
     <div
@@ -143,8 +163,12 @@ export function DropZone({
         transition: 'background 0.2s',
         clipPath: `polygon(${CUT}px 0, 100% 0, 100% calc(100% - ${CUT}px), calc(100% - ${CUT}px) 100%, 0 100%, 0 ${CUT}px)`,
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => {
+        setIsHovered(true)
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false)
+      }}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -358,8 +382,8 @@ export function DropZone({
           <div style={{ borderTop: '1px solid var(--cp-cyan)' }} />
           <div style={{ display: 'flex', height: '3rem', overflow: 'hidden' }}>
             {/* Left: format buttons or result stats */}
-            {isDone && result ? (
-              <ResultStats result={result} />
+            {doneResult ? (
+              <ResultStats result={doneResult} />
             ) : pageToFormat ? (
               <div
                 style={{
@@ -396,14 +420,14 @@ export function DropZone({
             {/* Right: download or execute */}
             <div
               style={{
-                flex: pageToFormat && !isDone ? 1 : undefined,
+                flex: pageToFormat && !doneResult ? 1 : undefined,
                 flexShrink: 0,
                 clipPath: `polygon(0% 0%, 100% 0%, 100% calc(100% - ${CUT}px), calc(100% - ${CUT}px) 100%, 0% 100%)`,
               }}
-              class={pageToFormat && !isDone ? undefined : 'w-fit sm:w-[35%]'}
+              class={pageToFormat && !doneResult ? undefined : 'w-fit sm:w-[35%]'}
             >
-              {isDone && result ? (
-                <DownloadButton result={result} onDownloadClick={onDownloadClick} />
+              {doneResult ? (
+                <DownloadButton result={doneResult} onDownloadClick={onDownloadClick} />
               ) : (
                 <ConvertButton
                   convertDisabled={convertDisabled}

@@ -56,7 +56,11 @@ const webAppSchema = {
     <meta name="twitter:description" content={description} />
 
     <!-- Structured Data: WebApplication (skipped when page provides its own) -->
-    {!skipDefaultSchema && <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />}
+    {
+      !skipDefaultSchema && (
+        <script type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
+      )
+    }
 
     <!-- Google Fonts: Space Grotesk (ticker) + Orbitron (display) + Share Tech Mono (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

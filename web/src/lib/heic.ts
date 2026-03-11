@@ -22,12 +22,26 @@
  * 8–11 are the brand code that identifies the specific HEIF variant.
  */
 export function isHeicMagicBytes(bytes: Uint8Array): boolean {
-  if (bytes.length < 12) return false
+  if (bytes.length < 12) {
+    return false
+  }
 
-  const ftyp = String.fromCharCode(bytes[4], bytes[5], bytes[6], bytes[7])
-  if (ftyp !== 'ftyp') return false
+  const ftyp = String.fromCharCode(
+    bytes[4] as number,
+    bytes[5] as number,
+    bytes[6] as number,
+    bytes[7] as number,
+  )
+  if (ftyp !== 'ftyp') {
+    return false
+  }
 
-  const brand = String.fromCharCode(bytes[8], bytes[9], bytes[10], bytes[11])
+  const brand = String.fromCharCode(
+    bytes[8] as number,
+    bytes[9] as number,
+    bytes[10] as number,
+    bytes[11] as number,
+  )
   const heicBrands = ['heic', 'heix', 'hevc', 'hevx', 'mif1', 'msf1', 'MiHE']
   return heicBrands.includes(brand)
 }
@@ -54,7 +68,7 @@ async function tryNativeDecode(file: File): Promise<File | null> {
     ctx.drawImage(bitmap, 0, 0)
     bitmap.close()
 
-    return new Promise<File | null>((resolve) => {
+    return await new Promise<File | null>((resolve) => {
       canvas.toBlob((blob) => {
         if (!blob) {
           resolve(null)
@@ -91,14 +105,18 @@ export async function normalizeHeic(file: File): Promise<File> {
   // This avoids downloading the heic-to WASM binary entirely for Safari users,
   // who are the primary source of HEIC files (iPhone default camera format).
   const nativeResult = await tryNativeDecode(file)
-  if (nativeResult) return nativeResult
+  if (nativeResult) {
+    return nativeResult
+  }
 
   // Lazy-load heic-to only now — the 2–4 MB WASM binary is not downloaded
   // until we know the user actually has a HEIC file on a non-Safari browser.
   const { isHeic, heicTo } = await import('heic-to')
 
   const confirmed = await isHeic(file)
-  if (!confirmed) return file
+  if (!confirmed) {
+    return file
+  }
 
   const pngBlob = await heicTo({ blob: file, type: 'image/png', quality: 1 })
   const pngName = file.name.replace(/\.heic?$/i, '.png')

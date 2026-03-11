@@ -1,8 +1,8 @@
 import { test, expect, type Page } from '@playwright/test'
-import { existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 const HEIC_FIXTURE = join(FIXTURES, 'sample.heic')
@@ -33,7 +33,7 @@ async function selectFormat(page: Page, fmt: string): Promise<void> {
 test.describe('End-to-end conversion', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    await page.waitForFunction(() => !!window.__converter)
+    await page.waitForFunction(() => Boolean(window.__converter))
     await page.evaluate(() => window.__converter.ensureReady())
   })
 
@@ -73,6 +73,7 @@ test.describe('End-to-end conversion', () => {
     expect(downloadAttr).toMatch(/\.png$/)
 
     // Verify the blob is a valid PNG by fetching it in-page
+    expect(href).toBeDefined()
     const isValidPng = await page.evaluate(async (blobUrl: string) => {
       const res = await fetch(blobUrl)
       const buf = await res.arrayBuffer()
@@ -85,7 +86,7 @@ test.describe('End-to-end conversion', () => {
         bytes[3] === 0x47 &&
         bytes.length > 0
       )
-    }, href!)
+    }, href as string)
     expect(isValidPng).toBe(true)
 
     const pipelineTotalMs = Math.round(performance.now() - pipelineStart)
@@ -137,8 +138,11 @@ test.describe('End-to-end conversion', () => {
 
   test('Error display: corrupted file triggers user-friendly error', async ({ page }) => {
     // Inject a fake corrupted file via drop event
-    await page.evaluate(async () => {
-      const dropZone = document.getElementById('drop-zone')!
+    await page.evaluate(() => {
+      const dropZone = document.getElementById('drop-zone')
+      if (!dropZone) {
+        throw new Error('drop-zone not found')
+      }
       const corruptBytes = new Uint8Array([0xff, 0xfe, 0x00, 0x01, 0xde, 0xad, 0xbe, 0xef])
       const file = new File([corruptBytes], 'corrupt.png', { type: 'image/png' })
       const dt = new DataTransfer()
@@ -151,7 +155,7 @@ test.describe('End-to-end conversion', () => {
 
     const errorText = await page.locator('#error-message').textContent()
     expect(errorText).toBeTruthy()
-    expect(errorText!.length).toBeGreaterThan(0)
+    expect(errorText?.length).toBeGreaterThan(0)
 
     console.log(`[E2E] Error shown for corrupted file: "${errorText}"`)
   })
@@ -186,7 +190,7 @@ test.describe('End-to-end conversion', () => {
       const buf = await res.arrayBuffer()
       const bytes = new Uint8Array(buf)
       return { size: bytes.byteLength, isJpeg: bytes[0] === 0xff && bytes[1] === 0xd8 }
-    }, href!)
+    }, href as string)
 
     expect(result.size).toBeGreaterThan(0)
     expect(result.isJpeg).toBe(true)
@@ -195,7 +199,7 @@ test.describe('End-to-end conversion', () => {
   })
 
   test('Multiple format conversions produce correct MIME types', async ({ page }) => {
-    const formats: Array<{ fmt: string; magic: number[] }> = [
+    const formats: { fmt: string; magic: number[] }[] = [
       { fmt: 'jpeg', magic: [0xff, 0xd8, 0xff] }, // JPEG SOI + APP marker
       { fmt: 'webp', magic: [0x52, 0x49, 0x46, 0x46] }, // RIFF
     ]
@@ -203,7 +207,7 @@ test.describe('End-to-end conversion', () => {
     for (const { fmt, magic } of formats) {
       // Reload fresh for each sub-test
       await page.goto('/')
-      await page.waitForFunction(() => !!window.__converter)
+      await page.waitForFunction(() => Boolean(window.__converter))
       await page.evaluate(() => window.__converter.ensureReady())
 
       await page.locator('#file-input').setInputFiles(join(FIXTURES, 'test.png'))
@@ -222,7 +226,7 @@ test.describe('End-to-end conversion', () => {
         const res = await fetch(blobUrl)
         const buf = await res.arrayBuffer()
         return Array.from(new Uint8Array(buf.slice(0, 4)))
-      }, href!)
+      }, href as string)
 
       for (let i = 0; i < magic.length; i++) {
         expect(firstBytes[i]).toBe(magic[i])

@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
@@ -17,7 +18,7 @@ const FIXTURES = join(__dirname, '../fixtures')
 test.describe('Tier-2 format conversions', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    await page.waitForFunction(() => !!window.__converter)
+    await page.waitForFunction(() => Boolean(window.__converter))
     await page.evaluate(() => window.__converter.ensureReady())
   })
 
@@ -102,12 +103,21 @@ test.describe('Tier-2 format conversions', () => {
       const canvas = document.createElement('canvas')
       canvas.width = 300
       canvas.height = 300
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        throw new Error('Failed to get 2d context')
+      }
       ctx.fillStyle = '#ff0000'
       ctx.fillRect(0, 0, 300, 300)
-      const blob = await new Promise<Blob>((resolve) =>
-        canvas.toBlob((b) => resolve(b!), 'image/png'),
-      )
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((b) => {
+          if (b) {
+            resolve(b)
+          } else {
+            reject(new Error('toBlob returned null'))
+          }
+        }, 'image/png')
+      })
       const buf = await blob.arrayBuffer()
       const data = new Uint8Array(buf)
       try {

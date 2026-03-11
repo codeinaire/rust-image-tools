@@ -1,11 +1,11 @@
 import posthog from 'posthog-js'
 
-type FormatPairProps = {
+interface FormatPairProps {
   source_format: string
   target_format: string
 }
 
-type ImageDimensionProps = {
+interface ImageDimensionProps {
   width: number
   height: number
   megapixels: number
@@ -14,22 +14,28 @@ type ImageDimensionProps = {
 let initialized = false
 
 export function initAnalytics(): void {
-  if (import.meta.env.MODE !== 'production') return
-  const key = import.meta.env.PUBLIC_POSTHOG_KEY
-  if (!key) return
+  if (import.meta.env.MODE !== 'production') {
+    return
+  }
+  const key = import.meta.env['PUBLIC_POSTHOG_KEY'] as string | undefined
+  if (!key) {
+    return
+  }
 
   posthog.init(key, {
     api_host: 'https://eu.i.posthog.com',
     autocapture: false,
     request_batching: false,
     person_profiles: 'always',
-    debug: import.meta.env.MODE !== 'production',
+    debug: false,
   })
   initialized = true
 }
 
-function capture(event: string, properties: Record<string, unknown>): void {
-  if (!initialized) return
+function capture(event: string, properties: object): void {
+  if (!initialized) {
+    return
+  }
   console.log('[posthog]', event, properties)
   posthog.capture(event, properties)
 }
@@ -88,4 +94,3 @@ export function trackValidationRejected(props: {
 export function trackDownloadClicked(props: FormatPairProps & { output_size_bytes: number }): void {
   capture('download_clicked', props)
 }
-

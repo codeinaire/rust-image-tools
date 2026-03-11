@@ -3,17 +3,33 @@ import { createPortal, Fragment } from 'preact/compat'
 import { ValidFormat } from '../../types'
 import type { ConverterStatus } from '../../hooks/useConverter'
 
-type Props = {
+interface Props {
   targetFormat: ValidFormat
   onFormatChange: (fmt: ValidFormat) => void
   controlsVisible: boolean
   status: ConverterStatus
 }
 
-const TOP_FORMATS: ValidFormat[] = [ValidFormat.Png, ValidFormat.Jpeg, ValidFormat.WebP, ValidFormat.Gif]
-const MORE_FORMATS: ValidFormat[] = [ValidFormat.Bmp, ValidFormat.Qoi, ValidFormat.Ico, ValidFormat.Tiff, ValidFormat.Tga]
+const TOP_FORMATS: ValidFormat[] = [
+  ValidFormat.Png,
+  ValidFormat.Jpeg,
+  ValidFormat.WebP,
+  ValidFormat.Gif,
+]
+const MORE_FORMATS: ValidFormat[] = [
+  ValidFormat.Bmp,
+  ValidFormat.Qoi,
+  ValidFormat.Ico,
+  ValidFormat.Tiff,
+  ValidFormat.Tga,
+]
 
-export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, status }: Props) {
+export function FormatSelector({
+  targetFormat,
+  onFormatChange,
+  controlsVisible,
+  status,
+}: Props): preact.JSX.Element {
   const moreButtonRef = useRef<HTMLButtonElement>(null)
   const moreDropdownRef = useRef<HTMLDivElement>(null)
   const [morePos, setMorePos] = useState({ bottom: 0, left: 0 })
@@ -21,18 +37,25 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
   const [moreOpen, setMoreOpen] = useState(false)
 
   useEffect(() => {
-    if (!moreOpen) return
+    if (!moreOpen) {
+      return
+    }
     function handleClickOutside(e: MouseEvent) {
-      if (!(e.target instanceof Node)) return
+      if (!(e.target instanceof Node)) {
+        return
+      }
       if (
         moreButtonRef.current?.contains(e.target) ||
         moreDropdownRef.current?.contains(e.target)
-      )
+      ) {
         return
+      }
       setMoreOpen(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [moreOpen])
 
   useEffect(() => {
@@ -88,9 +111,15 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
             )}
             <button
               data-format={fmt}
-              onClick={() => onFormatChange(fmt)}
-              onMouseEnter={() => setHoveredFormat(fmt)}
-              onMouseLeave={() => setHoveredFormat(null)}
+              onClick={() => {
+                onFormatChange(fmt)
+              }}
+              onMouseEnter={() => {
+                setHoveredFormat(fmt)
+              }}
+              onMouseLeave={() => {
+                setHoveredFormat(null)
+              }}
               style={fmtButtonStyle(fmt)}
             >
               {fmt.toUpperCase()}
@@ -165,16 +194,28 @@ export function FormatSelector({ targetFormat, onFormatChange, controlsVisible, 
                     onFormatChange(fmt)
                     setMoreOpen(false)
                   }}
-                  onMouseEnter={() => setHoveredFormat(fmt)}
-                  onMouseLeave={() => setHoveredFormat(null)}
+                  onMouseEnter={() => {
+                    setHoveredFormat(fmt)
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredFormat(null)
+                  }}
                   style={{
                     padding: '0.5rem 0.75rem',
                     fontFamily: "'Share Tech Mono', monospace",
                     letterSpacing: '0.1em',
                     fontSize: '0.8rem',
                     cursor: 'pointer',
-                    color: isSelected ? 'var(--cp-yellow)' : isHov ? 'var(--cp-cyan)' : 'var(--cp-text)',
-                    background: isSelected ? 'var(--cp-yellow-bg-subtle)' : isHov ? 'var(--cp-cyan-bg)' : 'transparent',
+                    color: isSelected
+                      ? 'var(--cp-yellow)'
+                      : isHov
+                        ? 'var(--cp-cyan)'
+                        : 'var(--cp-text)',
+                    background: isSelected
+                      ? 'var(--cp-yellow-bg-subtle)'
+                      : isHov
+                        ? 'var(--cp-cyan-bg)'
+                        : 'transparent',
                     borderLeft: isSelected ? '2px solid var(--cp-yellow)' : '2px solid transparent',
                     whiteSpace: 'nowrap',
                     transition: 'background 0.15s, color 0.15s',

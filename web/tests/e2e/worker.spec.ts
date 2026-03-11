@@ -3,6 +3,7 @@ import { readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const FIXTURES = join(__dirname, '../fixtures')
 
@@ -20,7 +21,7 @@ test.describe('Worker lifecycle', () => {
     page.on('pageerror', (err) => pageErrors.push(err.message))
 
     await page.goto('/')
-    await page.waitForFunction(() => !!window.__converter)
+    await page.waitForFunction(() => Boolean(window.__converter))
 
     // Wait until converter is ready (WASM loaded in Worker)
     const initMs = await page.evaluate(() => window.__converter.ensureReady())
@@ -78,7 +79,7 @@ test.describe('Worker lifecycle', () => {
 
     expect(errorMessage).not.toBeNull()
     expect(typeof errorMessage).toBe('string')
-    expect(errorMessage!.length).toBeGreaterThan(0)
+    expect(errorMessage?.length).toBeGreaterThan(0)
 
     console.log(`[WORKER] Error for invalid bytes: "${errorMessage}"`)
   })
@@ -129,7 +130,7 @@ test.describe('Worker lifecycle', () => {
 
     // We expect an error (garbage input), but NOT a crash, hang, or OOM
     expect(typeof errorOrNull).toBe('string')
-    expect((errorOrNull as string).length).toBeGreaterThan(0)
+    expect(errorOrNull?.length).toBeGreaterThan(0)
 
     console.log(`[WORKER] Large-buffer transfer error (expected): "${errorOrNull}"`)
   })
