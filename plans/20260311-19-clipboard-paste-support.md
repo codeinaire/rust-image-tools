@@ -126,19 +126,19 @@ Implement a dual-path clipboard input: (1) a global `document` paste event liste
 
 ## Verification
 
-- [ ] Paste event extracts image file from ClipboardEvent -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Paste event ignores non-image clipboard data -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Paste event calls preventDefault on image paste -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Paste event is no-op when `enabled` is false -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] MIME-to-extension mapping correctness -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Async clipboard read succeeds and produces File -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Async clipboard read handles NotAllowedError gracefully -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Async clipboard read handles no-image-in-clipboard -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] `isSupported` reflects API availability -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] Analytics tracks `clipboard_paste` input method -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
-- [ ] E2E paste image triggers conversion pipeline (Chromium) -- e2e -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx playwright test tests/e2e/clipboard.spec.ts --project=chromium` -- Automatic
+- [x] Paste event extracts image file from ClipboardEvent -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Paste event ignores non-image clipboard data -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Paste event calls preventDefault on image paste -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Paste event is no-op when `enabled` is false -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] MIME-to-extension mapping correctness -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Async clipboard read succeeds and produces File -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Async clipboard read handles NotAllowedError gracefully -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Async clipboard read handles no-image-in-clipboard -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] `isSupported` reflects API availability -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] Analytics tracks `clipboard_paste` input method -- unit -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx vitest run tests/unit/clipboard-paste.test.ts` -- Automatic
+- [x] E2E paste image triggers conversion pipeline (Chromium) -- e2e -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npx playwright test tests/e2e/clipboard.spec.ts --project=chromium` -- Automatic
 - [ ] "OR PASTE" text visible in idle DropZone state -- manual -- Open the app, verify the prompt reads "DRAG & DROP -- CLICK TO SELECT -- OR PASTE" -- Manual
 - [ ] Clicking "OR PASTE" triggers clipboard read and loads image -- manual -- Copy an image to clipboard, click "OR PASTE" in DropZone, verify image is loaded and format detected -- Manual
 - [ ] Ctrl+V / Cmd+V pastes image from clipboard into converter -- manual -- Copy an image, press Ctrl+V on the page, verify image loads -- Manual
 - [ ] Paste during conversion is silently ignored -- manual -- Start a conversion, press Ctrl+V, verify no double-processing or error -- Manual
-- [ ] Static analysis passes -- lint -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npm run check:all` -- Automatic
+- [x] Static analysis passes -- lint -- `cd /Users/nousunio/Repos/Learnings/claude-code/rust-image-tools/web && npm run check:all` -- Automatic

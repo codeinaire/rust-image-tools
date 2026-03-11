@@ -16,7 +16,7 @@ interface Props {
 
 /** Top-level image converter widget with drop zone, format selection, and download. */
 export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.JSX.Element {
-  const { state, converter, handleFile, handleConvert, setError } = useConverter()
+  const { state, converter, handleFile, handleConvert } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
 
   const onClipboardPaste = useCallback(
@@ -26,17 +26,9 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
     [handleFile],
   )
 
-  const onClipboardError = useCallback(
-    (message: string) => {
-      setError(message)
-    },
-    [setError],
-  )
-
   const clipboardEnabled = state.status !== 'converting' && state.status !== 'reading'
-  const { pasteFromClipboard, isSupported: pasteSupported } = useClipboardPaste({
+  useClipboardPaste({
     onPaste: onClipboardPaste,
-    onError: onClipboardError,
     enabled: clipboardEnabled,
   })
 
@@ -119,10 +111,6 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           estimatedMs={state.estimatedMs}
           showProgress={state.showProgress}
           onDownloadClick={onDownloadClick}
-          onPaste={() => {
-            void pasteFromClipboard()
-          }}
-          pasteSupported={pasteSupported}
           pageFromFormat={initialFrom}
           pageToFormat={initialTo}
         />

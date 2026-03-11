@@ -21,10 +21,7 @@ test.describe('Clipboard paste', () => {
     await page.evaluate(() => window.__converter.ensureReady())
   })
 
-  test('Ctrl+V paste triggers format detection and shows source info', async ({
-    page,
-  }) => {
-
+  test('Ctrl+V paste triggers format detection and shows source info', async ({ page }) => {
     // Read a small PNG test image and write it to the clipboard
     const pngBytes = readFileSync(join(FIXTURES, 'test.png'))
     const pngBase64 = pngBytes.toString('base64')
@@ -32,7 +29,7 @@ test.describe('Clipboard paste', () => {
     // Dispatch a synthetic paste event with the image file in clipboardData.
     // Keyboard shortcuts (Ctrl+V) don't populate DataTransfer in Playwright,
     // so we build the event manually.
-    await page.evaluate(async (b64: string) => {
+    await page.evaluate((b64: string) => {
       const binary = atob(b64)
       const bytes = new Uint8Array(binary.length)
       for (let i = 0; i < binary.length; i++) {

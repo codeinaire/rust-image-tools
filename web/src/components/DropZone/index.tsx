@@ -20,10 +20,6 @@ interface Props {
   estimatedMs: number
   showProgress: boolean
   onDownloadClick: () => void
-  /** Called when the user clicks "PASTE" to read from clipboard. */
-  onPaste?: () => void
-  /** Whether the Async Clipboard API is available. */
-  pasteSupported?: boolean
   /** Source format for the page (set on conversion landing pages). */
   pageFromFormat?: InputFormat | undefined
   /** Target format for the page (set on conversion landing pages). */
@@ -52,8 +48,6 @@ export function DropZone({
   estimatedMs,
   showProgress,
   onDownloadClick,
-  onPaste,
-  pasteSupported,
   pageFromFormat,
   pageToFormat,
 }: Props): preact.JSX.Element {
@@ -287,22 +281,7 @@ export function DropZone({
           </div>
         ) : showIdlePrompt ? (
           <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
-            <span>{'DRAG & DROP \u2014 CLICK TO SELECT'}</span>
-            {pasteSupported && onPaste && (
-              <>
-                {' \u2014 '}
-                <span
-                  onClick={(e: MouseEvent) => {
-                    e.stopPropagation()
-                    onPaste()
-                  }}
-                  style={{ cursor: 'pointer', textDecoration: 'none' }}
-                  class="hover:brightness-125 hover:underline"
-                >
-                  PASTE
-                </span>
-              </>
-            )}
+            {'DRAG & DROP \u2014 CLICK TO SELECT \u2014 PASTE'}
           </p>
         ) : (
           <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>

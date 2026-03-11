@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'preact/hooks'
+import { useEffect } from 'preact/hooks'
 
 const MIME_TO_EXTENSION: Record<string, string> = {
   'image/png': 'png',
@@ -19,27 +19,19 @@ export function extensionFromMime(mime: string): string {
 
 interface UseClipboardPasteOptions {
   onPaste: (file: File) => void
-  onError: (message: string) => void
   enabled: boolean
 }
 
 /**
- * Hook that provides clipboard paste support for images via two paths:
- * (1) a global `paste` event listener for Ctrl+V/Cmd+V, and
- * (2) a `pasteFromClipboard` function that uses the Async Clipboard API.
+ * Hook that listens for global `paste` events and extracts image files.
  *
- * The paste event listener is only active when `enabled` is `true`.
+ * When `enabled` is `true`, intercepts Ctrl+V/Cmd+V paste events on the
+ * document. If the clipboard contains an image file, it is wrapped in a
+ * synthetic `File` and passed to `onPaste`. Non-image paste events are
+ * ignored silently.
  */
-export function useClipboardPaste(options: UseClipboardPasteOptions): {
-  pasteFromClipboard: () => Promise<void>
-  isSupported: boolean
-} {
-  const { onPaste, onError, enabled } = options
-
-  const isSupported =
-    typeof navigator !== 'undefined' &&
-    typeof navigator.clipboard !== 'undefined' &&
-    typeof navigator.clipboard.read === 'function'
+export function useClipboardPaste(options: UseClipboardPasteOptions): void {
+  const { onPaste, enabled } = options
 
   useEffect(() => {
     if (!enabled) {
@@ -73,39 +65,4 @@ export function useClipboardPaste(options: UseClipboardPasteOptions): {
       document.removeEventListener('paste', handler)
     }
   }, [enabled, onPaste])
-
-  /**
-   * Reads image data from the clipboard using the Async Clipboard API.
-   *
-   * Requires a user gesture to trigger. May prompt the user for clipboard
-   * read permission in some browsers.
-   */
-  const pasteFromClipboard = useCallback(async (): Promise<void> => {
-    try {
-      const items = await navigator.clipboard.read()
-
-      for (const item of items) {
-        const imageType = item.types.find((t) => t.startsWith('image/'))
-        if (imageType) {
-          const blob = await item.getType(imageType)
-          const extension = extensionFromMime(imageType)
-          const syntheticFile = new File([blob], `pasted-image-${Date.now()}.${extension}`, {
-            type: imageType,
-          })
-          onPaste(syntheticFile)
-          return
-        }
-      }
-
-      onError('No image found in clipboard')
-    } catch (e) {
-      if (e instanceof DOMException && e.name === 'NotAllowedError') {
-        onError('Clipboard access denied. Please allow clipboard permissions.')
-      } else {
-        onError('Could not read clipboard')
-      }
-    }
-  }, [onPaste, onError])
-
-  return { pasteFromClipboard, isSupported }
 }

@@ -102,7 +102,6 @@ export function useConverter(): {
   converter: ImageConverter
   handleFile: (file: File, inputMethod: InputMethod) => Promise<void>
   handleConvert: (targetFormat: ValidFormat) => Promise<void>
-  setError: (message: string) => void
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
@@ -339,16 +338,5 @@ export function useConverter(): {
     }
   }
 
-  function setError(message: string): void {
-    setState((s) => ({
-      ...s,
-      status: 'error',
-      error: message,
-      fileInfo: null,
-      result: null,
-      showProgress: false,
-    }))
-  }
-
-  return { state, converter, handleFile, handleConvert, setError }
+  return { state, converter, handleFile, handleConvert }
 }
