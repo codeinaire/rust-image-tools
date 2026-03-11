@@ -6,7 +6,7 @@ interface PendingRequest {
   reject: (reason: Error) => void
 }
 
-/// Manages the image converter Web Worker and provides a Promise-based API.
+/** Manages the image converter Web Worker and provides a Promise-based API. */
 export class ImageConverter {
   private readonly worker: Worker
   private readonly ready: Promise<number>

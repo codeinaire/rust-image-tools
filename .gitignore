@@ -21,6 +21,9 @@ web/.astro/
 .DS_Store
 Thumbs.db
 
+# Test artifacts
+web/test-results/
+
 # IDE
 .idea/
 .vscode/
