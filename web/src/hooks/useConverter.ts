@@ -11,6 +11,8 @@ import type { ImageConverter } from '../lib/image-converter'
 import { ValidFormat } from '../types'
 import { normalizeHeic } from '../lib/heic'
 
+export type InputMethod = 'file_picker' | 'drag_drop' | 'clipboard_paste'
+
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
 
@@ -98,8 +100,9 @@ export interface ConverterState {
 export function useConverter(): {
   state: ConverterState
   converter: ImageConverter
-  handleFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => Promise<void>
+  handleFile: (file: File, inputMethod: InputMethod) => Promise<void>
   handleConvert: (targetFormat: ValidFormat) => Promise<void>
+  setError: (message: string) => void
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
@@ -139,7 +142,7 @@ export function useConverter(): {
     }
   }
 
-  async function handleFile(file: File, inputMethod: 'file_picker' | 'drag_drop'): Promise<void> {
+  async function handleFile(file: File, inputMethod: InputMethod): Promise<void> {
     revokeBlobUrl()
     clearProgressTimeout()
 
@@ -336,5 +339,16 @@ export function useConverter(): {
     }
   }
 
-  return { state, converter, handleFile, handleConvert }
+  function setError(message: string): void {
+    setState((s) => ({
+      ...s,
+      status: 'error',
+      error: message,
+      fileInfo: null,
+      result: null,
+      showProgress: false,
+    }))
+  }
+
+  return { state, converter, handleFile, handleConvert, setError }
 }

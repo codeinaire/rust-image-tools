@@ -9,7 +9,7 @@ import { DownloadButton } from './DownloadButton'
 import { ResultStats } from './ResultStats'
 
 interface Props {
-  onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => void
+  onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop' | 'clipboard_paste') => void
   fileInfo: FileInfo | null
   targetFormat: ValidFormat
   onFormatChange: (fmt: ValidFormat) => void
@@ -20,6 +20,10 @@ interface Props {
   estimatedMs: number
   showProgress: boolean
   onDownloadClick: () => void
+  /** Called when the user clicks "PASTE" to read from clipboard. */
+  onPaste?: () => void
+  /** Whether the Async Clipboard API is available. */
+  pasteSupported?: boolean
   /** Source format for the page (set on conversion landing pages). */
   pageFromFormat?: InputFormat | undefined
   /** Target format for the page (set on conversion landing pages). */
@@ -48,6 +52,8 @@ export function DropZone({
   estimatedMs,
   showProgress,
   onDownloadClick,
+  onPaste,
+  pasteSupported,
   pageFromFormat,
   pageToFormat,
 }: Props): preact.JSX.Element {
@@ -140,13 +146,15 @@ export function DropZone({
 
   const isReading = status === 'reading'
 
+  const showIdlePrompt = !isDragOver && !isReading && !fileInfo
+
   const mainText = isDragOver
     ? '[ RELEASE TO UPLOAD ]'
     : isReading
       ? '[ DECODING... ]'
       : fileInfo
         ? `[ ${truncateMiddle(fileInfo.file.name)} ]`
-        : 'DRAG & DROP IMAGE — OR CLICK TO SELECT'
+        : null
 
   const { w, h } = dims
   const points = w > 0 ? `${CUT},0 ${w},0 ${w},${h - CUT} ${w - CUT},${h} 0,${h} 0,${CUT}` : ''
@@ -277,6 +285,25 @@ export function DropZone({
               />
             </div>
           </div>
+        ) : showIdlePrompt ? (
+          <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
+            <span>{'DRAG & DROP \u2014 CLICK TO SELECT'}</span>
+            {pasteSupported && onPaste && (
+              <>
+                {' \u2014 '}
+                <span
+                  onClick={(e: MouseEvent) => {
+                    e.stopPropagation()
+                    onPaste()
+                  }}
+                  style={{ cursor: 'pointer', textDecoration: 'none' }}
+                  class="hover:brightness-125 hover:underline"
+                >
+                  PASTE
+                </span>
+              </>
+            )}
+          </p>
         ) : (
           <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
             {mainText}

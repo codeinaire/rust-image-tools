@@ -1456,7 +1456,7 @@ Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broke
 | #   | Feature                                             | Difficulty | Impact    | Effort    | WASM Δ (gz)   | JS/CSS Δ (gz) | Total Δ (gz)  | Done |
 | --- | --------------------------------------------------- | ---------- | --------- | --------- | ------------- | ------------- | ------------- | ---- |
 | 1   | Dark Mode                                           | 1/5        | Medium    | Low       | 0             | +~4–7 KB      | +~4–7 KB      | [ ]  |
-| 2   | Paste from Clipboard                                | 1.5/5      | High      | Low       | 0             | +~0.5–1 KB    | +~0.5–1 KB    | [ ]  |
+| 2   | Paste from Clipboard                                | 1.5/5      | High      | Low       | 0             | +~0.5–1 KB    | +~0.5–1 KB    | [x]  |
 | 3   | JPEG Quality Slider                                 | 2/5        | High      | Low       | +~1–3 KB      | +~1–1.5 KB    | +~2–5 KB      | [ ]  |
 | 4   | Tier 2 Formats (TIFF, ICO, TGA, QOI)                | 2/5        | Medium    | Low       | +~93–145 KB   | +~0.5–1 KB    | +~94–146 KB   | [x]  |
 | 5   | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5        | High      | Medium    | +~16–29 KB    | +~2–3.5 KB    | +~18–32 KB    | [ ]  |
