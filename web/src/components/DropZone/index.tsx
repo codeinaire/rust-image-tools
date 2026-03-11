@@ -9,7 +9,7 @@ import { DownloadButton } from './DownloadButton'
 import { ResultStats } from './ResultStats'
 
 interface Props {
-  onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop') => void
+  onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop' | 'clipboard_paste') => void
   fileInfo: FileInfo | null
   targetFormat: ValidFormat
   onFormatChange: (fmt: ValidFormat) => void
@@ -140,13 +140,15 @@ export function DropZone({
 
   const isReading = status === 'reading'
 
+  const showIdlePrompt = !isDragOver && !isReading && !fileInfo
+
   const mainText = isDragOver
     ? '[ RELEASE TO UPLOAD ]'
     : isReading
       ? '[ DECODING... ]'
       : fileInfo
         ? `[ ${truncateMiddle(fileInfo.file.name)} ]`
-        : 'DRAG & DROP IMAGE — OR CLICK TO SELECT'
+        : null
 
   const { w, h } = dims
   const points = w > 0 ? `${CUT},0 ${w},0 ${w},${h - CUT} ${w - CUT},${h} 0,${h} 0,${CUT}` : ''
@@ -277,6 +279,10 @@ export function DropZone({
               />
             </div>
           </div>
+        ) : showIdlePrompt ? (
+          <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
+            {'DRAG & DROP \u2014 CLICK TO SELECT \u2014 PASTE'}
+          </p>
         ) : (
           <p style={{ color: 'var(--cp-yellow)', fontSize: '1.125rem', letterSpacing: '0.05em' }}>
             {mainText}

@@ -48,7 +48,7 @@ export function trackImageSelected(
   props: ImageDimensionProps & {
     source_format: string
     file_size_bytes: number
-    input_method: 'file_picker' | 'drag_drop'
+    input_method: 'file_picker' | 'drag_drop' | 'clipboard_paste'
   },
 ): void {
   capture('image_selected', props)
