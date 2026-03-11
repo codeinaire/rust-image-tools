@@ -516,7 +516,7 @@ Research is complete when:
 - [ ] Source hierarchy followed (Context7 → GitHub MCP → Official docs → WebSearch)
 - [ ] All findings have confidence levels
 - [ ] Test infrastructure assessed and gaps identified
-- [ ] Research document created at `research/YYYY-MM-DD-[descriptive-title].md`
+- [ ] Research document created at `research/<YYYYMMDD>-<HHMMSS>-<short-kebab-case-title>.md`
 
 **Quality indicators:**
 

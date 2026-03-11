@@ -3,7 +3,7 @@ Store a decision record in the `decisions/` folder.
 Instructions:
 
 1. Look at the recent conversation to identify the decision being made, the options considered, and the reasoning.
-2. Create a new markdown file at `decisions/<YYYYMMDD>-<short-kebab-case-title>.md` (using today's date) with this template:
+2. Create a new markdown file at `decisions/<YYYYMMDD>-<HH MMSS>-<short-kebab-case-title>.md` (using today's date) with this template:
 
 ```markdown
 # Decision: <Title>

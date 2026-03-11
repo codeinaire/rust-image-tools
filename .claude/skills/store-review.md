@@ -3,7 +3,7 @@ Store a code review record in the `pr-reviews/` folder.
 Instructions:
 
 1. Look at the recent conversation to identify the PR being reviewed — its number or URL, title, what it changes, and the findings from the review.
-2. Create a new markdown file at `pr-reviews/<YYYYMMDD>-<short-kebab-case-title>.md` (using today's date) with this template:
+2. Create a new markdown file at `pr-reviews/<YYYYMMDD>-<HHMMSS>-<short-kebab-case-title>.md` (using today's date) with this template:
 
 ```markdown
 # Code Review: <PR Title>

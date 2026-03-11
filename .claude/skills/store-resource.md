@@ -5,12 +5,13 @@ Resources are knowledge documents that explain concepts, patterns, or technologi
 Instructions:
 
 1. Look at the recent conversation to identify the topic or concept being explained.
-2. Create a new markdown file at `resources/<YYYYMMDD>-<short-kebab-case-title>.md` (using today's date) with this template:
+2. Create a new markdown file at `resources/<YYYYMMDD>-<HHMMSS>-<short-kebab-case-title>.md` (using today's date) with this template:
 
 ```markdown
 # <Title>
 
 <Clear explanation of the concept or topic. Include:
+
 - What it is
 - Why it matters for this project
 - How it works (with code examples if applicable)
