@@ -13,6 +13,7 @@ export interface ConvertImageRequest {
   id: number
   data: Uint8Array
   targetFormat: ValidFormat
+  quality?: number
 }
 
 export interface GetDimensionsRequest {

@@ -16,6 +16,13 @@ export type InputMethod = 'file_picker' | 'drag_drop' | 'clipboard_paste'
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
 
+/** Formats that support a quality parameter (1-100). */
+export const FORMATS_WITH_QUALITY: ReadonlySet<ValidFormat> = new Set([
+  ValidFormat.Jpeg,
+  ValidFormat.WebP,
+  ValidFormat.Png,
+])
+
 const MIME_TYPES: Record<string, string> = {
   png: 'image/png',
   jpeg: 'image/jpeg',
@@ -53,6 +60,20 @@ function estimateConversionMs(
   const key = `${sourceFormat}->${targetFormat}`
   const rate = TIMING_RATES[key] ?? TIMING_FALLBACK
   return rate.base + megapixels * rate.perMp
+}
+
+/**
+ * Returns the quality value to pass to the converter for a given format.
+ * Returns undefined for formats that do not support quality control.
+ */
+export function getQualityForFormat(
+  targetFormat: ValidFormat,
+  quality: number,
+): number | undefined {
+  if (FORMATS_WITH_QUALITY.has(targetFormat)) {
+    return quality
+  }
+  return undefined
 }
 
 export function formatFileSize(bytes: number): string {
@@ -102,10 +123,14 @@ export function useConverter(): {
   converter: ImageConverter
   handleFile: (file: File, inputMethod: InputMethod) => Promise<void>
   handleConvert: (targetFormat: ValidFormat) => Promise<void>
+  quality: number
+  setQuality: (quality: number) => void
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
   const progressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const [quality, setQuality] = useState<number>(80)
 
   const [state, setState] = useState<ConverterState>({
     status: 'idle',
@@ -254,17 +279,24 @@ export function useConverter(): {
       showProgress: true,
     }))
 
+    const qualityForFormat = getQualityForFormat(targetFormat, quality)
+
     trackConversionStarted({
       source_format: fileInfo.sourceFormat,
       target_format: targetFormat,
       file_size_bytes: fileInfo.file.size,
       megapixels: fileInfo.megapixels,
+      ...(qualityForFormat !== undefined ? { quality: qualityForFormat } : {}),
     })
 
     const startTime = performance.now()
 
     try {
-      const resultBytes = await converter.convertImage(fileInfo.bytes, targetFormat)
+      const resultBytes = await converter.convertImage(
+        fileInfo.bytes,
+        targetFormat,
+        qualityForFormat,
+      )
       const elapsedMs = Math.round(performance.now() - startTime)
 
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
@@ -288,6 +320,7 @@ export function useConverter(): {
         megapixels: fileInfo.megapixels,
         conversion_ms: elapsedMs,
         pipeline_total_ms: elapsedMs,
+        ...(qualityForFormat !== undefined ? { quality: qualityForFormat } : {}),
       })
 
       setState((s) => ({
@@ -338,5 +371,5 @@ export function useConverter(): {
     }
   }
 
-  return { state, converter, handleFile, handleConvert }
+  return { state, converter, handleFile, handleConvert, quality, setQuality }
 }

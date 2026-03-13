@@ -33,7 +33,7 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
       handleDetectFormat(request.id, request.data)
       break
     case MessageType.ConvertImage:
-      void handleConvertImage(request.id, request.data, request.targetFormat)
+      void handleConvertImage(request.id, request.data, request.targetFormat, request.quality)
       break
     case MessageType.GetDimensions:
       handleGetDimensions(request.id, request.data)
@@ -75,7 +75,7 @@ function parseDimensions(value: unknown): { width: number; height: number } {
   throw new Error('Unexpected shape returned from get_dimensions')
 }
 
-async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
+async function encodeWebpViaCanvas(data: Uint8Array, quality: number): Promise<Uint8Array> {
   if (!('OffscreenCanvas' in globalThis)) {
     throw new Error('WebP output requires OffscreenCanvas, which is not supported in this browser.')
   }
@@ -89,7 +89,7 @@ async function encodeWebpViaCanvas(data: Uint8Array): Promise<Uint8Array> {
   const clampedArray = new Uint8ClampedArray(rgba.buffer as ArrayBuffer)
   const imageData = new ImageData(clampedArray, dims.width, dims.height)
   ctx.putImageData(imageData, 0, 0)
-  const blob = await canvas.convertToBlob({ type: 'image/webp', quality: 0.85 })
+  const blob = await canvas.convertToBlob({ type: 'image/webp', quality })
   const arrayBuffer = await blob.arrayBuffer()
   return new Uint8Array(arrayBuffer)
 }
@@ -98,14 +98,16 @@ async function handleConvertImage(
   id: number,
   data: Uint8Array,
   targetFormat: ValidFormat,
+  quality?: number,
 ): Promise<void> {
   try {
     const start = performance.now()
     let result: Uint8Array
     if (targetFormat === ValidFormat.WebP) {
-      result = await encodeWebpViaCanvas(data)
+      const canvasQuality = quality !== undefined ? quality / 100 : 0.85
+      result = await encodeWebpViaCanvas(data, canvasQuality)
     } else {
-      result = convert_image(data, targetFormat)
+      result = convert_image(data, targetFormat, quality)
     }
     const conversionMs = Math.round(performance.now() - start)
     const response: WorkerResponse = {
