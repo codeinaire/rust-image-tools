@@ -55,7 +55,7 @@ export function trackImageSelected(
 }
 
 export function trackConversionStarted(
-  props: FormatPairProps & { file_size_bytes: number; megapixels: number },
+  props: FormatPairProps & { file_size_bytes: number; megapixels: number; quality?: number },
 ): void {
   capture('conversion_started', props)
 }
@@ -68,6 +68,7 @@ export function trackConversionCompleted(
       size_change_pct: number
       conversion_ms: number
       pipeline_total_ms: number
+      quality?: number
     },
 ): void {
   capture('conversion_completed', props)

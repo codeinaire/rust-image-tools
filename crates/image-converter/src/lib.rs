@@ -22,7 +22,8 @@ pub fn detect_format(input: &[u8]) -> Result<String, JsError> {
 
 /// Convert an image from one format to another.
 ///
-/// Takes raw image bytes and a target format name (e.g. `"png"`, `"jpeg"`, `"gif"`, `"bmp"`).
+/// Takes raw image bytes, a target format name (e.g. `"png"`, `"jpeg"`, `"gif"`, `"bmp"`),
+/// and an optional quality value (1-100) for formats that support it.
 /// Returns the re-encoded image as a byte vector.
 ///
 /// # Errors
@@ -30,15 +31,28 @@ pub fn detect_format(input: &[u8]) -> Result<String, JsError> {
 /// Returns a `JsError` if:
 /// - The target format name is not recognized
 /// - The target format is not supported for encoding (e.g. `"webp"`)
+/// - The quality value is outside the 1-100 range
 /// - The input image cannot be decoded
 /// - Encoding to the target format fails
 #[wasm_bindgen]
-pub fn convert_image(input: &[u8], target_format: &str) -> Result<Vec<u8>, JsError> {
+pub fn convert_image(
+    input: &[u8],
+    target_format: &str,
+    quality: Option<u8>,
+) -> Result<Vec<u8>, JsError> {
+    // Validate at the WASM boundary for a clear JS-friendly error message.
+    // convert() also validates internally for non-WASM callers (defense in depth).
+    if let Some(q) = quality {
+        if q == 0 || q > 100 {
+            return Err(JsError::new("Quality must be between 1 and 100"));
+        }
+    }
+
     let target = ImageFormat::from_name(target_format)
         .map_err(|e| JsError::new(&format!("Invalid target format: {e}")))?;
 
-    let result =
-        convert::convert(input.to_vec(), target).map_err(|e| JsError::new(&e.to_string()))?;
+    let result = convert::convert(input.to_vec(), target, quality)
+        .map_err(|e| JsError::new(&e.to_string()))?;
 
     Ok(result)
 }

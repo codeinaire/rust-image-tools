@@ -4,6 +4,7 @@ import type { FileInfo, ConversionResult, ConverterStatus } from '../../hooks/us
 import type { ValidFormat } from '../../types'
 import type { InputFormat } from '../../types'
 import { FormatSelector } from './FormatSelector'
+import { QualitySlider } from './QualitySlider'
 import { ConvertButton } from './ConvertButton'
 import { DownloadButton } from './DownloadButton'
 import { ResultStats } from './ResultStats'
@@ -20,6 +21,8 @@ interface Props {
   estimatedMs: number
   showProgress: boolean
   onDownloadClick: () => void
+  quality: number
+  onQualityChange: (quality: number) => void
   /** Source format for the page (set on conversion landing pages). */
   pageFromFormat?: InputFormat | undefined
   /** Target format for the page (set on conversion landing pages). */
@@ -48,6 +51,8 @@ export function DropZone({
   estimatedMs,
   showProgress,
   onDownloadClick,
+  quality,
+  onQualityChange,
   pageFromFormat,
   pageToFormat,
 }: Props): preact.JSX.Element {
@@ -363,6 +368,15 @@ export function DropZone({
       {/* Bottom controls */}
       {fileInfo && (
         <div>
+          {/* Quality slider — visible when controls are shown */}
+          {controlsVisible && (
+            <QualitySlider
+              quality={quality}
+              onQualityChange={onQualityChange}
+              targetFormat={targetFormat}
+            />
+          )}
+
           {/* Thin progress bar — above the dividing line */}
           <div
             style={{

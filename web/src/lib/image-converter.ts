@@ -93,8 +93,12 @@ export class ImageConverter {
   }
 
   /** Convert an image to the specified target format. Returns the converted bytes. */
-  async convertImage(data: Uint8Array, targetFormat: ValidFormat): Promise<Uint8Array> {
-    const { data: result } = await this.convertImageTimed(data, targetFormat)
+  async convertImage(
+    data: Uint8Array,
+    targetFormat: ValidFormat,
+    quality?: number,
+  ): Promise<Uint8Array> {
+    const { data: result } = await this.convertImageTimed(data, targetFormat, quality)
     return result
   }
 
@@ -102,6 +106,7 @@ export class ImageConverter {
   async convertImageTimed(
     data: Uint8Array,
     targetFormat: ValidFormat,
+    quality?: number,
   ): Promise<{ data: Uint8Array; conversionMs: number }> {
     await this.ready
     const id = this.nextRequestId++
@@ -110,6 +115,7 @@ export class ImageConverter {
       id,
       data,
       targetFormat,
+      ...(quality !== undefined ? { quality } : {}),
     })
     if (response.type === MessageType.ConvertImage) {
       return { data: response.data, conversionMs: response.conversionMs }

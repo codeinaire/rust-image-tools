@@ -11,6 +11,10 @@ Use `npm run bundle-size:build` to clean, rebuild, and then measure.
 
 | Date       | Branch       | Asset     | Raw          | Gzip         | Top Contributor #1                                   | Top Contributor #2                                  | Top Contributor #3                                |
 |------------|--------------|-----------|--------------|--------------|------------------------------------------------------|-----------------------------------------------------|---------------------------------------------------|
+| 2026-03-14 | Qualiy Slider Support | WASM      | 1.04 MB | 347.1 KB | Fn code (3769 fns): 1.04 MB (73.9%) | Custom: __wasm_bindgen_unstable: 164.2 KB (11.4%) | Static data (2 segs): 136.5 KB (9.5%) |
+| 2026-03-14 | Qualiy Slider Support | JS        | 2.83 MB   | 736.3 KB   | _astro/heic-to.DIRPI3VF.js: 657.9 KB (89.3%)   | _astro/ImageConverter.Cma1vCQX.js: 65.9 KB (9.0%)   | _astro/preload-helper.C3igGt72.js: 4.9 KB (0.7%)   |
+| 2026-03-14 | Qualiy Slider Support | CSS       | 11.2 KB  | 3.3 KB  | _astro/_from_-to-_to_.wmaDk4Vx.css: 3.3 KB (100.0%)  | —  | —  |
+| 2026-03-14 | Qualiy Slider Support | **Total** | **3.88 MB** | **1.06 MB** | | | |
 | 2026-03-06 | heic-support | WASM      | 1.02 MB      | 343.8 KB     | Fn code (3720 fns): 1.02 MB (73.5%)                  | Custom: \_\_wasm_bindgen_unstable: 164.1 KB (11.6%) | Static data (2 segs): 136.3 KB (9.6%)             |
 | 2026-03-06 | heic-support | JS        | 2.82 MB      | 735.1 KB     | \_astro/heic-to.DIRPI3VF.js: 657.9 KB (89.5%)        | \_astro/ImageConverter.B0eTjFO\_.js: 64.9 KB (8.8%) | \_astro/preload-helper.C3igGt72.js: 4.9 KB (0.7%) |
 | 2026-03-06 | heic-support | CSS       | 17.8 KB      | 4.6 KB       | \_astro/index.C7w5X18Y.css: 4.6 KB (100.0%)          | —                                                   | —                                                 |

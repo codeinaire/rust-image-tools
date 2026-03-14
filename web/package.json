@@ -25,13 +25,13 @@
     "bundle-size:build": "node ../scripts/bundle-size.mjs --build"
   },
   "devDependencies": {
-    "@astrojs/preact": "^4.1.3",
+    "@astrojs/preact": "^5.0.0",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/vite": "^4",
     "@types/jsdom": "^28.0.0",
     "@types/node": "^24",
     "@vitest/ui": "^4.0.18",
-    "astro": "^5",
+    "astro": "^6.0.4",
     "eslint": "^10.0.2",
     "eslint-plugin-astro": "^1.6.0",
     "jsdom": "^28.1.0",
@@ -48,7 +48,7 @@
     "vite": "^6"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/sitemap": "^3.7.1",
     "heic-to": "^1.4.2",
     "posthog-js": "^1.347.2"
   }

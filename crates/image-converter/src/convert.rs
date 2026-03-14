@@ -1,5 +1,7 @@
 use std::io::Cursor;
 
+use image::codecs::jpeg::JpegEncoder;
+use image::codecs::png::{CompressionType, FilterType, PngEncoder};
 use image::ImageReader;
 
 use crate::formats::ImageFormat;
@@ -16,11 +18,21 @@ pub struct Dimensions {
 /// The input buffer is dropped after decoding to free memory before encoding,
 /// which is important for WASM's constrained linear memory.
 ///
+/// An optional `quality` parameter (1-100) controls output quality for formats
+/// that support it: JPEG uses it directly as encoder quality, PNG maps it to
+/// compression levels 1-9. Formats without quality support ignore this parameter.
+///
 /// Returns the encoded image as a byte vector.
-pub fn convert(input: Vec<u8>, target: ImageFormat) -> Result<Vec<u8>, ConvertError> {
-    let output_format = target
-        .to_image_format()
-        .map_err(|e| ConvertError::UnsupportedTarget(e.to_string()))?;
+pub fn convert(
+    input: Vec<u8>,
+    target: ImageFormat,
+    quality: Option<u8>,
+) -> Result<Vec<u8>, ConvertError> {
+    if let Some(q) = quality {
+        if q == 0 || q > 100 {
+            return Err(ConvertError::InvalidQuality(q));
+        }
+    }
 
     let decoded = image::load_from_memory(&input).map_err(ConvertError::Decode)?;
 
@@ -28,11 +40,55 @@ pub fn convert(input: Vec<u8>, target: ImageFormat) -> Result<Vec<u8>, ConvertEr
     drop(input);
 
     let mut output_buf = Vec::new();
-    decoded
-        .write_to(&mut Cursor::new(&mut output_buf), output_format)
-        .map_err(ConvertError::Encode)?;
+    match target {
+        ImageFormat::Jpeg => {
+            let encoder =
+                JpegEncoder::new_with_quality(Cursor::new(&mut output_buf), quality.unwrap_or(80));
+            decoded
+                .write_with_encoder(encoder)
+                .map_err(ConvertError::Encode)?;
+        }
+        ImageFormat::Png => {
+            let encoder = PngEncoder::new_with_quality(
+                Cursor::new(&mut output_buf),
+                map_png_quality(quality),
+                FilterType::Adaptive,
+            );
+            decoded
+                .write_with_encoder(encoder)
+                .map_err(ConvertError::Encode)?;
+        }
+        ImageFormat::Gif
+        | ImageFormat::Bmp
+        | ImageFormat::Tiff
+        | ImageFormat::Ico
+        | ImageFormat::Tga
+        | ImageFormat::Qoi
+        | ImageFormat::WebP => {
+            let output_format = target
+                .to_image_format()
+                .map_err(|e| ConvertError::UnsupportedTarget(e.to_string()))?;
+            decoded
+                .write_to(&mut Cursor::new(&mut output_buf), output_format)
+                .map_err(ConvertError::Encode)?;
+        }
+    }
 
     Ok(output_buf)
+}
+
+fn map_png_quality(quality: Option<u8>) -> CompressionType {
+    match quality {
+        None => CompressionType::Default,
+        Some(q) => {
+            // Map 1-100 linearly to compression levels 1-9.
+            // The result is always in 1..=9 since q is validated to 1..=100,
+            // so the truncation from u32 to u8 is safe.
+            #[allow(clippy::as_conversions)]
+            let level = (1 + u32::from(q - 1) * 8 / 99) as u8;
+            CompressionType::Level(level)
+        }
+    }
 }
 
 /// Reads image dimensions from the raw bytes without fully decoding the pixel data.
@@ -72,6 +128,8 @@ pub enum ConvertError {
     Encode(image::ImageError),
     /// The target format is not supported for encoding.
     UnsupportedTarget(String),
+    /// Quality value is outside the valid 1-100 range.
+    InvalidQuality(u8),
 }
 
 impl std::fmt::Display for ConvertError {
@@ -80,6 +138,9 @@ impl std::fmt::Display for ConvertError {
             Self::Decode(e) => write!(f, "Failed to decode image: {e}"),
             Self::Encode(e) => write!(f, "Failed to encode image: {e}"),
             Self::UnsupportedTarget(msg) => write!(f, "{msg}"),
+            Self::InvalidQuality(q) => {
+                write!(f, "Quality must be between 1 and 100, got {q}")
+            }
         }
     }
 }
@@ -178,7 +239,7 @@ mod tests {
 
     fn assert_conversion(input: &[u8], target: ImageFormat, width: u32, height: u32) {
         let start = Instant::now();
-        let result = convert(input.to_vec(), target).unwrap();
+        let result = convert(input.to_vec(), target, None).unwrap();
         let elapsed = start.elapsed();
         println!(
             "  → {target}: {elapsed:.2?} ({} bytes in, {} bytes out)",
@@ -309,7 +370,7 @@ mod tests {
     #[test]
     fn convert_to_webp_fails() {
         let png = make_png(2, 2);
-        let result = convert(png, ImageFormat::WebP);
+        let result = convert(png, ImageFormat::WebP, None);
         assert!(result.is_err());
     }
 
@@ -403,7 +464,7 @@ mod tests {
 
     #[test]
     fn convert_empty_input() {
-        let result = convert(vec![], ImageFormat::Png);
+        let result = convert(vec![], ImageFormat::Png, None);
         assert!(result.is_err());
     }
 
@@ -411,7 +472,7 @@ mod tests {
     fn convert_truncated_file() {
         let png = make_png(100, 100);
         let truncated = png[..100].to_vec();
-        let result = convert(truncated, ImageFormat::Png);
+        let result = convert(truncated, ImageFormat::Png, None);
         assert!(result.is_err());
     }
 
@@ -420,7 +481,7 @@ mod tests {
         let random: Vec<u8> = (0..1024u16)
             .map(|i| (i.wrapping_mul(137).wrapping_add(43) % 256) as u8)
             .collect();
-        let result = convert(random, ImageFormat::Png);
+        let result = convert(random, ImageFormat::Png, None);
         assert!(result.is_err());
     }
 
@@ -429,7 +490,7 @@ mod tests {
     #[test]
     fn fidelity_png_round_trip() {
         let (original, png_data) = make_patterned_png(50, 50);
-        let result = convert(png_data, ImageFormat::Png).unwrap();
+        let result = convert(png_data, ImageFormat::Png, None).unwrap();
         let decoded = image::load_from_memory(&result).unwrap().into_rgba8();
         assert_eq!(original.dimensions(), decoded.dimensions());
         assert_eq!(
@@ -448,7 +509,7 @@ mod tests {
             .write_to(&mut Cursor::new(&mut bmp_data), image::ImageFormat::Bmp)
             .unwrap();
 
-        let result = convert(bmp_data, ImageFormat::Png).unwrap();
+        let result = convert(bmp_data, ImageFormat::Png, None).unwrap();
         let decoded = image::load_from_memory(&result).unwrap().into_rgb8();
         assert_eq!(original_rgb.dimensions(), decoded.dimensions());
         assert_eq!(
@@ -461,7 +522,7 @@ mod tests {
     #[test]
     fn fidelity_jpeg_to_png_dimensions() {
         let jpeg = make_jpeg(200, 150);
-        let result = convert(jpeg, ImageFormat::Png).unwrap();
+        let result = convert(jpeg, ImageFormat::Png, None).unwrap();
         let dims = dimensions(&result).unwrap();
         assert_eq!(dims.width, 200);
         assert_eq!(dims.height, 150);
@@ -472,7 +533,7 @@ mod tests {
         let alpha_png = make_alpha_png(50, 50);
         let original = image::load_from_memory(&alpha_png).unwrap().into_rgba8();
 
-        let result = convert(alpha_png, ImageFormat::Png).unwrap();
+        let result = convert(alpha_png, ImageFormat::Png, None).unwrap();
         let decoded = image::load_from_memory(&result).unwrap().into_rgba8();
         assert_eq!(original.dimensions(), decoded.dimensions());
         assert_eq!(
@@ -487,7 +548,7 @@ mod tests {
         let alpha_png = make_alpha_png(10, 10);
         let original = image::load_from_memory(&alpha_png).unwrap().into_rgba8();
 
-        let result = convert(alpha_png, ImageFormat::Gif).unwrap();
+        let result = convert(alpha_png, ImageFormat::Gif, None).unwrap();
         let decoded = image::load_from_memory(&result).unwrap().into_rgba8();
         assert_eq!(original.dimensions(), decoded.dimensions());
 
@@ -693,5 +754,117 @@ mod tests {
         let truncated = &png[..10.min(png.len())];
         let result = dimensions(truncated);
         assert!(result.is_err());
+    }
+
+    // ===== Quality Tests =====
+
+    #[test]
+    fn jpeg_quality_boundaries() {
+        let (_, png_data) = make_patterned_png(100, 100);
+
+        let q1 = convert(png_data.clone(), ImageFormat::Jpeg, Some(1)).unwrap();
+        let q50 = convert(png_data.clone(), ImageFormat::Jpeg, Some(50)).unwrap();
+        let q80 = convert(png_data.clone(), ImageFormat::Jpeg, Some(80)).unwrap();
+        let q100 = convert(png_data, ImageFormat::Jpeg, Some(100)).unwrap();
+
+        // All should be valid JPEG images
+        image::load_from_memory(&q1).expect("Quality 1 should be decodable");
+        image::load_from_memory(&q50).expect("Quality 50 should be decodable");
+        image::load_from_memory(&q80).expect("Quality 80 should be decodable");
+        image::load_from_memory(&q100).expect("Quality 100 should be decodable");
+
+        // Lower quality should produce smaller output
+        assert!(
+            q1.len() < q100.len(),
+            "Quality 1 ({} bytes) should be smaller than quality 100 ({} bytes)",
+            q1.len(),
+            q100.len()
+        );
+    }
+
+    #[test]
+    fn jpeg_default_quality_matches_80() {
+        let (_, png_data) = make_patterned_png(50, 50);
+
+        let default_q = convert(png_data.clone(), ImageFormat::Jpeg, None).unwrap();
+        let q80 = convert(png_data, ImageFormat::Jpeg, Some(80)).unwrap();
+
+        assert_eq!(
+            default_q, q80,
+            "Default quality (None) should produce identical output to quality 80"
+        );
+    }
+
+    #[test]
+    fn png_quality_mapping() {
+        let (_, png_data) = make_patterned_png(100, 100);
+
+        let q1 = convert(png_data.clone(), ImageFormat::Png, Some(1)).unwrap();
+        let q100 = convert(png_data, ImageFormat::Png, Some(100)).unwrap();
+
+        // Both should be valid PNG images
+        image::load_from_memory(&q1).expect("PNG quality 1 should be decodable");
+        image::load_from_memory(&q100).expect("PNG quality 100 should be decodable");
+
+        // Higher quality % = more compression = smaller file for PNG
+        assert!(
+            q100.len() <= q1.len(),
+            "PNG quality 100 ({} bytes) should be smaller or equal to quality 1 ({} bytes)",
+            q100.len(),
+            q1.len()
+        );
+    }
+
+    #[test]
+    fn png_default_compression() {
+        let (_, png_data) = make_patterned_png(50, 50);
+        let result = convert(png_data, ImageFormat::Png, None).unwrap();
+        image::load_from_memory(&result).expect("PNG with default compression should be decodable");
+    }
+
+    #[test]
+    fn quality_ignored_for_other_formats() {
+        let png = make_png(10, 10);
+        let with_quality = convert(png.clone(), ImageFormat::Bmp, Some(50)).unwrap();
+        let without_quality = convert(png, ImageFormat::Bmp, None).unwrap();
+
+        assert_eq!(
+            with_quality, without_quality,
+            "Quality should be ignored for BMP"
+        );
+    }
+
+    #[test]
+    fn quality_zero_returns_error() {
+        let png = make_png(2, 2);
+        let result = convert(png, ImageFormat::Jpeg, Some(0));
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn quality_101_returns_error() {
+        let png = make_png(2, 2);
+        let result = convert(png, ImageFormat::Jpeg, Some(101));
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn map_png_quality_boundaries() {
+        // Quality 1 maps to compression level 1
+        assert_eq!(map_png_quality(Some(1)), CompressionType::Level(1));
+        // Quality 100 maps to compression level 9
+        assert_eq!(map_png_quality(Some(100)), CompressionType::Level(9));
+        // Quality 50 maps to a level between 1 and 9
+        let mid = map_png_quality(Some(50));
+        if let CompressionType::Level(level) = mid {
+            assert!(
+                level > 1 && level < 9,
+                "Quality 50 should map to a level between 1 and 9, got {level}"
+            );
+        } else {
+            panic!("Quality 50 should produce CompressionType::Level, got {mid:?}");
+        }
+        // None maps to Default
+        assert_eq!(map_png_quality(None), CompressionType::Default);
     }
 }
