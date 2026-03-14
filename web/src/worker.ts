@@ -9,7 +9,13 @@ import init, {
 } from '../../crates/image-converter/pkg/image_converter.js'
 
 import { MessageType, ValidFormat } from './types'
-import type { WorkerRequest, WorkerResponse } from './types'
+import type { BenchmarkImagesRequest, WorkerRequest, WorkerResponse } from './types'
+
+/** Formats that support a quality parameter. Used for benchmark quality routing. */
+const QUALITY_FORMATS: ReadonlySet<string> = new Set(['jpeg', 'webp', 'png'])
+
+/** Generation counter for benchmark cancellation. */
+let benchmarkGeneration = 0
 
 async function initialize(): Promise<void> {
   const start = performance.now()
@@ -37,6 +43,9 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
       break
     case MessageType.GetDimensions:
       handleGetDimensions(request.id, request.data)
+      break
+    case MessageType.BenchmarkImages:
+      void handleBenchmarkImages(request)
       break
   }
 }
@@ -137,6 +146,71 @@ function handleGetDimensions(id: number, data: Uint8Array): void {
     postMessage(response)
   } catch (e) {
     postError(id, e)
+  }
+}
+
+async function handleBenchmarkImages(request: BenchmarkImagesRequest): Promise<void> {
+  benchmarkGeneration++
+  const myGeneration = benchmarkGeneration
+
+  for (const format of request.formats) {
+    if (myGeneration !== benchmarkGeneration) {
+      return
+    }
+
+    try {
+      const start = performance.now()
+      let result: Uint8Array
+      const quality = QUALITY_FORMATS.has(format) ? request.quality : undefined
+
+      if (format === ValidFormat.WebP) {
+        const canvasQuality = quality !== undefined ? quality / 100 : 0.85
+        result = await encodeWebpViaCanvas(request.data, canvasQuality)
+      } else {
+        result = convert_image(request.data, format, quality)
+      }
+
+      const conversionMs = Math.round(performance.now() - start)
+      const outputSize = result.byteLength
+
+      if (myGeneration !== benchmarkGeneration) {
+        return
+      }
+
+      const response: WorkerResponse = {
+        type: MessageType.BenchmarkResult,
+        id: request.id,
+        format,
+        success: true,
+        data: result,
+        outputSize,
+        conversionMs,
+      }
+      // Transfer the result buffer back to main thread (zero-copy, O(1))
+      postMessage(response, [result.buffer])
+    } catch (e) {
+      if (myGeneration !== benchmarkGeneration) {
+        return
+      }
+
+      const error = e instanceof Error ? e.message : String(e)
+      const response: WorkerResponse = {
+        type: MessageType.BenchmarkResult,
+        id: request.id,
+        format,
+        success: false,
+        error,
+      }
+      postMessage(response)
+    }
+  }
+
+  if (myGeneration === benchmarkGeneration) {
+    const response: WorkerResponse = {
+      type: MessageType.BenchmarkComplete,
+      id: request.id,
+    }
+    postMessage(response)
   }
 }
 

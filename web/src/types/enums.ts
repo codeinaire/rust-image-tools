@@ -18,5 +18,8 @@ export enum MessageType {
   DetectFormat = 'detect_format',
   ConvertImage = 'convert_image',
   GetDimensions = 'get_dimensions',
+  BenchmarkImages = 'benchmark_images',
+  BenchmarkResult = 'benchmark_result',
+  BenchmarkComplete = 'benchmark_complete',
   Error = 'error',
 }

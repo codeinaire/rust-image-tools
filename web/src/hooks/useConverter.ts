@@ -10,18 +10,14 @@ import {
 import type { ImageConverter } from '../lib/image-converter'
 import { ValidFormat } from '../types'
 import { normalizeHeic } from '../lib/heic'
+import { getQualityForFormat } from '../lib/quality'
+
+export { FORMATS_WITH_QUALITY, getQualityForFormat } from '../lib/quality'
 
 export type InputMethod = 'file_picker' | 'drag_drop' | 'clipboard_paste'
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
-
-/** Formats that support a quality parameter (1-100). */
-export const FORMATS_WITH_QUALITY: ReadonlySet<ValidFormat> = new Set([
-  ValidFormat.Jpeg,
-  ValidFormat.WebP,
-  ValidFormat.Png,
-])
 
 const MIME_TYPES: Record<string, string> = {
   png: 'image/png',
@@ -60,20 +56,6 @@ function estimateConversionMs(
   const key = `${sourceFormat}->${targetFormat}`
   const rate = TIMING_RATES[key] ?? TIMING_FALLBACK
   return rate.base + megapixels * rate.perMp
-}
-
-/**
- * Returns the quality value to pass to the converter for a given format.
- * Returns undefined for formats that do not support quality control.
- */
-export function getQualityForFormat(
-  targetFormat: ValidFormat,
-  quality: number,
-): number | undefined {
-  if (FORMATS_WITH_QUALITY.has(targetFormat)) {
-    return quality
-  }
-  return undefined
 }
 
 export function formatFileSize(bytes: number): string {
