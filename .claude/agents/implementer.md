@@ -173,8 +173,8 @@ If you notice an existing security issue while implementing an adjacent feature,
 
 When all plan steps are done:
 
-1. **Run full verification** — execute every command in the plan's `## Verification` section
-2. **Update the plan** — change `**Status:** Draft` to `**Status:** Complete` in the plan header
+1. **Run full verification** — execute every command in the plan's `## Verification` section. After each verification item passes, edit the plan to change its `- [ ]` to `- [x]`. If a verification item fails, fix the issue before checking it off.
+2. **Update the plan** — change `**Status:** Draft` to `**Status:** Complete` in the plan header. All verification checkboxes must be checked before marking complete.
 3. **Update memory** — add any new patterns, pitfalls, or architectural insights discovered to the relevant memory files. Do not duplicate existing entries.
 4. **Report to the user:**
    - Steps completed
