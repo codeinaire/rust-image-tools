@@ -58,7 +58,13 @@ pub fn convert(
                 .write_with_encoder(encoder)
                 .map_err(ConvertError::Encode)?;
         }
-        _ => {
+        ImageFormat::Gif
+        | ImageFormat::Bmp
+        | ImageFormat::Tiff
+        | ImageFormat::Ico
+        | ImageFormat::Tga
+        | ImageFormat::Qoi
+        | ImageFormat::WebP => {
             let output_format = target
                 .to_image_format()
                 .map_err(|e| ConvertError::UnsupportedTarget(e.to_string()))?;

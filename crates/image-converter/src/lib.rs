@@ -40,6 +40,8 @@ pub fn convert_image(
     target_format: &str,
     quality: Option<u8>,
 ) -> Result<Vec<u8>, JsError> {
+    // Validate at the WASM boundary for a clear JS-friendly error message.
+    // convert() also validates internally for non-WASM callers (defense in depth).
     if let Some(q) = quality {
         if q == 0 || q > 100 {
             return Err(JsError::new("Quality must be between 1 and 100"));

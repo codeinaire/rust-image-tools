@@ -200,7 +200,9 @@ input[type='range'].cyber-slider::-moz-range-thumb {
   border: 1px solid var(--cp-cyan);
   padding: 0.35rem 0.75rem;
   pointer-events: none;
-  transition: opacity 0.2s, visibility 0.2s;
+  transition:
+    opacity 0.2s,
+    visibility 0.2s;
   z-index: 10;
 }
 
