@@ -10,9 +10,7 @@ import init, {
 
 import { MessageType, ValidFormat } from './types'
 import type { BenchmarkImagesRequest, WorkerRequest, WorkerResponse } from './types'
-
-/** Formats that support a quality parameter. Used for benchmark quality routing. */
-const QUALITY_FORMATS: ReadonlySet<string> = new Set(['jpeg', 'webp', 'png'])
+import { getQualityForFormat } from './lib/quality'
 
 /** Generation counter for benchmark cancellation. */
 let benchmarkGeneration = 0
@@ -161,7 +159,7 @@ async function handleBenchmarkImages(request: BenchmarkImagesRequest): Promise<v
     try {
       const start = performance.now()
       let result: Uint8Array
-      const quality = QUALITY_FORMATS.has(format) ? request.quality : undefined
+      const quality = getQualityForFormat(format, request.quality)
 
       if (format === ValidFormat.WebP) {
         const canvasQuality = quality !== undefined ? quality / 100 : 0.85

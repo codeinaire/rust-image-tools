@@ -10,11 +10,11 @@ Add a "Compare all formats" button that converts the uploaded image to every sup
 
 ## Approach
 
-Extend the Worker protocol with three new message types: `BenchmarkImages` (request), `BenchmarkResult` (per-format result), and `BenchmarkComplete` (done signal). The Worker iterates formats sequentially, reusing the existing `convert_image()` / `encodeWebpViaCanvas()` paths, and posts only the output size back (not the full byte array). The `ImageConverter` class gets a callback-based `benchmarkFormats()` method. A new `BenchmarkTable` Preact component renders results incrementally with skeleton rows, highlights the smallest format, and provides "Convert to this" buttons. A `useBenchmark` hook manages benchmark state. The benchmark is opt-in (button click) and cancellable (loading a new file or starting a new benchmark aborts the previous one).
+Extend the Worker protocol with three new message types: `BenchmarkImages` (request), `BenchmarkResult` (per-format result), and `BenchmarkComplete` (done signal). The Worker iterates formats sequentially, reusing the existing `convert_image()` / `encodeWebpViaCanvas()` paths. A `withData` flag controls whether converted bytes are included in results: on desktop with files ≤5 MB, bytes are included for instant download; on desktop with files >5 MB, only sizes are sent and conversion happens on demand via a GO button; on mobile, the table is comparison-only (no action buttons). The `ImageConverter` class gets a callback-based `benchmarkFormats()` method. A new `BenchmarkTable` Preact component renders results incrementally with skeleton rows, highlights the smallest format, and provides DL/GO action buttons. A `useBenchmark` hook manages benchmark state with mobile detection. The benchmark is opt-in (button click) and cancellable (loading a new file or starting a new benchmark sends a cancel message to the Worker to stop its conversion loop).
 
 ## Critical
 
-- Worker must only send `outputSize` in `BenchmarkResult`, NOT the full output bytes -- avoids massive memory transfers.
+- Worker conditionally sends converted bytes based on `withData` flag -- ≤5 MB desktop gets instant downloads, >5 MB and mobile skip bytes to avoid memory issues.
 - Use a generation counter (`benchmarkGeneration`) in the Worker to handle cancellation: if a new `BenchmarkImages` arrives, increment the counter and stop the old loop.
 - Catch per-format conversion errors gracefully -- a failed format shows "Error" in its table row, not crash the whole benchmark.
 - The `benchmarkFormats()` method in `ImageConverter` must NOT use the existing `pendingRequests` Map (which expects one response per request). Use a dedicated listener pattern.
@@ -179,7 +179,7 @@ Extend the Worker protocol with three new message types: `BenchmarkImages` (requ
   ```
   Update `useConverter.ts` to import from `web/src/lib/quality.ts` instead of defining it locally.
 
-  Note: The worker cannot import from hooks. The worker will use its own inline check (`QUALITY_FORMATS` Set) since it runs in a separate context and cannot import from the main thread modules easily.
+  The worker imports `getQualityForFormat` from the shared `lib/quality.ts` module.
 
 ## Verification
 

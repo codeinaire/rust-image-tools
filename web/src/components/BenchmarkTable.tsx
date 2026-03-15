@@ -32,7 +32,7 @@ const ALL_FORMATS: ValidFormat[] = Object.values(ValidFormat)
 const MONO_FONT = "'Share Tech Mono', monospace"
 
 /** Formats a time value as a human-readable string. */
-function formatTime(ms: number): string {
+export function formatTime(ms: number): string {
   if (ms < 1000) {
     return `${ms} ms`
   }
@@ -40,7 +40,7 @@ function formatTime(ms: number): string {
 }
 
 /** Finds the entry with the smallest output size among successful results. */
-function findSmallestFormat(results: BenchmarkEntry[]): ValidFormat | null {
+export function findSmallestFormat(results: BenchmarkEntry[]): ValidFormat | null {
   let smallest: ValidFormat | null = null
   let smallestSize = Infinity
 

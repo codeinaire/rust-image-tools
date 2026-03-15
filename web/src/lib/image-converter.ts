@@ -198,6 +198,19 @@ export class ImageConverter {
     return () => {
       if (this.activeBenchmarkId === id) {
         this.clearBenchmarkCallbacks()
+        // Send a no-op benchmark request to bump the Worker's generation counter,
+        // stopping the in-progress loop so it doesn't waste CPU on cancelled work.
+        const cancelRequest: WorkerRequest = {
+          type: MessageType.BenchmarkImages,
+          id: this.nextRequestId++,
+          data: new Uint8Array(0),
+          formats: [],
+          quality: 0,
+          withData: false,
+        }
+        void this.ready.then(() => {
+          this.worker.postMessage(cancelRequest)
+        })
       }
     }
   }
