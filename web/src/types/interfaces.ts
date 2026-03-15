@@ -22,6 +22,15 @@ export interface GetDimensionsRequest {
   data: Uint8Array
 }
 
+export interface BenchmarkImagesRequest {
+  type: MessageType.BenchmarkImages
+  id: number
+  data: Uint8Array
+  formats: ValidFormat[]
+  quality: number
+  withData: boolean
+}
+
 // Response types (worker → main thread)
 
 export interface InitSuccessResponse {
@@ -63,6 +72,31 @@ export interface ErrorResponse {
   type: MessageType.Error
   id: number
   error: string
+}
+
+export interface BenchmarkResultSuccess {
+  type: MessageType.BenchmarkResult
+  id: number
+  format: ValidFormat
+  success: true
+  data?: Uint8Array
+  outputSize: number
+  conversionMs: number
+}
+
+export interface BenchmarkResultError {
+  type: MessageType.BenchmarkResult
+  id: number
+  format: ValidFormat
+  success: false
+  error: string
+}
+
+export type BenchmarkResultResponse = BenchmarkResultSuccess | BenchmarkResultError
+
+export interface BenchmarkCompleteResponse {
+  type: MessageType.BenchmarkComplete
+  id: number
 }
 
 export interface ImageDimensions {

@@ -2,15 +2,23 @@ import type {
   DetectFormatRequest,
   ConvertImageRequest,
   GetDimensionsRequest,
+  BenchmarkImagesRequest,
   InitSuccessResponse,
   InitErrorResponse,
   DetectFormatSuccessResponse,
   ConvertImageSuccessResponse,
   GetDimensionsSuccessResponse,
+  BenchmarkResultSuccess,
+  BenchmarkResultError,
+  BenchmarkCompleteResponse,
   ErrorResponse,
 } from './interfaces'
 
-export type WorkerRequest = DetectFormatRequest | ConvertImageRequest | GetDimensionsRequest
+export type WorkerRequest =
+  | DetectFormatRequest
+  | ConvertImageRequest
+  | GetDimensionsRequest
+  | BenchmarkImagesRequest
 
 export type WorkerResponse =
   | InitSuccessResponse
@@ -18,4 +26,7 @@ export type WorkerResponse =
   | DetectFormatSuccessResponse
   | ConvertImageSuccessResponse
   | GetDimensionsSuccessResponse
+  | BenchmarkResultSuccess
+  | BenchmarkResultError
+  | BenchmarkCompleteResponse
   | ErrorResponse

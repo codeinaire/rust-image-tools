@@ -1,5 +1,10 @@
 import { MessageType, type ValidFormat } from '../types'
-import type { WorkerRequest, WorkerResponse, ImageDimensions } from '../types'
+import type {
+  WorkerRequest,
+  WorkerResponse,
+  ImageDimensions,
+  BenchmarkResultResponse,
+} from '../types'
 
 interface PendingRequest {
   resolve: (value: WorkerResponse) => void
@@ -14,6 +19,9 @@ export class ImageConverter {
   private readonly resolveInit: (initMs: number) => void
   private readonly rejectInit: (error: Error) => void
   private nextRequestId = 1
+  private activeBenchmarkId: number | null = null
+  private benchmarkResultCallback: ((result: BenchmarkResultResponse) => void) | null = null
+  private benchmarkCompleteCallback: (() => void) | null = null
 
   constructor() {
     let resolveInit!: (initMs: number) => void
@@ -43,6 +51,17 @@ export class ImageConverter {
         console.error(`[image-converter] WASM init failed: ${response.error}`)
         this.rejectInit(new Error(response.error))
       }
+      return
+    }
+
+    if (response.type === MessageType.BenchmarkResult && this.activeBenchmarkId === response.id) {
+      this.benchmarkResultCallback?.(response)
+      return
+    }
+
+    if (response.type === MessageType.BenchmarkComplete && this.activeBenchmarkId === response.id) {
+      this.benchmarkCompleteCallback?.()
+      this.clearBenchmarkCallbacks()
       return
     }
 
@@ -132,5 +151,67 @@ export class ImageConverter {
       return { width: response.width, height: response.height }
     }
     throw new Error('Unexpected response type')
+  }
+
+  private clearBenchmarkCallbacks(): void {
+    this.activeBenchmarkId = null
+    this.benchmarkResultCallback = null
+    this.benchmarkCompleteCallback = null
+  }
+
+  /**
+   * Benchmark an image against multiple output formats.
+   * Results stream in one-by-one via the onResult callback.
+   * When withData is true, each result includes the converted bytes for instant download.
+   * Returns a cleanup function that cancels the benchmark.
+   */
+  benchmarkFormats(
+    data: Uint8Array,
+    formats: ValidFormat[],
+    quality: number,
+    withData: boolean,
+    onResult: (result: BenchmarkResultResponse) => void,
+    onComplete: () => void,
+  ): () => void {
+    this.clearBenchmarkCallbacks()
+
+    const id = this.nextRequestId++
+    this.activeBenchmarkId = id
+    this.benchmarkResultCallback = onResult
+    this.benchmarkCompleteCallback = onComplete
+
+    const request: WorkerRequest = {
+      type: MessageType.BenchmarkImages,
+      id,
+      data,
+      formats,
+      quality,
+      withData,
+    }
+
+    void this.ready.then(() => {
+      if (this.activeBenchmarkId === id) {
+        this.worker.postMessage(request)
+      }
+    })
+
+    return () => {
+      if (this.activeBenchmarkId === id) {
+        this.clearBenchmarkCallbacks()
+        // Send a no-op benchmark request to bump the Worker's generation counter,
+        // stopping the in-progress loop so it doesn't waste CPU on cancelled work.
+        const cancelRequest: WorkerRequest = {
+          type: MessageType.BenchmarkImages,
+          id: this.nextRequestId++,
+          data: new Uint8Array(0),
+          formats: [],
+          quality: 0,
+          withData: false,
+        }
+        void this.ready.then(() => {
+          this.worker.postMessage(cancelRequest)
+        })
+      }
+    }
   }
 }
