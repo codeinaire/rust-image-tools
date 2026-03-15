@@ -28,6 +28,7 @@ export interface BenchmarkImagesRequest {
   data: Uint8Array
   formats: ValidFormat[]
   quality: number
+  withData: boolean
 }
 
 // Response types (worker → main thread)
@@ -78,7 +79,7 @@ export interface BenchmarkResultSuccess {
   id: number
   format: ValidFormat
   success: true
-  data: Uint8Array
+  data?: Uint8Array
   outputSize: number
   conversionMs: number
 }

@@ -20,7 +20,20 @@ interface Props {
 export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.JSX.Element {
   const { state, converter, handleFile, handleConvert, quality, setQuality } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
-  const { benchmarkState, startBenchmark } = useBenchmark(converter, state.fileInfo, quality)
+  const { benchmarkState, startBenchmark, isMobile } = useBenchmark(
+    converter,
+    state.fileInfo,
+    quality,
+  )
+
+  /** Sets the target format and triggers conversion (used by benchmark table rows). */
+  const onConvertFormat = useCallback(
+    (format: ValidFormat) => {
+      setTargetFormat(format)
+      void handleConvert(format)
+    },
+    [handleConvert],
+  )
 
   const onClipboardPaste = useCallback(
     (file: File) => {
@@ -51,6 +64,7 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
   }, [])
 
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
+  const convertingFormat = state.status === 'converting' ? targetFormat : null
 
   function onDownloadClick() {
     if (state.fileInfo && state.result) {
@@ -124,6 +138,10 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           fileInfo={state.fileInfo}
           benchmarkState={benchmarkState}
           onStartBenchmark={startBenchmark}
+          onConvertFormat={onConvertFormat}
+          conversionResult={state.result}
+          convertingFormat={convertingFormat}
+          isMobile={isMobile}
           disabled={state.status === 'converting' || state.status === 'reading'}
         />
       </section>

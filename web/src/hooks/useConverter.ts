@@ -111,6 +111,7 @@ export function useConverter(): {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
   const progressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const convertGenerationRef = useRef<number>(0)
 
   const [quality, setQuality] = useState<number>(80)
 
@@ -239,10 +240,13 @@ export function useConverter(): {
   }
 
   async function handleConvert(targetFormat: ValidFormat): Promise<void> {
-    const { fileInfo, status } = state
-    if (!fileInfo || status === 'converting') {
+    const { fileInfo } = state
+    if (!fileInfo) {
       return
     }
+
+    convertGenerationRef.current++
+    const myGeneration = convertGenerationRef.current
 
     revokeBlobUrl()
     clearProgressTimeout()
@@ -279,6 +283,10 @@ export function useConverter(): {
         targetFormat,
         qualityForFormat,
       )
+      if (myGeneration !== convertGenerationRef.current) {
+        return
+      }
+
       const elapsedMs = Math.round(performance.now() - startTime)
 
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
@@ -327,6 +335,9 @@ export function useConverter(): {
         setState((s) => ({ ...s, showProgress: false }))
       }, 700)
     } catch (e) {
+      if (myGeneration !== convertGenerationRef.current) {
+        return
+      }
       const message = e instanceof Error ? e.message : String(e)
       const errorType = message.includes('decode')
         ? 'decode_error'

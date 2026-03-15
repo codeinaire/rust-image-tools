@@ -20,6 +20,7 @@ export default defineConfig({
         // crates/image-converter/pkg/ which sits outside the web/ project root.
         allow: ['..'],
       },
+      allowedHosts: ['.ngrok-free.app'],
     },
   },
 })

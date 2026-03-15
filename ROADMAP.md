@@ -1457,13 +1457,13 @@ Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broke
 | --- | --------------------------------------------------- | ---------- | --------- | --------- | ------------- | ------------- | ------------- | ---- |
 | 1   | Dark Mode                                           | 1/5        | Medium    | Low       | 0             | +~4–7 KB      | +~4–7 KB      | [ ]  |
 | 2   | Paste from Clipboard                                | 1.5/5      | High      | Low       | 0             | +~0.5–1 KB    | +~0.5–1 KB    | [x]  |
-| 3   | JPEG Quality Slider                                 | 2/5        | High      | Low       | +~1–3 KB      | +~1–1.5 KB    | +~2–5 KB      | [ ]  |
+| 3   | JPEG Quality Slider                                 | 2/5        | High      | Low       | +~1–3 KB      | +~1–1.5 KB    | +~2–5 KB      | [x]  |
 | 4   | Tier 2 Formats (TIFF, ICO, TGA, QOI)                | 2/5        | Medium    | Low       | +~93–145 KB   | +~0.5–1 KB    | +~94–146 KB   | [x]  |
 | 5   | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5        | High      | Medium    | +~16–29 KB    | +~2–3.5 KB    | +~18–32 KB    | [ ]  |
 | 6   | Format Landing Pages (SEO)                          | 2.5/5      | High      | Medium    | 0             | +~0.3–0.5 KB  | +~0.3–0.5 KB  | [x]  |
 | 7   | SVG Rasterization                                   | 2.5/5      | Medium    | Medium    | +~540 KB–1 MB | +~0.5–1 KB    | +~541 KB–1 MB | [ ]  |
 | 8   | Image Metadata + EXIF Display                       | 2.5/5      | Medium    | Medium    | +~28–45 KB    | +~1.2–2 KB    | +~29–47 KB    | [ ]  |
-| 9   | Compression Benchmark                               | 2.5/5      | High      | Medium    | 0             | +~1.2–2.3 KB  | +~1.2–2.3 KB  | [ ]  |
+| 9   | Compression Benchmark                               | 2.5/5      | High      | Medium    | 0             | +~1.2–2.3 KB  | +~1.2–2.3 KB  | [x]  |
 | 10  | Parameterized Processing (Resize, Crop, Blur, etc.) | 3/5        | Very High | High      | +~32–53 KB    | +~3–5 KB      | +~35–58 KB    | [ ]  |
 | 11  | Side-by-Side Comparison                             | 3/5        | High      | Medium    | 0             | +~2–3.5 KB    | +~2–3.5 KB    | [ ]  |
 | 12  | Color Palette Extraction                            | 3/5        | Medium    | Medium    | +~0–28 KB     | +~1–2 KB      | +~1–30 KB     | [ ]  |

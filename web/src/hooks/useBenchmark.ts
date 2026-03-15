@@ -4,11 +4,14 @@ import type { BenchmarkResultResponse } from '../types'
 import type { ImageConverter } from '../lib/image-converter'
 import type { FileInfo } from './useConverter'
 
+/** File size threshold (5 MB) above which benchmark skips sending converted bytes. */
+const DATA_SIZE_THRESHOLD = 5 * 1024 * 1024
+
 /** A successful benchmark result for one format. */
 export interface BenchmarkFormatResult {
   format: ValidFormat
   success: true
-  data: Uint8Array
+  data?: Uint8Array
   outputSize: number
   conversionMs: number
   changePercent: number
@@ -41,9 +44,21 @@ const INITIAL_STATE: BenchmarkState = {
   completedFormats: 0,
 }
 
+/** Detects whether the device is primarily touch-based (mobile/tablet). */
+function isTouchDevice(): boolean {
+  if (typeof window === 'undefined') {
+    return false
+  }
+  return window.matchMedia('(hover: none) and (pointer: coarse)').matches
+}
+
 /**
  * Manages benchmark lifecycle: starting, receiving incremental results,
  * cancellation on file change, and state tracking.
+ *
+ * On desktop with files ≤5 MB, benchmark includes converted bytes for instant download.
+ * On desktop with files >5 MB, benchmark sends sizes only; conversion happens on demand.
+ * On mobile, the table is comparison-only (no action buttons).
  */
 export function useBenchmark(
   converter: ImageConverter,
@@ -53,10 +68,13 @@ export function useBenchmark(
   benchmarkState: BenchmarkState
   startBenchmark: () => void
   cancelBenchmark: () => void
+  isMobile: boolean
 } {
   const [state, setState] = useState<BenchmarkState>(INITIAL_STATE)
   const cleanupRef = useRef<(() => void) | null>(null)
   const inputSizeRef = useRef<number>(0)
+
+  const isMobile = isTouchDevice()
 
   /** Cancel any running benchmark and reset state. */
   const cancelBenchmark = useCallback(() => {
@@ -93,6 +111,8 @@ export function useBenchmark(
     const formats = ALL_FORMATS.filter((f) => f !== fileInfo.sourceFormat)
     inputSizeRef.current = fileInfo.file.size
 
+    const withData = !isMobile && fileInfo.file.size <= DATA_SIZE_THRESHOLD
+
     setState({
       isRunning: true,
       results: [],
@@ -109,10 +129,10 @@ export function useBenchmark(
         entry = {
           format: response.format,
           success: true,
-          data: response.data,
           outputSize: response.outputSize,
           conversionMs: response.conversionMs,
           changePercent,
+          ...(response.data !== undefined ? { data: response.data } : {}),
         }
       } else {
         entry = {
@@ -141,10 +161,11 @@ export function useBenchmark(
       fileInfo.bytes,
       formats,
       quality,
+      withData,
       onResult,
       onComplete,
     )
-  }, [converter, fileInfo, quality])
+  }, [converter, fileInfo, quality, isMobile])
 
-  return { benchmarkState: state, startBenchmark, cancelBenchmark }
+  return { benchmarkState: state, startBenchmark, cancelBenchmark, isMobile }
 }

@@ -162,12 +162,14 @@ export class ImageConverter {
   /**
    * Benchmark an image against multiple output formats.
    * Results stream in one-by-one via the onResult callback.
+   * When withData is true, each result includes the converted bytes for instant download.
    * Returns a cleanup function that cancels the benchmark.
    */
   benchmarkFormats(
     data: Uint8Array,
     formats: ValidFormat[],
     quality: number,
+    withData: boolean,
     onResult: (result: BenchmarkResultResponse) => void,
     onComplete: () => void,
   ): () => void {
@@ -184,6 +186,7 @@ export class ImageConverter {
       data,
       formats,
       quality,
+      withData,
     }
 
     void this.ready.then(() => {

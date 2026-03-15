@@ -182,12 +182,11 @@ async function handleBenchmarkImages(request: BenchmarkImagesRequest): Promise<v
         id: request.id,
         format,
         success: true,
-        data: result,
         outputSize,
         conversionMs,
+        ...(request.withData ? { data: result } : {}),
       }
-      // Transfer the result buffer back to main thread (zero-copy, O(1))
-      postMessage(response, [result.buffer])
+      postMessage(response, request.withData ? [result.buffer] : [])
     } catch (e) {
       if (myGeneration !== benchmarkGeneration) {
         return
