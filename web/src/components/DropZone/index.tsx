@@ -8,6 +8,8 @@ import { QualitySlider } from './QualitySlider'
 import { ConvertButton } from './ConvertButton'
 import { DownloadButton } from './DownloadButton'
 import { ResultStats } from './ResultStats'
+import { TransformToolbar } from '../TransformToolbar'
+import type { TransformName } from '../../hooks/useConverter'
 
 interface Props {
   onFile: (file: File, inputMethod: 'file_picker' | 'drag_drop' | 'clipboard_paste') => void
@@ -27,6 +29,13 @@ interface Props {
   pageFromFormat?: InputFormat | undefined
   /** Target format for the page (set on conversion landing pages). */
   pageToFormat?: InputFormat | undefined
+  transforms: TransformName[]
+  onRotateCW: () => void
+  onRotateCCW: () => void
+  onToggleFlipH: () => void
+  onToggleFlipV: () => void
+  onToggleGrayscale: () => void
+  onToggleInvert: () => void
 }
 
 const CUT = 20
@@ -55,6 +64,13 @@ export function DropZone({
   onQualityChange,
   pageFromFormat,
   pageToFormat,
+  transforms,
+  onRotateCW,
+  onRotateCCW,
+  onToggleFlipH,
+  onToggleFlipV,
+  onToggleGrayscale,
+  onToggleInvert,
 }: Props): preact.JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -374,6 +390,20 @@ export function DropZone({
               quality={quality}
               onQualityChange={onQualityChange}
               targetFormat={targetFormat}
+            />
+          )}
+
+          {/* Transform toolbar — visible when controls are shown */}
+          {controlsVisible && (
+            <TransformToolbar
+              transforms={transforms}
+              onRotateCW={onRotateCW}
+              onRotateCCW={onRotateCCW}
+              onToggleFlipH={onToggleFlipH}
+              onToggleFlipV={onToggleFlipV}
+              onToggleGrayscale={onToggleGrayscale}
+              onToggleInvert={onToggleInvert}
+              disabled={status === 'converting' || status === 'reading'}
             />
           )}
 

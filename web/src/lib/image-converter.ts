@@ -116,8 +116,9 @@ export class ImageConverter {
     data: Uint8Array,
     targetFormat: ValidFormat,
     quality?: number,
+    transforms?: string[],
   ): Promise<Uint8Array> {
-    const { data: result } = await this.convertImageTimed(data, targetFormat, quality)
+    const { data: result } = await this.convertImageTimed(data, targetFormat, quality, transforms)
     return result
   }
 
@@ -126,15 +127,18 @@ export class ImageConverter {
     data: Uint8Array,
     targetFormat: ValidFormat,
     quality?: number,
+    transforms?: string[],
   ): Promise<{ data: Uint8Array; conversionMs: number }> {
     await this.ready
     const id = this.nextRequestId++
+    const hasTransforms = transforms !== undefined && transforms.length > 0
     const response = await this.sendRequest({
       type: MessageType.ConvertImage,
       id,
       data,
       targetFormat,
       ...(quality !== undefined ? { quality } : {}),
+      ...(hasTransforms ? { transforms } : {}),
     })
     if (response.type === MessageType.ConvertImage) {
       return { data: response.data, conversionMs: response.conversionMs }

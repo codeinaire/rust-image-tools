@@ -3,6 +3,7 @@ declare function postMessage(message: unknown, transfer?: Transferable[]): void
 
 import init, {
   convert_image,
+  convert_image_with_transforms,
   decode_to_rgba,
   detect_format,
   get_dimensions,
@@ -37,7 +38,13 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
       handleDetectFormat(request.id, request.data)
       break
     case MessageType.ConvertImage:
-      void handleConvertImage(request.id, request.data, request.targetFormat, request.quality)
+      void handleConvertImage(
+        request.id,
+        request.data,
+        request.targetFormat,
+        request.quality,
+        request.transforms,
+      )
       break
     case MessageType.GetDimensions:
       handleGetDimensions(request.id, request.data)
@@ -106,13 +113,18 @@ async function handleConvertImage(
   data: Uint8Array,
   targetFormat: ValidFormat,
   quality?: number,
+  transforms?: string[],
 ): Promise<void> {
   try {
     const start = performance.now()
     let result: Uint8Array
+    const hasTransforms = transforms !== undefined && transforms.length > 0
     if (targetFormat === ValidFormat.WebP) {
       const canvasQuality = quality !== undefined ? quality / 100 : 0.85
       result = await encodeWebpViaCanvas(data, canvasQuality)
+    } else if (hasTransforms) {
+      const transformsCsv = transforms.join(',')
+      result = convert_image_with_transforms(data, targetFormat, quality, transformsCsv)
     } else {
       result = convert_image(data, targetFormat, quality)
     }

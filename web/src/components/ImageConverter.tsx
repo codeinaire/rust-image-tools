@@ -18,7 +18,18 @@ interface Props {
 
 /** Top-level image converter widget with drop zone, format selection, and download. */
 export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.JSX.Element {
-  const { state, converter, handleFile, handleConvert, quality, setQuality } = useConverter()
+  const {
+    state,
+    converter,
+    handleFile,
+    handleConvert,
+    quality,
+    setQuality,
+    transforms,
+    rotateCW,
+    rotateCCW,
+    toggleTransform,
+  } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
   const { benchmarkState, startBenchmark, isMobile } = useBenchmark(
     converter,
@@ -132,6 +143,25 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           onQualityChange={setQuality}
           pageFromFormat={initialFrom}
           pageToFormat={initialTo}
+          transforms={transforms}
+          onRotateCW={() => {
+            rotateCW(targetFormat)
+          }}
+          onRotateCCW={() => {
+            rotateCCW(targetFormat)
+          }}
+          onToggleFlipH={() => {
+            toggleTransform(targetFormat, 'flip_horizontal')
+          }}
+          onToggleFlipV={() => {
+            toggleTransform(targetFormat, 'flip_vertical')
+          }}
+          onToggleGrayscale={() => {
+            toggleTransform(targetFormat, 'grayscale')
+          }}
+          onToggleInvert={() => {
+            toggleTransform(targetFormat, 'invert')
+          }}
         />
 
         <BenchmarkTable
