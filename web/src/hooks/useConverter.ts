@@ -182,9 +182,16 @@ export function useConverter(): {
   const progressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const convertGenerationRef = useRef<number>(0)
   const transformDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const transformsRef = useRef<TransformName[]>([])
 
   const [quality, setQuality] = useState<number>(80)
-  const [transforms, setTransforms] = useState<TransformName[]>([])
+  const [transforms, setTransformsState] = useState<TransformName[]>([])
+
+  /** Updates transforms state and keeps the ref in sync for use in closures. */
+  function setTransforms(newTransforms: TransformName[]): void {
+    transformsRef.current = newTransforms
+    setTransformsState(newTransforms)
+  }
 
   const [state, setState] = useState<ConverterState>({
     status: 'idle',
@@ -350,14 +357,15 @@ export function useConverter(): {
 
     const qualityForFormat = getQualityForFormat(targetFormat, quality)
 
-    const hasTransforms = transforms.length > 0
+    const currentTransforms = transformsRef.current
+    const hasTransforms = currentTransforms.length > 0
     trackConversionStarted({
       source_format: fileInfo.sourceFormat,
       target_format: targetFormat,
       file_size_bytes: fileInfo.file.size,
       megapixels: fileInfo.megapixels,
       ...(qualityForFormat !== undefined ? { quality: qualityForFormat } : {}),
-      ...(hasTransforms ? { transforms } : {}),
+      ...(hasTransforms ? { transforms: currentTransforms } : {}),
     })
 
     const startTime = performance.now()
@@ -367,7 +375,7 @@ export function useConverter(): {
         fileInfo.bytes,
         targetFormat,
         qualityForFormat,
-        hasTransforms ? transforms : undefined,
+        hasTransforms ? currentTransforms : undefined,
       )
       if (myGeneration !== convertGenerationRef.current) {
         return
