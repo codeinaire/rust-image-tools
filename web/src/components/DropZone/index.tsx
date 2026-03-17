@@ -8,7 +8,6 @@ import { QualitySlider } from './QualitySlider'
 import { ConvertButton } from './ConvertButton'
 import { DownloadButton } from './DownloadButton'
 import { ResultStats } from './ResultStats'
-import { TransformToolbar } from '../TransformToolbar'
 import type { TransformName } from '../../hooks/useConverter'
 
 interface Props {
@@ -30,12 +29,9 @@ interface Props {
   /** Target format for the page (set on conversion landing pages). */
   pageToFormat?: InputFormat | undefined
   transforms: TransformName[]
-  onRotateCW: () => void
-  onRotateCCW: () => void
-  onToggleFlipH: () => void
-  onToggleFlipV: () => void
-  onToggleGrayscale: () => void
-  onToggleInvert: () => void
+  onStartBenchmark: () => void
+  onTransformOpen: () => void
+  benchmarkDisabled: boolean
 }
 
 const CUT = 20
@@ -65,12 +61,9 @@ export function DropZone({
   pageFromFormat,
   pageToFormat,
   transforms,
-  onRotateCW,
-  onRotateCCW,
-  onToggleFlipH,
-  onToggleFlipV,
-  onToggleGrayscale,
-  onToggleInvert,
+  onStartBenchmark,
+  onTransformOpen,
+  benchmarkDisabled,
 }: Props): preact.JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -393,18 +386,89 @@ export function DropZone({
             />
           )}
 
-          {/* Transform toolbar — visible when controls are shown */}
+          {/* Compare + Transform button row */}
           {controlsVisible && (
-            <TransformToolbar
-              transforms={transforms}
-              onRotateCW={onRotateCW}
-              onRotateCCW={onRotateCCW}
-              onToggleFlipH={onToggleFlipH}
-              onToggleFlipV={onToggleFlipV}
-              onToggleGrayscale={onToggleGrayscale}
-              onToggleInvert={onToggleInvert}
-              disabled={status === 'converting' || status === 'reading'}
-            />
+            <div style={{ display: 'flex', height: '24px' }}>
+              <button
+                type="button"
+                disabled={benchmarkDisabled}
+                onClick={onStartBenchmark}
+                style={{
+                  flex: 1,
+                  height: '100%',
+                  background: 'transparent',
+                  border: '1px solid var(--cp-border)',
+                  color: benchmarkDisabled ? 'var(--cp-muted)' : 'var(--cp-text)',
+                  fontFamily: "'Share Tech Mono', monospace",
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.1em',
+                  cursor: benchmarkDisabled ? 'not-allowed' : 'pointer',
+                  transition: 'color 0.15s, background 0.15s',
+                  padding: 0,
+                }}
+                onMouseEnter={(e) => {
+                  if (!benchmarkDisabled) {
+                    e.currentTarget.style.color = 'var(--cp-cyan)'
+                    e.currentTarget.style.background = 'var(--cp-cyan-bg-dim)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'transparent'
+                  e.currentTarget.style.color = benchmarkDisabled
+                    ? 'var(--cp-muted)'
+                    : 'var(--cp-text)'
+                }}
+              >
+                COMPARE ALL FORMATS
+              </button>
+              <button
+                type="button"
+                disabled={status === 'converting' || status === 'reading'}
+                onClick={onTransformOpen}
+                style={{
+                  flex: 1,
+                  height: '100%',
+                  background: transforms.length > 0 ? 'var(--cp-yellow-bg-dim)' : 'transparent',
+                  border: '1px solid var(--cp-border)',
+                  color:
+                    transforms.length > 0
+                      ? 'var(--cp-yellow)'
+                      : status === 'converting' || status === 'reading'
+                        ? 'var(--cp-muted)'
+                        : 'var(--cp-text)',
+                  fontFamily: "'Share Tech Mono', monospace",
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.1em',
+                  cursor:
+                    status === 'converting' || status === 'reading' ? 'not-allowed' : 'pointer',
+                  transition: 'color 0.15s, background 0.15s',
+                  padding: 0,
+                }}
+                onMouseEnter={(e) => {
+                  if (status !== 'converting' && status !== 'reading') {
+                    if (transforms.length > 0) {
+                      e.currentTarget.style.color = 'var(--cp-yellow)'
+                      e.currentTarget.style.background = 'var(--cp-yellow-bg-dim)'
+                    } else {
+                      e.currentTarget.style.color = 'var(--cp-cyan)'
+                      e.currentTarget.style.background = 'var(--cp-cyan-bg-dim)'
+                    }
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    transforms.length > 0 ? 'var(--cp-yellow-bg-dim)' : 'transparent'
+                  e.currentTarget.style.color =
+                    transforms.length > 0
+                      ? 'var(--cp-yellow)'
+                      : status === 'converting' || status === 'reading'
+                        ? 'var(--cp-muted)'
+                        : 'var(--cp-text)'
+                }}
+              >
+                TRANSFORM IMAGE{transforms.length > 0 ? ` [${transforms.length}]` : ''}
+              </button>
+            </div>
           )}
 
           {/* Thin progress bar — above the dividing line */}

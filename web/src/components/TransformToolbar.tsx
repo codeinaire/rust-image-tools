@@ -20,7 +20,7 @@ interface ToolbarButtonProps {
   children: preact.ComponentChildren
 }
 
-/** A single toolbar icon button with active/disabled states. */
+/** A single toolbar icon button with active/disabled states and cyberpunk tooltip. */
 function ToolbarButton({
   label,
   title,
@@ -33,30 +33,31 @@ function ToolbarButton({
   const glowFilter = active && !disabled ? 'drop-shadow(0 0 4px var(--cp-yellow-glow))' : 'none'
 
   return (
-    <button
-      type="button"
-      aria-label={label}
-      title={title}
-      disabled={disabled}
-      onClick={onClick}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '2rem',
-        height: '2rem',
-        background: 'transparent',
-        border: `1px solid ${active && !disabled ? 'var(--cp-yellow)' : 'var(--cp-border)'}`,
-        color,
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        filter: glowFilter,
-        transition: 'all 0.15s ease',
-        padding: 0,
-        flexShrink: 0,
-      }}
-    >
-      {children}
-    </button>
+    <div class="cyber-tooltip" style={{ position: 'relative', flexShrink: 0 }}>
+      <button
+        type="button"
+        aria-label={label}
+        disabled={disabled}
+        onClick={onClick}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '2rem',
+          height: '2rem',
+          background: 'transparent',
+          border: `1px solid ${active && !disabled ? 'var(--cp-yellow)' : 'var(--cp-border)'}`,
+          color,
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          filter: glowFilter,
+          transition: 'all 0.15s ease',
+          padding: 0,
+        }}
+      >
+        {children}
+      </button>
+      <span class="cyber-tooltip-text cyber-tooltip-text--center">{title}</span>
+    </div>
   )
 }
 
@@ -91,7 +92,7 @@ export function TransformToolbar({
     >
       <span
         style={{
-          color: 'var(--cp-muted)',
+          color: 'var(--cp-text)',
           fontFamily: "'Share Tech Mono', monospace",
           fontSize: '0.65rem',
           letterSpacing: '0.12em',
@@ -169,12 +170,12 @@ export function TransformToolbar({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <path d="M21 2v6h-6" />
-          <path d="M21 8A9 9 0 1 0 6.2 6.2" />
+          <path d="M15 4l3 3-3 3" />
+          <path d="M18 7h-5a5 5 0 0 0-5 5v0a5 5 0 0 0 5 5h1" />
         </svg>
       </ToolbarButton>
 
@@ -192,12 +193,12 @@ export function TransformToolbar({
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
         >
-          <path d="M3 2v6h6" />
-          <path d="M3 8a9 9 0 1 1 2.8-1.8" />
+          <path d="M9 4l-3 3 3 3" />
+          <path d="M6 7h5a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5h-1" />
         </svg>
       </ToolbarButton>
 

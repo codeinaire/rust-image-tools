@@ -114,6 +114,39 @@ pub fn decode_to_rgba(input: &[u8]) -> Result<Vec<u8>, JsError> {
         .map_err(|e| JsError::new(&format!("Failed to decode image to RGBA: {e}")))
 }
 
+/// Decode an image, apply transforms, and return raw RGBA8 pixel bytes.
+///
+/// Returns a `JsValue` object with `rgba` (Uint8Array), `width` (u32), and `height` (u32).
+/// Transforms may change dimensions (e.g. 90° rotation swaps width/height), so the
+/// post-transform dimensions are included in the result.
+///
+/// # Errors
+///
+/// Returns a `JsError` if the input cannot be decoded, the format is unrecognized,
+/// or a transform name is invalid.
+#[wasm_bindgen]
+pub fn decode_to_rgba_with_transforms(
+    input: &[u8],
+    transforms_csv: &str,
+) -> Result<JsValue, JsError> {
+    let transform_list = transforms::parse_transforms(transforms_csv)
+        .map_err(|e| JsError::new(&format!("Invalid transform: {e}")))?;
+
+    let (rgba, dims) = convert::decode_rgba_with_transforms(input, &transform_list)
+        .map_err(|e| JsError::new(&format!("Failed to decode image with transforms: {e}")))?;
+
+    let obj = js_sys::Object::new();
+    let rgba_array = js_sys::Uint8Array::from(rgba.as_slice());
+    js_sys::Reflect::set(&obj, &"rgba".into(), &rgba_array)
+        .map_err(|_| JsError::new("Failed to set rgba property"))?;
+    js_sys::Reflect::set(&obj, &"width".into(), &dims.width.into())
+        .map_err(|_| JsError::new("Failed to set width property"))?;
+    js_sys::Reflect::set(&obj, &"height".into(), &dims.height.into())
+        .map_err(|_| JsError::new("Failed to set height property"))?;
+
+    Ok(obj.into())
+}
+
 /// Read the dimensions of an image without fully decoding its pixel data.
 ///
 /// Returns a JavaScript object with `width` and `height` properties (both `u32`).

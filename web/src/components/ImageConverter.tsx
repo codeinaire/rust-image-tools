@@ -3,6 +3,7 @@ import { useConverter } from '../hooks/useConverter'
 import { useClipboardPaste } from '../hooks/useClipboardPaste'
 import { useBenchmark } from '../hooks/useBenchmark'
 import { DropZone } from './DropZone'
+import { TransformModal } from './TransformModal'
 import { BenchmarkTable } from './BenchmarkTable'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
 import { ValidFormat } from '../types'
@@ -29,8 +30,11 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
     rotateCW,
     rotateCCW,
     toggleTransform,
+    undoTransform,
+    canUndoTransform,
   } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
+  const [transformModalOpen, setTransformModalOpen] = useState(false)
   const { benchmarkState, startBenchmark, isMobile } = useBenchmark(
     converter,
     state.fileInfo,
@@ -76,6 +80,8 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
 
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
   const convertingFormat = state.status === 'converting' ? targetFormat : null
+  const benchmarkDisabled =
+    state.status === 'converting' || state.status === 'reading' || benchmarkState.isRunning
 
   function onDownloadClick() {
     if (state.fileInfo && state.result) {
@@ -144,6 +150,29 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           pageFromFormat={initialFrom}
           pageToFormat={initialTo}
           transforms={transforms}
+          onStartBenchmark={startBenchmark}
+          onTransformOpen={() => {
+            setTransformModalOpen(true)
+          }}
+          benchmarkDisabled={benchmarkDisabled}
+        />
+
+        <BenchmarkTable
+          fileInfo={state.fileInfo}
+          benchmarkState={benchmarkState}
+          onConvertFormat={onConvertFormat}
+          conversionResult={state.result}
+          convertingFormat={convertingFormat}
+          isMobile={isMobile}
+        />
+      </section>
+
+      {/* Transform modal */}
+      {transformModalOpen && state.fileInfo && (
+        <TransformModal
+          fileInfo={state.fileInfo}
+          result={state.result}
+          transforms={transforms}
           onRotateCW={() => {
             rotateCW(targetFormat)
           }}
@@ -162,19 +191,17 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           onToggleInvert={() => {
             toggleTransform(targetFormat, 'invert')
           }}
-        />
-
-        <BenchmarkTable
-          fileInfo={state.fileInfo}
-          benchmarkState={benchmarkState}
-          onStartBenchmark={startBenchmark}
-          onConvertFormat={onConvertFormat}
-          conversionResult={state.result}
-          convertingFormat={convertingFormat}
-          isMobile={isMobile}
           disabled={state.status === 'converting' || state.status === 'reading'}
+          onClose={() => {
+            setTransformModalOpen(false)
+          }}
+          onDownloadClick={onDownloadClick}
+          onUndo={() => {
+            undoTransform(targetFormat)
+          }}
+          canUndo={canUndoTransform}
         />
-      </section>
+      )}
     </div>
   )
 }

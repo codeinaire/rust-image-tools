@@ -176,6 +176,8 @@ export function useConverter(): {
   rotateCW: (targetFormat: ValidFormat) => void
   rotateCCW: (targetFormat: ValidFormat) => void
   toggleTransform: (targetFormat: ValidFormat, name: TransformName) => void
+  undoTransform: (targetFormat: ValidFormat) => void
+  canUndoTransform: boolean
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
@@ -183,6 +185,7 @@ export function useConverter(): {
   const convertGenerationRef = useRef<number>(0)
   const transformDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const transformsRef = useRef<TransformName[]>([])
+  const transformHistoryRef = useRef<TransformName[][]>([])
 
   const [quality, setQuality] = useState<number>(80)
   const [transforms, setTransformsState] = useState<TransformName[]>([])
@@ -191,6 +194,11 @@ export function useConverter(): {
   function setTransforms(newTransforms: TransformName[]): void {
     transformsRef.current = newTransforms
     setTransformsState(newTransforms)
+  }
+
+  /** Pushes the current transforms onto the history stack before a change. */
+  function pushTransformHistory(): void {
+    transformHistoryRef.current = [...transformHistoryRef.current, [...transformsRef.current]]
   }
 
   const [state, setState] = useState<ConverterState>({
@@ -242,6 +250,7 @@ export function useConverter(): {
     clearProgressTimeout()
     clearTransformDebounce()
     setTransforms([])
+    transformHistoryRef.current = []
 
     if (file.size > MAX_FILE_SIZE) {
       trackValidationRejected({
@@ -462,6 +471,7 @@ export function useConverter(): {
   const scheduleTransformConvert = useCallback(
     (targetFormat: ValidFormat, newTransforms: TransformName[]) => {
       clearTransformDebounce()
+      pushTransformHistory()
       setTransforms(newTransforms)
       // Only auto-convert if we have a file and a previous conversion result
       if (state.fileInfo && state.status !== 'reading') {
@@ -507,6 +517,29 @@ export function useConverter(): {
     [transforms, scheduleTransformConvert],
   )
 
+  /** Reverts to the previous transform state. */
+  const undoTransform = useCallback(
+    (targetFormat: ValidFormat) => {
+      const history = transformHistoryRef.current
+      if (history.length === 0) {
+        return
+      }
+      const previous = history[history.length - 1] as TransformName[]
+      transformHistoryRef.current = history.slice(0, -1)
+      clearTransformDebounce()
+      setTransforms(previous)
+      if (state.fileInfo && state.status !== 'reading') {
+        transformDebounceRef.current = setTimeout(() => {
+          transformDebounceRef.current = null
+          void handleConvert(targetFormat)
+        }, TRANSFORM_DEBOUNCE_MS)
+      }
+    },
+    [state.fileInfo, state.status, handleConvert],
+  )
+
+  const canUndoTransform = transformHistoryRef.current.length > 0
+
   return {
     state,
     converter,
@@ -518,5 +551,7 @@ export function useConverter(): {
     rotateCW,
     rotateCCW,
     toggleTransform,
+    undoTransform,
+    canUndoTransform,
   }
 }

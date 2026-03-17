@@ -127,6 +127,27 @@ pub fn decode_rgba(input: &[u8]) -> Result<Vec<u8>, ConvertError> {
         .into_raw())
 }
 
+/// Decodes the input image, applies transforms, and returns the transformed RGBA8 pixel data
+/// along with the post-transform dimensions.
+///
+/// This is needed for formats like WebP where encoding is handled outside Rust (via Canvas)
+/// but transforms still need to be applied on the Rust side.
+///
+/// # Errors
+///
+/// Returns a `ConvertError::Decode` if the input cannot be decoded or the format is unrecognized.
+pub fn decode_rgba_with_transforms(
+    input: &[u8],
+    transforms_list: &[Transform],
+) -> Result<(Vec<u8>, Dimensions), ConvertError> {
+    let decoded = image::load_from_memory(input).map_err(ConvertError::Decode)?;
+    let transformed = transforms::apply_transforms(decoded, transforms_list);
+    let width = transformed.width();
+    let height = transformed.height();
+    let rgba = transformed.into_rgba8().into_raw();
+    Ok((rgba, Dimensions { width, height }))
+}
+
 /// Errors that can occur during image conversion or dimension reading.
 #[derive(Debug)]
 pub enum ConvertError {

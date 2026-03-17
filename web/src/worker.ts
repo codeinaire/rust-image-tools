@@ -5,6 +5,7 @@ import init, {
   convert_image,
   convert_image_with_transforms,
   decode_to_rgba,
+  decode_to_rgba_with_transforms,
   detect_format,
   get_dimensions,
 } from '../../crates/image-converter/pkg/image_converter.js'
@@ -89,23 +90,49 @@ function parseDimensions(value: unknown): { width: number; height: number } {
   throw new Error('Unexpected shape returned from get_dimensions')
 }
 
-async function encodeWebpViaCanvas(data: Uint8Array, quality: number): Promise<Uint8Array> {
+/** Encodes raw RGBA pixels to WebP via OffscreenCanvas. */
+async function encodeRgbaToWebp(
+  rgba: Uint8Array,
+  width: number,
+  height: number,
+  quality: number,
+): Promise<Uint8Array> {
   if (!('OffscreenCanvas' in globalThis)) {
     throw new Error('WebP output requires OffscreenCanvas, which is not supported in this browser.')
   }
-  const dims = parseDimensions(get_dimensions(data))
-  const rgba = decode_to_rgba(data)
-  const canvas = new OffscreenCanvas(dims.width, dims.height)
+  const canvas = new OffscreenCanvas(width, height)
   const ctx = canvas.getContext('2d')
   if (!ctx) {
     throw new Error('Failed to get 2D context from OffscreenCanvas.')
   }
   const clampedArray = new Uint8ClampedArray(rgba.buffer as ArrayBuffer)
-  const imageData = new ImageData(clampedArray, dims.width, dims.height)
+  const imageData = new ImageData(clampedArray, width, height)
   ctx.putImageData(imageData, 0, 0)
   const blob = await canvas.convertToBlob({ type: 'image/webp', quality })
   const arrayBuffer = await blob.arrayBuffer()
   return new Uint8Array(arrayBuffer)
+}
+
+/** Decodes an image to RGBA and encodes to WebP via Canvas. */
+async function encodeWebpViaCanvas(data: Uint8Array, quality: number): Promise<Uint8Array> {
+  const dims = parseDimensions(get_dimensions(data))
+  const rgba = decode_to_rgba(data)
+  return encodeRgbaToWebp(rgba, dims.width, dims.height, quality)
+}
+
+/** Decodes an image, applies transforms in Rust, then encodes to WebP via Canvas. */
+async function encodeWebpWithTransforms(
+  data: Uint8Array,
+  quality: number,
+  transforms: string[],
+): Promise<Uint8Array> {
+  const transformsCsv = transforms.join(',')
+  const result = decode_to_rgba_with_transforms(data, transformsCsv) as {
+    rgba: Uint8Array
+    width: number
+    height: number
+  }
+  return encodeRgbaToWebp(result.rgba, result.width, result.height, quality)
 }
 
 async function handleConvertImage(
@@ -119,7 +146,10 @@ async function handleConvertImage(
     const start = performance.now()
     let result: Uint8Array
     const hasTransforms = transforms !== undefined && transforms.length > 0
-    if (targetFormat === ValidFormat.WebP) {
+    if (targetFormat === ValidFormat.WebP && hasTransforms) {
+      const canvasQuality = quality !== undefined ? quality / 100 : 0.85
+      result = await encodeWebpWithTransforms(data, canvasQuality, transforms)
+    } else if (targetFormat === ValidFormat.WebP) {
       const canvasQuality = quality !== undefined ? quality / 100 : 0.85
       result = await encodeWebpViaCanvas(data, canvasQuality)
     } else if (hasTransforms) {
