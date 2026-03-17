@@ -198,7 +198,9 @@ export function useConverter(): {
 
   /** Pushes the current transforms onto the history stack before a change. */
   function pushTransformHistory(): void {
-    transformHistoryRef.current = [...transformHistoryRef.current, [...transformsRef.current]]
+    const MAX_TRANSFORM_HISTORY = 50
+    const history = [...transformHistoryRef.current, [...transformsRef.current]]
+    transformHistoryRef.current = history.slice(-MAX_TRANSFORM_HISTORY)
   }
 
   const [state, setState] = useState<ConverterState>({
@@ -467,6 +469,10 @@ export function useConverter(): {
     }
   }
 
+  /** Stable ref for handleConvert so useCallback chains don't break memoization. */
+  const handleConvertRef = useRef(handleConvert)
+  handleConvertRef.current = handleConvert
+
   /** Schedules a debounced re-conversion when transforms change. */
   const scheduleTransformConvert = useCallback(
     (targetFormat: ValidFormat, newTransforms: TransformName[]) => {
@@ -477,11 +483,11 @@ export function useConverter(): {
       if (state.fileInfo && state.status !== 'reading') {
         transformDebounceRef.current = setTimeout(() => {
           transformDebounceRef.current = null
-          void handleConvert(targetFormat)
+          void handleConvertRef.current(targetFormat)
         }, TRANSFORM_DEBOUNCE_MS)
       }
     },
-    [state.fileInfo, state.status, handleConvert],
+    [state.fileInfo, state.status],
   )
 
   /** Adds one clockwise quarter-turn, normalizing the net rotation. */
@@ -531,11 +537,11 @@ export function useConverter(): {
       if (state.fileInfo && state.status !== 'reading') {
         transformDebounceRef.current = setTimeout(() => {
           transformDebounceRef.current = null
-          void handleConvert(targetFormat)
+          void handleConvertRef.current(targetFormat)
         }, TRANSFORM_DEBOUNCE_MS)
       }
     },
-    [state.fileInfo, state.status, handleConvert],
+    [state.fileInfo, state.status],
   )
 
   const canUndoTransform = transformHistoryRef.current.length > 0

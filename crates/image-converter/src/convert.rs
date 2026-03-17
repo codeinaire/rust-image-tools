@@ -5,7 +5,7 @@ use image::codecs::png::{CompressionType, FilterType, PngEncoder};
 use image::ImageReader;
 
 use crate::formats::ImageFormat;
-use crate::transforms::{self, Transform, TransformError};
+use crate::transforms::{self, Transform};
 
 /// Result of reading image dimensions.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize)]
@@ -159,8 +159,6 @@ pub enum ConvertError {
     UnsupportedTarget(String),
     /// Quality value is outside the valid 1-100 range.
     InvalidQuality(u8),
-    /// A transform could not be parsed or applied.
-    Transform(TransformError),
 }
 
 impl std::fmt::Display for ConvertError {
@@ -172,7 +170,6 @@ impl std::fmt::Display for ConvertError {
             Self::InvalidQuality(q) => {
                 write!(f, "Quality must be between 1 and 100, got {q}")
             }
-            Self::Transform(e) => write!(f, "Transform error: {e}"),
         }
     }
 }

@@ -29,6 +29,8 @@ interface SideButtonProps {
 }
 
 const MONO = "'Share Tech Mono', monospace"
+/** Height of the header row (label + close button + margin), used to align the tools sidebar. */
+const HEADER_ROW_HEIGHT = '40px'
 
 /**
  * Creates an object URL from a File, revoking the previous one on change.
@@ -179,7 +181,7 @@ export function TransformModal({
             display: 'flex',
             flexDirection: 'column',
             flexShrink: 0,
-            marginTop: '40px',
+            marginTop: HEADER_ROW_HEIGHT,
           }}
         >
           {/* TOOLS header — aligned with the header row */}
