@@ -62,7 +62,19 @@ Apply the checklist below, filtered through the project's actual conventions. Wo
 
 Use the output format at the end of this prompt. Only report findings where you are **>80% confident** it is a real problem.
 
-**If reviewing a PR**: After generating your report, use `mcp__github__create_pull_request_review` to submit the review directly on GitHub. Use `APPROVE`, `REQUEST_CHANGES`, or `COMMENT` based on your verdict.
+## Step 7: Post to GitHub (MANDATORY for PR reviews)
+
+**This step is NOT optional.** If you are reviewing a pull request, you MUST post the review to GitHub before finishing. Do not skip this step.
+
+1. Format the full review report as the `body` parameter (use markdown)
+2. Map your verdict to the `event` parameter:
+   - APPROVE → `APPROVE`
+   - WARNING → `COMMENT`
+   - BLOCK → `REQUEST_CHANGES`
+3. Call `mcp__github__create_pull_request_review` with the owner, repo, pull_number, body, and event
+4. If the call fails (e.g. permission error), report the failure explicitly — do not silently skip
+
+You are not done until the review is posted on GitHub or you have reported a posting failure.
 
 </process>
 
