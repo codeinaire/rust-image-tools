@@ -248,6 +248,8 @@ export function useConverter(): {
   }
 
   async function handleFile(file: File, inputMethod: InputMethod): Promise<void> {
+    // Invalidate any in-flight conversion so it cannot corrupt state after this new file loads
+    convertGenerationRef.current++
     revokeBlobUrl()
     clearProgressTimeout()
     clearTransformDebounce()
@@ -349,7 +351,6 @@ export function useConverter(): {
     convertGenerationRef.current++
     const myGeneration = convertGenerationRef.current
 
-    revokeBlobUrl()
     clearProgressTimeout()
 
     const estimatedMs = estimateConversionMs(
@@ -361,7 +362,6 @@ export function useConverter(): {
       ...s,
       status: 'converting',
       error: null,
-      result: null,
       estimatedMs,
       showProgress: true,
     }))
@@ -397,6 +397,7 @@ export function useConverter(): {
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
       const blob = new Blob([resultBytes.buffer as ArrayBuffer], { type: mimeType })
       const blobUrl = URL.createObjectURL(blob)
+      revokeBlobUrl()
       blobUrlRef.current = blobUrl
 
       const changePercent =
@@ -460,10 +461,12 @@ export function useConverter(): {
         error_message: message,
       })
 
+      revokeBlobUrl()
       setState((s) => ({
         ...s,
         status: 'error',
         error: `Conversion failed: ${message}`,
+        result: null,
         showProgress: false,
       }))
     }

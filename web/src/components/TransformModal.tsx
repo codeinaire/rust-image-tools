@@ -174,6 +174,9 @@ export function TransformModal({
           boxShadow: '0 0 30px var(--cp-cyan-glow), 0 0 60px var(--cp-cyan-glow-subtle)',
           padding: '1.25rem',
         }}
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
       >
         {/* Left: vertical transform buttons */}
         <div
