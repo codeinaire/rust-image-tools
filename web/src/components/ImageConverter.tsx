@@ -81,7 +81,10 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
   const convertingFormat = state.status === 'converting' ? targetFormat : null
   const benchmarkDisabled =
-    state.status === 'converting' || state.status === 'reading' || benchmarkState.isRunning
+    state.status === 'converting' ||
+    state.status === 'reading' ||
+    benchmarkState.isRunning ||
+    benchmarkState.results.length > 0
 
   function onDownloadClick() {
     if (state.fileInfo && state.result) {
