@@ -14,6 +14,7 @@ export interface ConvertImageRequest {
   data: Uint8Array
   targetFormat: ValidFormat
   quality?: number
+  transforms?: string[]
 }
 
 export interface GetDimensionsRequest {

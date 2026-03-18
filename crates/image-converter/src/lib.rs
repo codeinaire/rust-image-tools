@@ -1,5 +1,6 @@
 pub mod convert;
 pub mod formats;
+pub mod transforms;
 
 use wasm_bindgen::prelude::*;
 
@@ -51,7 +52,49 @@ pub fn convert_image(
     let target = ImageFormat::from_name(target_format)
         .map_err(|e| JsError::new(&format!("Invalid target format: {e}")))?;
 
-    let result = convert::convert(input.to_vec(), target, quality)
+    let result = convert::convert(input.to_vec(), target, quality, &[])
+        .map_err(|e| JsError::new(&e.to_string()))?;
+
+    Ok(result)
+}
+
+/// Convert an image with optional transforms applied before encoding.
+///
+/// Takes raw image bytes, a target format name, an optional quality value (1-100),
+/// and a comma-separated string of transform names to apply before encoding.
+///
+/// Supported transforms: `"flip_horizontal"`, `"flip_vertical"`, `"rotate_90"`,
+/// `"rotate_180"`, `"rotate_270"`, `"grayscale"`, `"invert"`.
+///
+/// # Errors
+///
+/// Returns a `JsError` if:
+/// - The target format name is not recognized
+/// - The target format is not supported for encoding (e.g. `"webp"`)
+/// - The quality value is outside the 1-100 range
+/// - A transform name is not recognized
+/// - The input image cannot be decoded
+/// - Encoding to the target format fails
+#[wasm_bindgen]
+pub fn convert_image_with_transforms(
+    input: &[u8],
+    target_format: &str,
+    quality: Option<u8>,
+    transforms_csv: &str,
+) -> Result<Vec<u8>, JsError> {
+    if let Some(q) = quality {
+        if q == 0 || q > 100 {
+            return Err(JsError::new("Quality must be between 1 and 100"));
+        }
+    }
+
+    let target = ImageFormat::from_name(target_format)
+        .map_err(|e| JsError::new(&format!("Invalid target format: {e}")))?;
+
+    let transform_list = transforms::parse_transforms(transforms_csv)
+        .map_err(|e| JsError::new(&format!("Invalid transform: {e}")))?;
+
+    let result = convert::convert(input.to_vec(), target, quality, &transform_list)
         .map_err(|e| JsError::new(&e.to_string()))?;
 
     Ok(result)
@@ -69,6 +112,39 @@ pub fn convert_image(
 pub fn decode_to_rgba(input: &[u8]) -> Result<Vec<u8>, JsError> {
     convert::decode_rgba(input)
         .map_err(|e| JsError::new(&format!("Failed to decode image to RGBA: {e}")))
+}
+
+/// Decode an image, apply transforms, and return raw RGBA8 pixel bytes.
+///
+/// Returns a `JsValue` object with `rgba` (Uint8Array), `width` (u32), and `height` (u32).
+/// Transforms may change dimensions (e.g. 90° rotation swaps width/height), so the
+/// post-transform dimensions are included in the result.
+///
+/// # Errors
+///
+/// Returns a `JsError` if the input cannot be decoded, the format is unrecognized,
+/// or a transform name is invalid.
+#[wasm_bindgen]
+pub fn decode_to_rgba_with_transforms(
+    input: &[u8],
+    transforms_csv: &str,
+) -> Result<JsValue, JsError> {
+    let transform_list = transforms::parse_transforms(transforms_csv)
+        .map_err(|e| JsError::new(&format!("Invalid transform: {e}")))?;
+
+    let (rgba, dims) = convert::decode_rgba_with_transforms(input, &transform_list)
+        .map_err(|e| JsError::new(&format!("Failed to decode image with transforms: {e}")))?;
+
+    let obj = js_sys::Object::new();
+    let rgba_array = js_sys::Uint8Array::from(rgba.as_slice());
+    js_sys::Reflect::set(&obj, &"rgba".into(), &rgba_array)
+        .map_err(|_| JsError::new("Failed to set rgba property"))?;
+    js_sys::Reflect::set(&obj, &"width".into(), &dims.width.into())
+        .map_err(|_| JsError::new("Failed to set width property"))?;
+    js_sys::Reflect::set(&obj, &"height".into(), &dims.height.into())
+        .map_err(|_| JsError::new("Failed to set height property"))?;
+
+    Ok(obj.into())
 }
 
 /// Read the dimensions of an image without fully decoding its pixel data.

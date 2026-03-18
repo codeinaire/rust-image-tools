@@ -55,7 +55,12 @@ export function trackImageSelected(
 }
 
 export function trackConversionStarted(
-  props: FormatPairProps & { file_size_bytes: number; megapixels: number; quality?: number },
+  props: FormatPairProps & {
+    file_size_bytes: number
+    megapixels: number
+    quality?: number
+    transforms?: string[]
+  },
 ): void {
   capture('conversion_started', props)
 }

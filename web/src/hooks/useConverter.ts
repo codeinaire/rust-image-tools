@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'preact/hooks'
+import { useState, useRef, useEffect, useCallback } from 'preact/hooks'
 import { useImageConverter } from './useImageConverter'
 import {
   trackImageSelected,
@@ -15,6 +15,71 @@ import { getQualityForFormat } from '../lib/quality'
 export { FORMATS_WITH_QUALITY, getQualityForFormat } from '../lib/quality'
 
 export type InputMethod = 'file_picker' | 'drag_drop' | 'clipboard_paste'
+
+/** Transform name strings matching the Rust Transform enum variants. */
+export type TransformName =
+  | 'flip_horizontal'
+  | 'flip_vertical'
+  | 'rotate_90'
+  | 'rotate_180'
+  | 'rotate_270'
+  | 'grayscale'
+  | 'invert'
+
+/** Debounce delay (ms) before re-conversion when transforms change. */
+const TRANSFORM_DEBOUNCE_MS = 300
+
+/**
+ * Normalizes accumulated rotation clicks into a single rotation transform.
+ * 4 quarter-turns = full rotation = no-op.
+ */
+function normalizeRotation(quarterTurns: number): TransformName | null {
+  const normalized = ((quarterTurns % 4) + 4) % 4
+  if (normalized === 1) {
+    return 'rotate_90'
+  }
+  if (normalized === 2) {
+    return 'rotate_180'
+  }
+  if (normalized === 3) {
+    return 'rotate_270'
+  }
+  return null
+}
+
+/**
+ * Computes the net rotation quarter-turns from a transforms list.
+ * rotate_90 = +1, rotate_180 = +2, rotate_270 = +3.
+ */
+function getRotationQuarterTurns(transforms: TransformName[]): number {
+  let turns = 0
+  for (const t of transforms) {
+    if (t === 'rotate_90') {
+      turns += 1
+    } else if (t === 'rotate_180') {
+      turns += 2
+    } else if (t === 'rotate_270') {
+      turns += 3
+    }
+  }
+  return turns
+}
+
+/**
+ * Rebuilds the transforms list with a new net rotation, preserving non-rotation transforms.
+ */
+function rebuildWithRotation(
+  transforms: TransformName[],
+  newRotation: TransformName | null,
+): TransformName[] {
+  const nonRotation = transforms.filter(
+    (t) => t !== 'rotate_90' && t !== 'rotate_180' && t !== 'rotate_270',
+  )
+  if (newRotation === null) {
+    return nonRotation
+  }
+  return [...nonRotation, newRotation]
+}
 
 const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200 MB
 const MAX_MEGAPIXELS = 100
@@ -107,13 +172,36 @@ export function useConverter(): {
   handleConvert: (targetFormat: ValidFormat) => Promise<void>
   quality: number
   setQuality: (quality: number) => void
+  transforms: TransformName[]
+  rotateCW: (targetFormat: ValidFormat) => void
+  rotateCCW: (targetFormat: ValidFormat) => void
+  toggleTransform: (targetFormat: ValidFormat, name: TransformName) => void
+  undoTransform: (targetFormat: ValidFormat) => void
+  canUndoTransform: boolean
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
   const progressTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const convertGenerationRef = useRef<number>(0)
+  const transformDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const transformsRef = useRef<TransformName[]>([])
+  const transformHistoryRef = useRef<TransformName[][]>([])
 
   const [quality, setQuality] = useState<number>(80)
+  const [transforms, setTransformsState] = useState<TransformName[]>([])
+
+  /** Updates transforms state and keeps the ref in sync for use in closures. */
+  function setTransforms(newTransforms: TransformName[]): void {
+    transformsRef.current = newTransforms
+    setTransformsState(newTransforms)
+  }
+
+  /** Pushes the current transforms onto the history stack before a change. */
+  function pushTransformHistory(): void {
+    const MAX_TRANSFORM_HISTORY = 50
+    const history = [...transformHistoryRef.current, [...transformsRef.current]]
+    transformHistoryRef.current = history.slice(-MAX_TRANSFORM_HISTORY)
+  }
 
   const [state, setState] = useState<ConverterState>({
     status: 'idle',
@@ -132,6 +220,9 @@ export function useConverter(): {
       if (progressTimeoutRef.current !== null) {
         clearTimeout(progressTimeoutRef.current)
       }
+      if (transformDebounceRef.current !== null) {
+        clearTimeout(transformDebounceRef.current)
+      }
     }
   }, [])
 
@@ -149,9 +240,21 @@ export function useConverter(): {
     }
   }
 
+  function clearTransformDebounce(): void {
+    if (transformDebounceRef.current !== null) {
+      clearTimeout(transformDebounceRef.current)
+      transformDebounceRef.current = null
+    }
+  }
+
   async function handleFile(file: File, inputMethod: InputMethod): Promise<void> {
+    // Invalidate any in-flight conversion so it cannot corrupt state after this new file loads
+    convertGenerationRef.current++
     revokeBlobUrl()
     clearProgressTimeout()
+    clearTransformDebounce()
+    setTransforms([])
+    transformHistoryRef.current = []
 
     if (file.size > MAX_FILE_SIZE) {
       trackValidationRejected({
@@ -248,7 +351,6 @@ export function useConverter(): {
     convertGenerationRef.current++
     const myGeneration = convertGenerationRef.current
 
-    revokeBlobUrl()
     clearProgressTimeout()
 
     const estimatedMs = estimateConversionMs(
@@ -260,19 +362,21 @@ export function useConverter(): {
       ...s,
       status: 'converting',
       error: null,
-      result: null,
       estimatedMs,
       showProgress: true,
     }))
 
     const qualityForFormat = getQualityForFormat(targetFormat, quality)
 
+    const currentTransforms = transformsRef.current
+    const hasTransforms = currentTransforms.length > 0
     trackConversionStarted({
       source_format: fileInfo.sourceFormat,
       target_format: targetFormat,
       file_size_bytes: fileInfo.file.size,
       megapixels: fileInfo.megapixels,
       ...(qualityForFormat !== undefined ? { quality: qualityForFormat } : {}),
+      ...(hasTransforms ? { transforms: currentTransforms } : {}),
     })
 
     const startTime = performance.now()
@@ -282,6 +386,7 @@ export function useConverter(): {
         fileInfo.bytes,
         targetFormat,
         qualityForFormat,
+        hasTransforms ? currentTransforms : undefined,
       )
       if (myGeneration !== convertGenerationRef.current) {
         return
@@ -292,6 +397,7 @@ export function useConverter(): {
       const mimeType = MIME_TYPES[targetFormat] ?? 'application/octet-stream'
       const blob = new Blob([resultBytes.buffer as ArrayBuffer], { type: mimeType })
       const blobUrl = URL.createObjectURL(blob)
+      revokeBlobUrl()
       blobUrlRef.current = blobUrl
 
       const changePercent =
@@ -355,14 +461,106 @@ export function useConverter(): {
         error_message: message,
       })
 
+      revokeBlobUrl()
       setState((s) => ({
         ...s,
         status: 'error',
         error: `Conversion failed: ${message}`,
+        result: null,
         showProgress: false,
       }))
     }
   }
 
-  return { state, converter, handleFile, handleConvert, quality, setQuality }
+  /** Stable ref for handleConvert so useCallback chains don't break memoization. */
+  const handleConvertRef = useRef(handleConvert)
+  handleConvertRef.current = handleConvert
+
+  /** Schedules a debounced re-conversion when transforms change. */
+  const scheduleTransformConvert = useCallback(
+    (targetFormat: ValidFormat, newTransforms: TransformName[]) => {
+      clearTransformDebounce()
+      pushTransformHistory()
+      setTransforms(newTransforms)
+      // Only auto-convert if we have a file and a previous conversion result
+      if (state.fileInfo && state.status !== 'reading') {
+        transformDebounceRef.current = setTimeout(() => {
+          transformDebounceRef.current = null
+          void handleConvertRef.current(targetFormat)
+        }, TRANSFORM_DEBOUNCE_MS)
+      }
+    },
+    [state.fileInfo, state.status],
+  )
+
+  /** Adds one clockwise quarter-turn, normalizing the net rotation. */
+  const rotateCW = useCallback(
+    (targetFormat: ValidFormat) => {
+      const currentTurns = getRotationQuarterTurns(transforms)
+      const newRotation = normalizeRotation(currentTurns + 1)
+      const newTransforms = rebuildWithRotation(transforms, newRotation)
+      scheduleTransformConvert(targetFormat, newTransforms)
+    },
+    [transforms, scheduleTransformConvert],
+  )
+
+  /** Adds one counter-clockwise quarter-turn, normalizing the net rotation. */
+  const rotateCCW = useCallback(
+    (targetFormat: ValidFormat) => {
+      const currentTurns = getRotationQuarterTurns(transforms)
+      const newRotation = normalizeRotation(currentTurns - 1)
+      const newTransforms = rebuildWithRotation(transforms, newRotation)
+      scheduleTransformConvert(targetFormat, newTransforms)
+    },
+    [transforms, scheduleTransformConvert],
+  )
+
+  /** Toggles a transform on/off in the transforms list. */
+  const toggleTransform = useCallback(
+    (targetFormat: ValidFormat, name: TransformName) => {
+      const newTransforms = transforms.includes(name)
+        ? transforms.filter((t) => t !== name)
+        : [...transforms, name]
+      scheduleTransformConvert(targetFormat, newTransforms)
+    },
+    [transforms, scheduleTransformConvert],
+  )
+
+  /** Reverts to the previous transform state. */
+  const undoTransform = useCallback(
+    (targetFormat: ValidFormat) => {
+      const history = transformHistoryRef.current
+      if (history.length === 0) {
+        return
+      }
+      const previous = history[history.length - 1] as TransformName[]
+      transformHistoryRef.current = history.slice(0, -1)
+      clearTransformDebounce()
+      setTransforms(previous)
+      if (state.fileInfo && state.status !== 'reading') {
+        transformDebounceRef.current = setTimeout(() => {
+          transformDebounceRef.current = null
+          void handleConvertRef.current(targetFormat)
+        }, TRANSFORM_DEBOUNCE_MS)
+      }
+    },
+    [state.fileInfo, state.status],
+  )
+
+  const canUndoTransform = transformHistoryRef.current.length > 0
+
+  return {
+    state,
+    converter,
+    handleFile,
+    handleConvert,
+    quality,
+    setQuality,
+    transforms,
+    rotateCW,
+    rotateCCW,
+    toggleTransform,
+    undoTransform,
+    canUndoTransform,
+  }
 }

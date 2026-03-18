@@ -3,6 +3,7 @@ import { useConverter } from '../hooks/useConverter'
 import { useClipboardPaste } from '../hooks/useClipboardPaste'
 import { useBenchmark } from '../hooks/useBenchmark'
 import { DropZone } from './DropZone'
+import { TransformModal } from './TransformModal'
 import { BenchmarkTable } from './BenchmarkTable'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
 import { ValidFormat } from '../types'
@@ -18,8 +19,22 @@ interface Props {
 
 /** Top-level image converter widget with drop zone, format selection, and download. */
 export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.JSX.Element {
-  const { state, converter, handleFile, handleConvert, quality, setQuality } = useConverter()
+  const {
+    state,
+    converter,
+    handleFile,
+    handleConvert,
+    quality,
+    setQuality,
+    transforms,
+    rotateCW,
+    rotateCCW,
+    toggleTransform,
+    undoTransform,
+    canUndoTransform,
+  } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
+  const [transformModalOpen, setTransformModalOpen] = useState(false)
   const { benchmarkState, startBenchmark, isMobile } = useBenchmark(
     converter,
     state.fileInfo,
@@ -65,6 +80,11 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
 
   const canConvert = state.fileInfo !== null && state.status !== 'converting'
   const convertingFormat = state.status === 'converting' ? targetFormat : null
+  const benchmarkDisabled =
+    state.status === 'converting' ||
+    state.status === 'reading' ||
+    benchmarkState.isRunning ||
+    benchmarkState.results.length > 0
 
   function onDownloadClick() {
     if (state.fileInfo && state.result) {
@@ -132,19 +152,59 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           onQualityChange={setQuality}
           pageFromFormat={initialFrom}
           pageToFormat={initialTo}
+          transforms={transforms}
+          onStartBenchmark={startBenchmark}
+          onTransformOpen={() => {
+            setTransformModalOpen(true)
+          }}
+          benchmarkDisabled={benchmarkDisabled}
         />
 
         <BenchmarkTable
           fileInfo={state.fileInfo}
           benchmarkState={benchmarkState}
-          onStartBenchmark={startBenchmark}
           onConvertFormat={onConvertFormat}
           conversionResult={state.result}
           convertingFormat={convertingFormat}
           isMobile={isMobile}
-          disabled={state.status === 'converting' || state.status === 'reading'}
         />
       </section>
+
+      {/* Transform modal */}
+      {transformModalOpen && state.fileInfo && (
+        <TransformModal
+          fileInfo={state.fileInfo}
+          result={state.result}
+          transforms={transforms}
+          onRotateCW={() => {
+            rotateCW(targetFormat)
+          }}
+          onRotateCCW={() => {
+            rotateCCW(targetFormat)
+          }}
+          onToggleFlipH={() => {
+            toggleTransform(targetFormat, 'flip_horizontal')
+          }}
+          onToggleFlipV={() => {
+            toggleTransform(targetFormat, 'flip_vertical')
+          }}
+          onToggleGrayscale={() => {
+            toggleTransform(targetFormat, 'grayscale')
+          }}
+          onToggleInvert={() => {
+            toggleTransform(targetFormat, 'invert')
+          }}
+          disabled={state.status === 'converting' || state.status === 'reading'}
+          onClose={() => {
+            setTransformModalOpen(false)
+          }}
+          onDownloadClick={onDownloadClick}
+          onUndo={() => {
+            undoTransform(targetFormat)
+          }}
+          canUndo={canUndoTransform}
+        />
+      )}
     </div>
   )
 }

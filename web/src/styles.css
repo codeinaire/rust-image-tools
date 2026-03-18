@@ -220,6 +220,16 @@ input[type='range'].cyber-slider::-moz-range-thumb {
   opacity: 1;
 }
 
+.cyber-tooltip .cyber-tooltip-text--center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cyber-tooltip .cyber-tooltip-text--center::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* ─── FAQ Details Styling ─────────────────────────────────────────────── */
 details.cyber-details > summary {
   list-style: none;

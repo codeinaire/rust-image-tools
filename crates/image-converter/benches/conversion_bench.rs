@@ -239,7 +239,8 @@ fn bench_by_size(c: &mut Criterion) {
                     &input,
                     |b, input| {
                         b.iter(|| {
-                            convert(input.clone(), pair.target).expect("conversion should succeed")
+                            convert(input.clone(), pair.target, None, &[])
+                                .expect("conversion should succeed")
                         });
                     },
                 );
@@ -263,7 +264,8 @@ fn bench_by_size(c: &mut Criterion) {
                     &input,
                     |b, input| {
                         b.iter(|| {
-                            convert(input.clone(), pair.target).expect("conversion should succeed")
+                            convert(input.clone(), pair.target, None, &[])
+                                .expect("conversion should succeed")
                         });
                     },
                 );
@@ -306,7 +308,8 @@ fn bench_by_source_format(c: &mut Criterion) {
 
                 group.bench_with_input(BenchmarkId::new(&id, size.label), &input, |b, input| {
                     b.iter(|| {
-                        convert(input.clone(), pair.target).expect("conversion should succeed")
+                        convert(input.clone(), pair.target, None, &[])
+                            .expect("conversion should succeed")
                     });
                 });
             }

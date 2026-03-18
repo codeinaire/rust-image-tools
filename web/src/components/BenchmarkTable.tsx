@@ -19,12 +19,10 @@ const MIME_TYPES: Record<string, string> = {
 interface Props {
   fileInfo: FileInfo | null
   benchmarkState: BenchmarkState
-  onStartBenchmark: () => void
   onConvertFormat: (format: ValidFormat) => void
   conversionResult: ConversionResult | null
   convertingFormat: ValidFormat | null
   isMobile: boolean
-  disabled: boolean
 }
 
 const ALL_FORMATS: ValidFormat[] = Object.values(ValidFormat)
@@ -72,12 +70,10 @@ function downloadBytes(data: Uint8Array, format: ValidFormat, baseName: string):
 export function BenchmarkTable({
   fileInfo,
   benchmarkState,
-  onStartBenchmark,
   onConvertFormat,
   conversionResult,
   convertingFormat,
   isMobile,
-  disabled,
 }: Props): preact.JSX.Element | null {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null)
 
@@ -92,21 +88,7 @@ export function BenchmarkTable({
   const showActionColumn = !isMobile
 
   if (!hasResults) {
-    return (
-      <div style={{ marginTop: '1rem', textAlign: 'center' }}>
-        <CompareButton
-          disabled={disabled}
-          onClick={onStartBenchmark}
-          isHovered={hoveredButton === 'compare'}
-          onMouseEnter={() => {
-            setHoveredButton('compare')
-          }}
-          onMouseLeave={() => {
-            setHoveredButton(null)
-          }}
-        />
-      </div>
-    )
+    return null
   }
 
   const formats = ALL_FORMATS.filter((f) => f !== fileInfo.sourceFormat)
@@ -232,48 +214,6 @@ export function BenchmarkTable({
         })}
       </div>
     </div>
-  )
-}
-
-interface CompareButtonProps {
-  disabled: boolean
-  onClick: () => void
-  isHovered: boolean
-  onMouseEnter: () => void
-  onMouseLeave: () => void
-}
-
-/** The "Compare all formats" trigger button shown before benchmarking. */
-function CompareButton({
-  disabled,
-  onClick,
-  isHovered,
-  onMouseEnter,
-  onMouseLeave,
-}: CompareButtonProps): preact.JSX.Element {
-  const background = disabled ? 'transparent' : isHovered ? 'var(--cp-cyan-bg-dim)' : 'transparent'
-  const color = disabled ? 'var(--cp-muted)' : isHovered ? 'var(--cp-cyan)' : 'var(--cp-text)'
-
-  return (
-    <button
-      disabled={disabled}
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      style={{
-        background,
-        color,
-        border: `1px solid ${disabled ? 'var(--cp-border)' : 'var(--cp-cyan)'}`,
-        fontFamily: MONO_FONT,
-        fontSize: '0.7rem',
-        letterSpacing: '0.1em',
-        padding: '0.5rem 1.25rem',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'background 0.15s, color 0.15s',
-      }}
-    >
-      COMPARE ALL FORMATS
-    </button>
   )
 }
 
