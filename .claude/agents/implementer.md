@@ -1,7 +1,7 @@
 ---
 name: implementer
 description: Implements a plan file step by step. Reads the plan, loads project context, executes each step in order with quality gates, and reports progress. Use this agent to implement any plan in `plans/`.
-tools: Read, Write, Edit, Bash, Grep, Glob, Agent
+tools: Read, Write, Edit, Bash, Grep, Glob
 color: gold
 model: sonnet
 ---

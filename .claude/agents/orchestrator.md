@@ -173,7 +173,10 @@ When the reviewer completes:
 - If CRITICAL or HIGH issues found:
   1. Report the findings to the user with the reviewer's suggested fixes
   2. Wait for the user to confirm whether to proceed with fixes
-  3. If yes: spawn the implementer agent with a targeted prompt listing the specific fixes to apply. When it completes, commit to the existing branch and push (`btfc "<files>" <branch-name> "<fix message>"` then `btp <branch-name>` — do NOT use `/ship` as that creates a new branch and PR). Then re-run the code reviewer on the same PR
+  3. If yes: spawn the implementer agent with a targeted prompt listing the specific fixes to apply. When it completes, commit to the existing branch and push (`btfc "<files>" <branch-name> "<fix message>"` then `btp <branch-name>` — do NOT use `/ship` as that creates a new branch and PR). Then re-run the code reviewer with re-review context:
+     ```
+     Agent(subagent_type: "code-reviewer", prompt: "Re-review this pull request: <PR URL>. The previous review flagged these issues: <list of issues>. Fixes have been applied. Verify the fixes address each flagged issue and check for regressions introduced by the fixes. Do not re-review unchanged code.")
+     ```
   4. If no: proceed to the final report with review issues noted as follow-up items
 - Otherwise, proceed to the final report
 
