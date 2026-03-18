@@ -4,6 +4,7 @@ import FormatTickerHeader from '../components/FormatTickerHeader.astro'
 import { ImageConverter } from '../components/ImageConverter'
 import { buildFormatPairs, type FormatPair } from '../data/format-pairs'
 import formatCopy from '../data/format-copy.json'
+import { BASE_URL } from '../constants'
 
 /** Generates one static page per format conversion pair (e.g. /png-to-jpeg). */
 export function getStaticPaths() {
@@ -48,6 +49,25 @@ const faqSchema = {
       text: faq.answer,
     },
   })),
+}
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Image Toolz',
+      item: `${BASE_URL}/`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: pair.h1,
+      item: pair.canonical,
+    },
+  ],
 }
 
 // Build related pairs: same from (excl. current) + same to (excl. current), deduped, max 6
@@ -95,6 +115,7 @@ const isHeicSource = pair.from === 'heic'
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(webAppSchema)} />
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 
   <FormatTickerHeader fromName={pair.fromMeta.displayName} toName={pair.toMeta.displayName} />
 
