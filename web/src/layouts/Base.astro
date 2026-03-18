@@ -15,13 +15,14 @@ const { title, description, canonical, skipDefaultSchema = false } = Astro.props
 const webAppSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'Image Converter',
+  name: 'Image Toolz',
   description:
-    'Convert images between PNG, JPEG, WebP, GIF, and BMP formats. Runs entirely in your browser — no server uploads.',
+    'Convert images between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, and TGA formats. HEIC input supported. Runs entirely in your browser\u2014no server uploads.',
   applicationCategory: 'UtilitiesApplication',
   operatingSystem: 'Any (browser-based)',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   browserRequirements: 'Requires WebAssembly support',
+  url: BASE_URL,
 }
 ---
 
@@ -32,10 +33,6 @@ const webAppSchema = {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta
-      name="keywords"
-      content="image converter, png to jpeg, webp to png, convert image online, free image converter"
-    />
     <meta name="robots" content="index, follow" />
     {canonical && <link rel="canonical" href={canonical} />}
 
@@ -51,9 +48,13 @@ const webAppSchema = {
     <meta property="og:type" content="website" />
     {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={`${BASE_URL}/og-image.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${BASE_URL}/og-image.png`} />
+    <meta name="theme-color" content="#05050f" />
 
     <!-- Structured Data: WebApplication (skipped when page provides its own) -->
     {

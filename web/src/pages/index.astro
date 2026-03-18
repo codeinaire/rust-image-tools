@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro'
 import { ImageConverter } from '../components/ImageConverter'
 import { BASE_URL } from '../constants'
+import { buildFormatPairs, type FormatPair } from '../data/format-pairs'
 
 const TICKER_REPEATS = 8
 const TICKER_CONTAINER_STYLE =
@@ -22,8 +23,7 @@ const LETTERS: { ch: string; dur: number; delay: number }[] = [
   { ch: 'Z', dur: 8.2, delay: 3.7 },
 ]
 
-const title =
-  'Free Image Converter — PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, TGA | Online & Private'
+const title = 'Image Converter -- PNG, JPEG, WebP & More | Free & Private'
 const description =
   'Convert images between PNG, JPEG, WebP, GIF, BMP, TIFF, ICO, QOI, and TGA instantly in your browser. No upload to any server — 100% private, free, and fast.'
 const canonical = `${BASE_URL}/`
@@ -74,6 +74,25 @@ const faqSchema = {
     },
   ],
 }
+
+const allPairs = buildFormatPairs()
+const popularSlugs = [
+  'png-to-jpeg',
+  'jpeg-to-png',
+  'webp-to-png',
+  'webp-to-jpeg',
+  'heic-to-jpeg',
+  'heic-to-png',
+  'png-to-webp',
+  'gif-to-png',
+  'bmp-to-png',
+  'tiff-to-jpeg',
+  'png-to-ico',
+  'jpeg-to-webp',
+]
+const popularPairs = popularSlugs
+  .map((slug) => allPairs.find((p) => p.slug === slug))
+  .filter((p): p is FormatPair => p !== undefined)
 ---
 
 <style>
@@ -382,6 +401,32 @@ const faqSchema = {
             supported.
           </p>
         </div>
+      </div>
+    </section>
+
+    <!-- ░░ POPULAR CONVERSIONS ░░ -->
+    <section style="margin-top: 3rem;">
+      <h2
+        style="font-family: 'Orbitron', monospace; color: var(--cp-yellow); font-size: 1rem; letter-spacing: 0.15em; margin-bottom: 1.25rem;"
+      >
+        // POPULAR CONVERSIONS
+      </h2>
+      <div class="grid sm:grid-cols-3 gap-3">
+        {
+          popularPairs.map((p) => (
+            <a
+              href={`/${p.slug}`}
+              style="display: block; background: var(--cp-panel); border: 1px solid var(--cp-border); border-left: 3px solid var(--cp-cyan); padding: 1rem; text-decoration: none; transition: background 0.2s;"
+            >
+              <span style="font-family: 'Orbitron', monospace; color: var(--cp-cyan); font-size: 0.8rem; letter-spacing: 0.1em;">
+                {p.fromMeta.displayName} &rarr; {p.toMeta.displayName}
+              </span>
+              <p style="color: var(--cp-text); font-size: 0.75rem; margin-top: 0.4rem; line-height: 1.5;">
+                {p.h1}
+              </p>
+            </a>
+          ))
+        }
       </div>
     </section>
 
