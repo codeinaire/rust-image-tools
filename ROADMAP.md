@@ -1449,6 +1449,83 @@ Run multiple Web Workers in parallel, each with their own WASM module instance, 
 
 ---
 
+## 20. Worker Termination for Stale Conversion Cancellation
+
+> Difficulty: 2.5/5 · Impact: Medium · Effort: Medium
+
+### Overview
+
+When a user loads a new image while a transform conversion is in-flight, the stale WASM conversion currently runs to completion and its result is discarded via a generation counter. For large images on mobile (up to 200 MB / 100 MP), this wastes 15-25 seconds of CPU and contributes to memory pressure.
+
+### Pros
+
+- Immediately frees CPU and WASM memory when loading a new image
+- Eliminates wasted computation on mobile for large images
+- Clean WASM state after termination (no lingering allocations from previous image)
+
+### Cons
+
+- WASM re-initialization adds latency to loading the new image (blocks `detectFormat` / `getDimensions`)
+- More complex lifecycle management in `ImageConverter` class
+- All pending Worker requests must be rejected on terminate
+
+### Architectural Considerations
+
+- Add a `terminateAndRecreate()` method to `ImageConverter` that calls `worker.terminate()`, creates a new Worker, and replaces the `ready` promise
+- Reject all entries in `pendingRequests` with a "Worker terminated" error on terminate
+- Call from `handleFile` in `useConverter.ts` instead of (or in addition to) the generation counter increment
+- Consider gating behind a file size / megapixel threshold — only terminate for images above a certain size where the wasted work is meaningful
+- Benchmark WASM re-init cost on mobile to determine the right threshold
+
+### Bundle Size Impact
+
+No bundle size impact — this is a runtime behavior change only.
+
+### Decision Record
+
+See [decisions/20260318-generation-counter-over-worker-termination.md](decisions/20260318-generation-counter-over-worker-termination.md) for why the generation counter was chosen as the initial fix.
+
+---
+
+## 21. EXIF Orientation Handling
+
+> Difficulty: 2/5 · Impact: High · Effort: Low
+
+### Overview
+
+Phone photos often store pixels in a rotated orientation with an EXIF tag instructing viewers to rotate on display. The browser's `<img>` tag respects this tag, so images appear correct in the UI. However, `image::load_from_memory()` in Rust decodes raw pixels without applying EXIF orientation. When the image is re-encoded after conversion or transforms, the EXIF tag is lost and the output appears rotated.
+
+This affects all conversions of phone photos with EXIF orientation, not just transforms — but it's most noticeable when transforms are applied because the user is actively looking at the image in the TransformModal.
+
+### Pros
+
+- Fixes incorrect rotation on all phone photos
+- Consistent behavior between the preview (`<img>` tag) and the conversion output
+- Small, isolated change in the Rust decoding path
+
+### Cons
+
+- Adds a dependency for EXIF parsing (e.g., `kamadak-exif`) unless the `image` crate's built-in support is sufficient
+- Slight decoding overhead to read and apply orientation
+
+### Architectural Considerations
+
+- Apply EXIF orientation immediately after `image::load_from_memory()` in `convert()`, `decode_rgba()`, and `decode_rgba_with_transforms()` — before any transforms or encoding
+- Options for reading EXIF orientation:
+  1. Use the `image` crate's `ImageReader` with orientation support (check if available in current version)
+  2. Use `kamadak-exif` crate to read the orientation tag, then manually apply the corresponding rotation/flip
+- The orientation correction is a one-time operation per decode, so performance impact is minimal
+- Must set `default-features = false` on any new EXIF crate to avoid pulling in features that break WASM
+
+### Bundle Size Impact
+
+| Component | Delta (gzipped) |
+| --------- | --------------- |
+| WASM      | +~2–8 KB        |
+| JS/CSS    | 0               |
+
+---
+
 ## Summary Table
 
 Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broken out separately since WASM is fetched once and cached, while JS is part of the critical render path.
@@ -1475,6 +1552,8 @@ Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broke
 | 17  | Batch Processing                                    | 4/5        | Very High | Very High | 0             | +~11–15.5 KB  | +~11–15.5 KB  | [ ]  |
 | 18  | Raise File Size Limits                              | 4.5/5      | Low       | Very High | 0‡            | +~0.1–0.2 KB  | +~0.1–0.2 KB  | [ ]  |
 | 19  | Worker Pool (Parallel Batch)                        | 4.5/5      | High      | Very High | 0             | +~1.4–2.4 KB  | +~1.4–2.4 KB  | [ ]  |
+| 20  | Worker Termination (Stale Conversion Cancel)        | 2.5/5      | Medium    | Medium    | 0             | 0             | 0             | [ ]  |
+| 21  | EXIF Orientation Handling                           | 2/5        | High      | Low       | +~2–8 KB      | 0             | +~2–8 KB      | [ ]  |
 
 † PWA service worker and icons load separately and are not in the critical JS bundle.
 ‡ Near-zero for threshold changes; tiled processing would add +28–70 KB WASM gzipped.
