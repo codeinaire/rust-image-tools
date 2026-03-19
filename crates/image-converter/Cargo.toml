@@ -34,6 +34,8 @@ image = { version = "0.25", default-features = false, features = [
     # default-features = false disables rayon (multithreading) which breaks WASM.
     # Only the codecs listed here are compiled in, keeping the .wasm binary smaller.
 ] }
+kamadak-exif = "0.6"               # EXIF metadata parsing for JPEG/TIFF/WebP
+png = { version = "0.18", default-features = false }  # Direct access to PNG text chunk APIs
 
 # -- Test-only dependencies (not included in the final .wasm binary) --
 [dev-dependencies]

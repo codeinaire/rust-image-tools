@@ -104,3 +104,63 @@ export interface ImageDimensions {
   width: number
   height: number
 }
+
+// Metadata types
+
+/** Metadata extracted from an image by the WASM module. */
+export interface ImageMetadata {
+  width: number
+  height: number
+  format: string
+  color_type: string
+  bits_per_pixel: number
+  has_alpha: boolean
+  has_icc_profile: boolean
+  exif: ExifData
+  png_text_chunks: TextChunk[]
+}
+
+/** Parsed EXIF data with curated fields and optional full field list. */
+export interface ExifData {
+  camera_make: string | null
+  camera_model: string | null
+  date_time: string | null
+  exposure_time: string | null
+  f_number: string | null
+  iso: string | null
+  focal_length: string | null
+  orientation: string | null
+  software: string | null
+  gps_latitude: number | null
+  gps_longitude: number | null
+  has_gps: boolean
+  all_fields: ExifField[]
+}
+
+/** A single EXIF tag/value pair. */
+export interface ExifField {
+  tag: string
+  value: string
+  group: string
+}
+
+/** A PNG text chunk (tEXt, zTXt, or iTXt). */
+export interface TextChunk {
+  keyword: string
+  text: string
+}
+
+// Metadata worker messages
+
+export interface GetMetadataRequest {
+  type: MessageType.GetMetadata
+  id: number
+  data: Uint8Array
+}
+
+export interface GetMetadataSuccessResponse {
+  type: MessageType.GetMetadata
+  id: number
+  success: true
+  metadata: ImageMetadata
+}

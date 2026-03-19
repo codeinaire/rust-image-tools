@@ -100,3 +100,14 @@ export function trackValidationRejected(props: {
 export function trackDownloadClicked(props: FormatPairProps & { output_size_bytes: number }): void {
   capture('download_clicked', props)
 }
+
+/** Track when a user expands a metadata section to view image details. */
+export function trackMetadataViewed(props: {
+  source_format: string
+  has_exif: boolean
+  has_gps: boolean
+  has_png_text: boolean
+  exif_field_count: number
+}): void {
+  capture('metadata_viewed', props)
+}
