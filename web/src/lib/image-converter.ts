@@ -3,6 +3,7 @@ import type {
   WorkerRequest,
   WorkerResponse,
   ImageDimensions,
+  ImageMetadata,
   BenchmarkResultResponse,
 } from '../types'
 
@@ -153,6 +154,17 @@ export class ImageConverter {
     const response = await this.sendRequest({ type: MessageType.GetDimensions, id, data })
     if (response.type === MessageType.GetDimensions) {
       return { width: response.width, height: response.height }
+    }
+    throw new Error('Unexpected response type')
+  }
+
+  /** Extract image metadata without fully decoding pixel data. */
+  async getMetadata(data: Uint8Array): Promise<ImageMetadata> {
+    await this.ready
+    const id = this.nextRequestId++
+    const response = await this.sendRequest({ type: MessageType.GetMetadata, id, data })
+    if (response.type === MessageType.GetMetadata) {
+      return response.metadata
     }
     throw new Error('Unexpected response type')
   }

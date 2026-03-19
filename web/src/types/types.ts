@@ -2,12 +2,14 @@ import type {
   DetectFormatRequest,
   ConvertImageRequest,
   GetDimensionsRequest,
+  GetMetadataRequest,
   BenchmarkImagesRequest,
   InitSuccessResponse,
   InitErrorResponse,
   DetectFormatSuccessResponse,
   ConvertImageSuccessResponse,
   GetDimensionsSuccessResponse,
+  GetMetadataSuccessResponse,
   BenchmarkResultSuccess,
   BenchmarkResultError,
   BenchmarkCompleteResponse,
@@ -18,6 +20,7 @@ export type WorkerRequest =
   | DetectFormatRequest
   | ConvertImageRequest
   | GetDimensionsRequest
+  | GetMetadataRequest
   | BenchmarkImagesRequest
 
 export type WorkerResponse =
@@ -26,6 +29,7 @@ export type WorkerResponse =
   | DetectFormatSuccessResponse
   | ConvertImageSuccessResponse
   | GetDimensionsSuccessResponse
+  | GetMetadataSuccessResponse
   | BenchmarkResultSuccess
   | BenchmarkResultError
   | BenchmarkCompleteResponse

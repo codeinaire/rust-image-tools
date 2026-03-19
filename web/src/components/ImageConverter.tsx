@@ -5,6 +5,7 @@ import { useBenchmark } from '../hooks/useBenchmark'
 import { DropZone } from './DropZone'
 import { TransformModal } from './TransformModal'
 import { BenchmarkTable } from './BenchmarkTable'
+import { MetadataPanel } from './MetadataPanel'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
 import { ValidFormat } from '../types'
 import type { InputFormat } from '../types'
@@ -159,6 +160,8 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           }}
           benchmarkDisabled={benchmarkDisabled}
         />
+
+        <MetadataPanel metadata={state.fileInfo?.metadata ?? null} />
 
         <BenchmarkTable
           fileInfo={state.fileInfo}

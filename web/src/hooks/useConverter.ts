@@ -8,6 +8,7 @@ import {
   trackValidationRejected,
 } from '../analytics'
 import type { ImageConverter } from '../lib/image-converter'
+import type { ImageMetadata } from '../types'
 import { ValidFormat } from '../types'
 import { normalizeHeic } from '../lib/heic'
 import { getQualityForFormat } from '../lib/quality'
@@ -140,6 +141,7 @@ export interface FileInfo {
   megapixels: number
   width: number
   height: number
+  metadata: ImageMetadata | null
 }
 
 export interface ConversionResult {
@@ -287,9 +289,15 @@ export function useConverter(): {
     const bytes = new Uint8Array(buffer)
 
     try {
-      const [format, dimensions] = await Promise.all([
+      const metadataPromise = converter.getMetadata(bytes).catch((err: unknown) => {
+        console.warn('[image-converter] Metadata extraction failed:', err)
+        return null
+      })
+
+      const [format, dimensions, metadata] = await Promise.all([
         converter.detectFormat(bytes),
         converter.getDimensions(bytes),
+        metadataPromise,
       ])
 
       const megapixels = (dimensions.width * dimensions.height) / 1_000_000
@@ -329,6 +337,7 @@ export function useConverter(): {
           megapixels,
           width: dimensions.width,
           height: dimensions.height,
+          metadata,
         },
       }))
     } catch (e) {

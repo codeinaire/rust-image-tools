@@ -8,9 +8,11 @@ import init, {
   decode_to_rgba_with_transforms,
   detect_format,
   get_dimensions,
+  get_image_metadata,
 } from '../../crates/image-converter/pkg/image_converter.js'
 
 import { MessageType, ValidFormat } from './types'
+import type { ImageMetadata } from './types'
 import type { BenchmarkImagesRequest, WorkerRequest, WorkerResponse } from './types'
 import { getQualityForFormat } from './lib/quality'
 
@@ -49,6 +51,9 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
       break
     case MessageType.GetDimensions:
       handleGetDimensions(request.id, request.data)
+      break
+    case MessageType.GetMetadata:
+      handleGetMetadata(request.id, request.data)
       break
     case MessageType.BenchmarkImages:
       void handleBenchmarkImages(request)
@@ -182,6 +187,22 @@ function handleGetDimensions(id: number, data: Uint8Array): void {
       success: true,
       width: dims.width,
       height: dims.height,
+    }
+    postMessage(response)
+  } catch (e) {
+    postError(id, e)
+  }
+}
+
+/** Extract image metadata without fully decoding pixel data. */
+function handleGetMetadata(id: number, data: Uint8Array): void {
+  try {
+    const metadata = get_image_metadata(data) as ImageMetadata
+    const response: WorkerResponse = {
+      type: MessageType.GetMetadata,
+      id,
+      success: true,
+      metadata,
     }
     postMessage(response)
   } catch (e) {

@@ -1,5 +1,6 @@
 pub mod convert;
 pub mod formats;
+pub mod metadata;
 pub mod transforms;
 
 use wasm_bindgen::prelude::*;
@@ -160,4 +161,20 @@ pub fn get_dimensions(input: &[u8]) -> Result<JsValue, JsError> {
 
     serde_wasm_bindgen::to_value(&dims)
         .map_err(|e| JsError::new(&format!("Failed to serialize dimensions: {e}")))
+}
+
+/// Extract metadata from an image without fully decoding pixel data.
+///
+/// Returns a JavaScript object containing image dimensions, format, color info,
+/// EXIF data (if present), and PNG text chunks (if applicable).
+///
+/// # Errors
+///
+/// Returns a `JsError` if the image format cannot be detected or metadata extraction fails.
+#[wasm_bindgen]
+pub fn get_image_metadata(input: &[u8]) -> Result<JsValue, JsError> {
+    let meta =
+        metadata::extract(input).map_err(|e| JsError::new(&format!("Metadata error: {e}")))?;
+    serde_wasm_bindgen::to_value(&meta)
+        .map_err(|e| JsError::new(&format!("Failed to serialize metadata: {e}")))
 }
