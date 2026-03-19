@@ -1536,7 +1536,7 @@ Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broke
 | 2   | Paste from Clipboard                                | 1.5/5      | High      | Low       | 0             | +~0.5–1 KB    | +~0.5–1 KB    | [x]  |
 | 3   | JPEG Quality Slider                                 | 2/5        | High      | Low       | +~1–3 KB      | +~1–1.5 KB    | +~2–5 KB      | [x]  |
 | 4   | Tier 2 Formats (TIFF, ICO, TGA, QOI)                | 2/5        | Medium    | Low       | +~93–145 KB   | +~0.5–1 KB    | +~94–146 KB   | [x]  |
-| 5   | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5        | High      | Medium    | +~16–29 KB    | +~2–3.5 KB    | +~18–32 KB    | [ ]  |
+| 5   | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5        | High      | Medium    | +~16–29 KB    | +~2–3.5 KB    | +~18–32 KB    | [x]  |
 | 6   | Format Landing Pages (SEO)                          | 2.5/5      | High      | Medium    | 0             | +~0.3–0.5 KB  | +~0.3–0.5 KB  | [x]  |
 | 7   | SVG Rasterization                                   | 2.5/5      | Medium    | Medium    | +~540 KB–1 MB | +~0.5–1 KB    | +~541 KB–1 MB | [ ]  |
 | 8   | Image Metadata + EXIF Display                       | 2.5/5      | Medium    | Medium    | +~28–45 KB    | +~1.2–2 KB    | +~29–47 KB    | [ ]  |

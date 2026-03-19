@@ -99,6 +99,9 @@ pub fn extract(input: &[u8]) -> Result<ImageMetadata, MetadataError> {
     let color_type = decoder.color_type();
     let original_color = decoder.original_color_type();
 
+    // Note: bytes_per_pixel reflects the decoded color type, not the original
+    // stored encoding (e.g. a 1-bit BMP decoded to RGB8 reports 24 bits).
+    // We use the decoded value because it matches what the `image` crate works with.
     // bytes_per_pixel returns u8, which always fits in u16
     let bits_per_pixel = u16::from(color_type.bytes_per_pixel()) * 8;
     let has_alpha = color_type.has_alpha();
@@ -143,6 +146,8 @@ fn format_to_string(format: image::ImageFormat) -> String {
         image::ImageFormat::Ico => "ico".to_owned(),
         image::ImageFormat::Tga => "tga".to_owned(),
         image::ImageFormat::Qoi => "qoi".to_owned(),
+        // ImageFormat is #[non_exhaustive], so a wildcard is required to handle
+        // any future variants added by the `image` crate.
         _ => format!("{format:?}").to_lowercase(),
     }
 }

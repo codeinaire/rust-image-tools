@@ -1,4 +1,4 @@
-import { useState, useRef } from 'preact/hooks'
+import { useState, useRef, useEffect } from 'preact/hooks'
 import type { ImageMetadata } from '../types'
 import { trackMetadataViewed } from '../analytics'
 
@@ -18,6 +18,12 @@ export function formatGpsCoord(value: number, isLatitude: boolean): string {
 export function MetadataPanel({ metadata }: MetadataPanelProps): preact.JSX.Element | null {
   const [showAllFields, setShowAllFields] = useState(false)
   const trackedRef = useRef(false)
+
+  // Reset per-file state when a new image is loaded
+  useEffect(() => {
+    setShowAllFields(false)
+    trackedRef.current = false
+  }, [metadata])
 
   if (!metadata) {
     return null
@@ -357,8 +363,8 @@ export function MetadataPanel({ metadata }: MetadataPanelProps): preact.JSX.Elem
             }}
           >
             <tbody>
-              {meta.png_text_chunks.map((chunk) => (
-                <tr key={chunk.keyword}>
+              {meta.png_text_chunks.map((chunk, i) => (
+                <tr key={`${i}-${chunk.keyword}`}>
                   <td style={labelStyle}>{chunk.keyword}</td>
                   <td style={pngValueStyle}>{chunk.text}</td>
                 </tr>

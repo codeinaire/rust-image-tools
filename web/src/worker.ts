@@ -194,10 +194,25 @@ function handleGetDimensions(id: number, data: Uint8Array): void {
   }
 }
 
+/** Validate that a WASM return value has the expected ImageMetadata shape. */
+function parseMetadata(value: unknown): ImageMetadata {
+  if (
+    typeof value === 'object' &&
+    value !== null &&
+    'width' in value &&
+    'height' in value &&
+    'format' in value &&
+    'exif' in value
+  ) {
+    return value as ImageMetadata
+  }
+  throw new Error('Unexpected shape returned from get_image_metadata')
+}
+
 /** Extract image metadata without fully decoding pixel data. */
 function handleGetMetadata(id: number, data: Uint8Array): void {
   try {
-    const metadata = get_image_metadata(data) as ImageMetadata
+    const metadata = parseMetadata(get_image_metadata(data))
     const response: WorkerResponse = {
       type: MessageType.GetMetadata,
       id,
