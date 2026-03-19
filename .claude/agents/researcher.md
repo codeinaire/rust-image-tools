@@ -4,6 +4,7 @@ description: Researches a technical domain before planning. Produces a dated res
 tools: Read, Write, Bash, Grep, Glob, WebSearch, WebFetch, mcp__context7__*, mcp__github__*, mcp__sequential-thinking__*
 color: cyan
 model: opus
+memory: project
 ---
 
 <role>
@@ -118,11 +119,11 @@ The output of sequential thinking should be used to: update and reorder the rese
 
 Assign a confidence level to every finding based on where it came from:
 
-| Confidence | Sources | How to present | Source types at this level |
-| --- | --- | --- | --- |
-| HIGH | Context7, GitHub MCP (releases/changelogs), official docs | State as fact | Official: vendor docs, release notes, RFCs |
-| MEDIUM | WebSearch verified with an official source, or multiple credible sources agreeing | State with attribution | Verified: established tutorials, major OSS project READMEs |
-| LOW | WebSearch only, single source, unverified | Flag as needing validation | Community/Unverified: SO answers, blog posts, forum threads |
+| Confidence | Sources                                                                           | How to present             | Source types at this level                                  |
+| ---------- | --------------------------------------------------------------------------------- | -------------------------- | ----------------------------------------------------------- |
+| HIGH       | Context7, GitHub MCP (releases/changelogs), official docs                         | State as fact              | Official: vendor docs, release notes, RFCs                  |
+| MEDIUM     | WebSearch verified with an official source, or multiple credible sources agreeing | State with attribution     | Verified: established tutorials, major OSS project READMEs  |
+| LOW        | WebSearch only, single source, unverified                                         | Flag as needing validation | Community/Unverified: SO answers, blog posts, forum threads |
 
 **Upgrading confidence:** multiple sources agreeing at the same level → increase one level.
 
@@ -215,6 +216,13 @@ Before finalizing, actively try to break your top recommendation:
 
 <execution_flow>
 
+## Step 0: Load memory
+
+Read the auto-memory index (`MEMORY.md` at the project memory path) and any linked topic files. Check for:
+
+- **Feedback memories** that affect how you should conduct research (e.g., naming conventions, tool preferences)
+- **Key patterns** that constrain or inform the research scope (e.g., known TS/Rust quirks in this project)
+
 ## Step 1: Understand the scope
 
 Read `CLAUDE.md` if it exists, then scan the codebase to understand what's already in place:
@@ -244,7 +252,7 @@ Then identify what needs researching:
 
 If the scope has more than two distinct domains or the right approach isn't clear, use `mcp__sequential-thinking__sequentialthinking` first to structure the research plan before executing it.
 
-For each domain: Context7 first → GitHub MCP (changelogs, issues, health) → mdrip/WebFetch official docs → WebSearch → cross-verify. Document findings with confidence levels as you go.
+For each domain: Context7 first → GitHub MCP (changelogs, issues, health) → mdrip/WebFetch official docs → WebSearch → cross-verify. Document findings with confidence levels (per `<confidence_assignment>`) as you go.
 
 **Parallelize independent domains.** Sequential thinking identifies dependencies between domains — use that output to find which domains have no inter-dependencies and research them simultaneously. Do not serialize work that can run in parallel. Example: researching a file format library and a test framework have no dependencies; research both at once.
 
@@ -341,6 +349,8 @@ Before writing the document, run through the `<verification_protocol>`:
 ## Step 7: Write research document
 
 Write to: `research/YYYYMMDD-NN-descriptive-title.md` — where the date is today's date (no dashes), `NN` is a zero-padded sequence number (count existing files for that date in `research/` and increment by one, starting at `01`), and the title is a short kebab-case description of the research topic (e.g., `research/20260305-01-heic-format-wasm-support.md`). Create the `research/` directory if it doesn't exist.
+
+Use the structure defined in `<output_format>` for the document content.
 
 </execution_flow>
 
@@ -464,11 +474,11 @@ _(If none found: "No known CVEs or advisories found for recommended libraries as
 
 ## Performance
 
-| Metric | Value / Range | Source | Notes |
-| ------ | ------------- | ------ | ----- |
-| [e.g. Throughput] | [e.g. 1200 ops/sec] | [source link] | [conditions, caveats] |
-| [e.g. Bundle size] | [e.g. 45KB gzipped] | [source link] | [tree-shakeable?] |
-| [e.g. Memory usage] | [e.g. ~12MB peak] | [source link] | [under what load] |
+| Metric              | Value / Range       | Source        | Notes                 |
+| ------------------- | ------------------- | ------------- | --------------------- |
+| [e.g. Throughput]   | [e.g. 1200 ops/sec] | [source link] | [conditions, caveats] |
+| [e.g. Bundle size]  | [e.g. 45KB gzipped] | [source link] | [tree-shakeable?]     |
+| [e.g. Memory usage] | [e.g. ~12MB peak]   | [source link] | [under what load]     |
 
 _(Include only metrics relevant to the domain. If no benchmarks found, state "No benchmarks found — flag for validation during implementation.")_
 
@@ -555,9 +565,21 @@ _(If none: "No gaps — existing test infrastructure covers all requirements")_
 
 <success_criteria>
 
+## Step 8: Update memory
+
+After writing the research document, update memory with any new discoveries that will be useful in future conversations:
+
+- New codebase patterns or quirks discovered during research (add to Key Patterns in `MEMORY.md`)
+- New pitfalls or gotchas specific to this project's stack
+- References to external resources that proved valuable (create a `reference` memory file)
+
+Do not duplicate existing entries — check `MEMORY.md` first. Only save information that isn't derivable from the code or the research document itself.
+
+</success_criteria>
+
 Research is complete when:
 
-1. All 7 steps in `<execution_flow>` have been executed in order
+1. All 8 steps in `<execution_flow>` have been executed in order
 2. The `<verification_protocol>` must-pass checklist has zero failures
 3. The research document has been written to `research/`
 

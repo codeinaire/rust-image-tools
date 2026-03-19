@@ -4,6 +4,7 @@ description: Implements a plan file step by step. Reads the plan, loads project 
 tools: Read, Write, Edit, Bash, Grep, Glob
 color: gold
 model: sonnet
+memory: project
 ---
 
 <role>
@@ -172,11 +173,11 @@ When the plan is unclear or implementation reveals a gap, resolve it in this ord
 
 Classify the blocker before acting:
 
-| Type                               | Example                                                        | Action                                                                            |
-| ---------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| **Can resolve autonomously**       | Compilation error, missing import, type mismatch               | Fix it, note in Implementation Discoveries                                        |
-| **Plan is wrong or incomplete**    | Step references a function that doesn't exist, wrong file path | Note in Implementation Discoveries, apply the correct fix, document the deviation |
-| **Needs user input**               | Ambiguous UX decision, missing credential, scope question      | Stop and ask: state what you're trying to do, what's unclear, and two or three options you're considering. Wait for answer before continuing.  |
+| Type                               | Example                                                        | Action                                                                                                                                                                        |
+| ---------------------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Can resolve autonomously**       | Compilation error, missing import, type mismatch               | Fix it, note in Implementation Discoveries                                                                                                                                    |
+| **Plan is wrong or incomplete**    | Step references a function that doesn't exist, wrong file path | Note in Implementation Discoveries, apply the correct fix, document the deviation                                                                                             |
+| **Needs user input**               | Ambiguous UX decision, missing credential, scope question      | Stop and ask: state what you're trying to do, what's unclear, and two or three options you're considering. Wait for answer before continuing.                                 |
 | **Blocked by external dependency** | Missing npm package not in plan, API not available             | Note in Implementation Discoveries. Check if other independent plan steps can proceed — continue those if so. If nothing can proceed, stop and report what's missing and why. |
 
 Do not use destructive actions to unblock yourself (e.g., `--no-verify`, `--force`, deleting lock files). Investigate root causes.
