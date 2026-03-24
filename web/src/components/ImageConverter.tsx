@@ -5,7 +5,7 @@ import { useBenchmark } from '../hooks/useBenchmark'
 import { DropZone } from './DropZone'
 import { TransformModal } from './TransformModal'
 import { BenchmarkTable } from './BenchmarkTable'
-import { MetadataPanel } from './MetadataPanel'
+import { MetadataModal } from './MetadataModal'
 import { initAnalytics, trackAppLoaded, trackDownloadClicked } from '../analytics'
 import { ValidFormat } from '../types'
 import type { InputFormat } from '../types'
@@ -36,6 +36,7 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
   } = useConverter()
   const [targetFormat, setTargetFormat] = useState<ValidFormat>(initialTo ?? ValidFormat.Png)
   const [transformModalOpen, setTransformModalOpen] = useState(false)
+  const [metadataModalOpen, setMetadataModalOpen] = useState(false)
   const { benchmarkState, startBenchmark, isMobile } = useBenchmark(
     converter,
     state.fileInfo,
@@ -158,10 +159,11 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           onTransformOpen={() => {
             setTransformModalOpen(true)
           }}
+          onMetadataOpen={() => {
+            setMetadataModalOpen(true)
+          }}
           benchmarkDisabled={benchmarkDisabled}
         />
-
-        <MetadataPanel metadata={state.fileInfo?.metadata ?? null} />
 
         <BenchmarkTable
           fileInfo={state.fileInfo}
@@ -172,6 +174,16 @@ export function ImageConverter({ initialFrom, initialTo }: Props = {}): preact.J
           isMobile={isMobile}
         />
       </section>
+
+      {/* Metadata modal */}
+      {metadataModalOpen && state.fileInfo?.metadata && (
+        <MetadataModal
+          metadata={state.fileInfo.metadata}
+          onClose={() => {
+            setMetadataModalOpen(false)
+          }}
+        />
+      )}
 
       {/* Transform modal */}
       {transformModalOpen && state.fileInfo && (

@@ -6,6 +6,8 @@ const MONO_FONT = "'Share Tech Mono', monospace"
 
 interface MetadataPanelProps {
   metadata: ImageMetadata | null
+  /** When true, all detail sections start expanded (used inside the modal). */
+  expandAll?: boolean
 }
 
 /** Formats a GPS coordinate as a human-readable string with direction. */
@@ -15,7 +17,10 @@ export function formatGpsCoord(value: number, isLatitude: boolean): string {
 }
 
 /** Collapsible panel displaying image metadata, EXIF data, and PNG text chunks. */
-export function MetadataPanel({ metadata }: MetadataPanelProps): preact.JSX.Element | null {
+export function MetadataPanel({
+  metadata,
+  expandAll,
+}: MetadataPanelProps): preact.JSX.Element | null {
   const [showAllFields, setShowAllFields] = useState(false)
   const trackedRef = useRef(false)
 
@@ -182,7 +187,11 @@ export function MetadataPanel({ metadata }: MetadataPanelProps): preact.JSX.Elem
 
       {/* EXIF Data */}
       {hasExif && (
-        <details style={{ marginTop: '0.75rem' }} onToggle={onSectionToggle}>
+        <details
+          open={expandAll ?? undefined}
+          style={{ marginTop: '0.75rem' }}
+          onToggle={onSectionToggle}
+        >
           <summary style={summaryStyle}>EXIF DATA</summary>
           <table
             style={{
@@ -353,7 +362,11 @@ export function MetadataPanel({ metadata }: MetadataPanelProps): preact.JSX.Elem
 
       {/* PNG Text Chunks */}
       {hasPngText && (
-        <details style={{ marginTop: '0.75rem' }} onToggle={onSectionToggle}>
+        <details
+          open={expandAll ?? undefined}
+          style={{ marginTop: '0.75rem' }}
+          onToggle={onSectionToggle}
+        >
           <summary style={summaryStyle}>PNG TEXT CHUNKS</summary>
           <table
             style={{
