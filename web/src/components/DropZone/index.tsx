@@ -31,6 +31,7 @@ interface Props {
   transforms: TransformName[]
   onStartBenchmark: () => void
   onTransformOpen: () => void
+  onMetadataOpen: () => void
   benchmarkDisabled: boolean
 }
 
@@ -63,6 +64,7 @@ export function DropZone({
   transforms,
   onStartBenchmark,
   onTransformOpen,
+  onMetadataOpen,
   benchmarkDisabled,
 }: Props): preact.JSX.Element {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -223,6 +225,51 @@ export function DropZone({
             }}
           />
         </svg>
+      )}
+
+      {/* Metadata info icon — top-right corner */}
+      {fileInfo?.metadata && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onMetadataOpen()
+          }}
+          style={{
+            position: 'absolute',
+            top: '0.5rem',
+            right: '0.75rem',
+            zIndex: 10,
+            background: 'none',
+            border: 'none',
+            color: 'var(--cp-muted)',
+            cursor: 'pointer',
+            padding: '0.25rem',
+            transition: 'color 0.15s',
+            lineHeight: 0,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = 'var(--cp-cyan)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = 'var(--cp-muted)'
+          }}
+          aria-label="View image metadata"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5" />
+            <line
+              x1="8"
+              y1="7"
+              x2="8"
+              y2="11.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+            <circle cx="8" cy="4.5" r="0.75" fill="currentColor" />
+          </svg>
+        </button>
       )}
 
       {/* Top section: clickable file area */}
