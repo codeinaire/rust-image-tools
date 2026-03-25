@@ -4,6 +4,8 @@ import type {
   GetDimensionsRequest,
   GetMetadataRequest,
   BenchmarkImagesRequest,
+  ProcessImageRequest,
+  PreviewOperationsRequest,
   InitSuccessResponse,
   InitErrorResponse,
   DetectFormatSuccessResponse,
@@ -13,6 +15,8 @@ import type {
   BenchmarkResultSuccess,
   BenchmarkResultError,
   BenchmarkCompleteResponse,
+  ProcessImageSuccessResponse,
+  PreviewOperationsSuccessResponse,
   ErrorResponse,
 } from './interfaces'
 
@@ -22,6 +26,8 @@ export type WorkerRequest =
   | GetDimensionsRequest
   | GetMetadataRequest
   | BenchmarkImagesRequest
+  | ProcessImageRequest
+  | PreviewOperationsRequest
 
 export type WorkerResponse =
   | InitSuccessResponse
@@ -33,4 +39,6 @@ export type WorkerResponse =
   | BenchmarkResultSuccess
   | BenchmarkResultError
   | BenchmarkCompleteResponse
+  | ProcessImageSuccessResponse
+  | PreviewOperationsSuccessResponse
   | ErrorResponse

@@ -8,7 +8,7 @@ import {
   trackValidationRejected,
 } from '../analytics'
 import type { ImageConverter } from '../lib/image-converter'
-import type { ImageMetadata } from '../types'
+import type { ImageMetadata, ProcessingOperation } from '../types'
 import { ValidFormat } from '../types'
 import { normalizeHeic } from '../lib/heic'
 import { getQualityForFormat } from '../lib/quality'
@@ -180,6 +180,8 @@ export function useConverter(): {
   toggleTransform: (targetFormat: ValidFormat, name: TransformName) => void
   undoTransform: (targetFormat: ValidFormat) => void
   canUndoTransform: boolean
+  /** Sets the current processing operations for use during conversion. */
+  setOperations: (ops: ProcessingOperation[]) => void
 } {
   const converter = useImageConverter()
   const blobUrlRef = useRef<string | null>(null)
@@ -188,6 +190,7 @@ export function useConverter(): {
   const transformDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const transformsRef = useRef<TransformName[]>([])
   const transformHistoryRef = useRef<TransformName[][]>([])
+  const operationsRef = useRef<ProcessingOperation[]>([])
 
   const [quality, setQuality] = useState<number>(80)
   const [transforms, setTransformsState] = useState<TransformName[]>([])
@@ -391,12 +394,27 @@ export function useConverter(): {
     const startTime = performance.now()
 
     try {
-      const resultBytes = await converter.convertImage(
-        fileInfo.bytes,
-        targetFormat,
-        qualityForFormat,
-        hasTransforms ? currentTransforms : undefined,
-      )
+      const currentOperations = operationsRef.current
+      const hasOperations = currentOperations.length > 0
+
+      let resultBytes: Uint8Array
+      if (hasOperations) {
+        const { data } = await converter.processImage(
+          fileInfo.bytes,
+          targetFormat,
+          currentOperations,
+          qualityForFormat,
+          hasTransforms ? currentTransforms : undefined,
+        )
+        resultBytes = data
+      } else {
+        resultBytes = await converter.convertImage(
+          fileInfo.bytes,
+          targetFormat,
+          qualityForFormat,
+          hasTransforms ? currentTransforms : undefined,
+        )
+      }
       if (myGeneration !== convertGenerationRef.current) {
         return
       }
@@ -558,6 +576,11 @@ export function useConverter(): {
 
   const canUndoTransform = transformHistoryRef.current.length > 0
 
+  /** Updates the current processing operations ref for use during conversion. */
+  const setOperations = useCallback((ops: ProcessingOperation[]) => {
+    operationsRef.current = ops
+  }, [])
+
   return {
     state,
     converter,
@@ -571,5 +594,6 @@ export function useConverter(): {
     toggleTransform,
     undoTransform,
     canUndoTransform,
+    setOperations,
   }
 }

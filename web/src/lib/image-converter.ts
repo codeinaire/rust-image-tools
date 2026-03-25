@@ -5,6 +5,7 @@ import type {
   ImageDimensions,
   ImageMetadata,
   BenchmarkResultResponse,
+  ProcessingOperation,
 } from '../types'
 
 interface PendingRequest {
@@ -165,6 +166,59 @@ export class ImageConverter {
     const response = await this.sendRequest({ type: MessageType.GetMetadata, id, data })
     if (response.type === MessageType.GetMetadata) {
       return response.metadata
+    }
+    throw new Error('Unexpected response type')
+  }
+
+  /**
+   * Convert an image with processing operations applied.
+   * Returns the converted bytes and conversion timing.
+   */
+  async processImage(
+    data: Uint8Array,
+    targetFormat: ValidFormat,
+    operations: ProcessingOperation[],
+    quality?: number,
+    transforms?: string[],
+  ): Promise<{ data: Uint8Array; conversionMs: number }> {
+    await this.ready
+    const id = this.nextRequestId++
+    const hasTransforms = transforms !== undefined && transforms.length > 0
+    const response = await this.sendRequest({
+      type: MessageType.ProcessImage,
+      id,
+      data,
+      targetFormat,
+      operations,
+      ...(quality !== undefined ? { quality } : {}),
+      ...(hasTransforms ? { transforms } : {}),
+    })
+    if (response.type === MessageType.ProcessImage) {
+      return { data: response.data, conversionMs: response.conversionMs }
+    }
+    throw new Error('Unexpected response type')
+  }
+
+  /**
+   * Generate a low-resolution preview with processing operations applied.
+   * Returns RGBA pixel data and dimensions for rendering to a canvas.
+   */
+  async previewOperations(
+    data: Uint8Array,
+    operations: ProcessingOperation[],
+    maxWidth: number,
+  ): Promise<{ rgba: Uint8Array; width: number; height: number }> {
+    await this.ready
+    const id = this.nextRequestId++
+    const response = await this.sendRequest({
+      type: MessageType.PreviewOperations,
+      id,
+      data,
+      operations,
+      maxWidth,
+    })
+    if (response.type === MessageType.PreviewOperations) {
+      return { rgba: response.rgba, width: response.width, height: response.height }
     }
     throw new Error('Unexpected response type')
   }

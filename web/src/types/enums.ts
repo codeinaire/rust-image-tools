@@ -22,5 +22,7 @@ export enum MessageType {
   BenchmarkResult = 'benchmark_result',
   BenchmarkComplete = 'benchmark_complete',
   GetMetadata = 'get_metadata',
+  ProcessImage = 'process_image',
+  PreviewOperations = 'preview_operations',
   Error = 'error',
 }

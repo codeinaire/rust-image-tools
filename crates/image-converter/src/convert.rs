@@ -5,6 +5,7 @@ use image::codecs::png::{CompressionType, FilterType, PngEncoder};
 use image::ImageReader;
 
 use crate::formats::ImageFormat;
+use crate::processing::{self, ProcessingOperation};
 use crate::transforms::{self, Transform};
 
 /// Result of reading image dimensions.
@@ -148,6 +149,98 @@ pub fn decode_rgba_with_transforms(
     Ok((rgba, Dimensions { width, height }))
 }
 
+/// Decodes the input image, applies transforms and processing operations, then
+/// re-encodes in the target format.
+///
+/// This extends `convert()` by adding a processing step between transforms and encoding.
+/// Processing operations (resize, crop, blur, etc.) are applied after simple transforms
+/// (flip, rotate, grayscale) and before format encoding.
+///
+/// # Errors
+///
+/// Returns a `ConvertError` if decoding, transforms, processing, or encoding fails.
+pub fn convert_with_processing(
+    input: Vec<u8>,
+    target: ImageFormat,
+    quality: Option<u8>,
+    transforms_list: &[Transform],
+    operations: &[ProcessingOperation],
+) -> Result<Vec<u8>, ConvertError> {
+    if let Some(q) = quality {
+        if q == 0 || q > 100 {
+            return Err(ConvertError::InvalidQuality(q));
+        }
+    }
+
+    let decoded = image::load_from_memory(&input).map_err(ConvertError::Decode)?;
+    drop(input);
+
+    let transformed = transforms::apply_transforms(decoded, transforms_list);
+    let processed = processing::apply_operations(transformed, operations)
+        .map_err(ConvertError::ProcessingFailed)?;
+
+    let mut output_buf = Vec::new();
+    match target {
+        ImageFormat::Jpeg => {
+            let encoder =
+                JpegEncoder::new_with_quality(Cursor::new(&mut output_buf), quality.unwrap_or(80));
+            processed
+                .write_with_encoder(encoder)
+                .map_err(ConvertError::Encode)?;
+        }
+        ImageFormat::Png => {
+            let encoder = PngEncoder::new_with_quality(
+                Cursor::new(&mut output_buf),
+                map_png_quality(quality),
+                FilterType::Adaptive,
+            );
+            processed
+                .write_with_encoder(encoder)
+                .map_err(ConvertError::Encode)?;
+        }
+        ImageFormat::Gif
+        | ImageFormat::Bmp
+        | ImageFormat::Tiff
+        | ImageFormat::Ico
+        | ImageFormat::Tga
+        | ImageFormat::Qoi
+        | ImageFormat::WebP => {
+            let output_format = target
+                .to_image_format()
+                .map_err(|e| ConvertError::UnsupportedTarget(e.to_string()))?;
+            processed
+                .write_to(&mut Cursor::new(&mut output_buf), output_format)
+                .map_err(ConvertError::Encode)?;
+        }
+    }
+
+    Ok(output_buf)
+}
+
+/// Decodes the input image, applies transforms and processing operations, then
+/// returns the resulting RGBA8 pixel data with post-processing dimensions.
+///
+/// This is used for formats like WebP where encoding is handled outside Rust (via Canvas)
+/// but transforms and processing still need to be applied on the Rust side.
+///
+/// # Errors
+///
+/// Returns a `ConvertError` if decoding, transforms, or processing fails.
+pub fn decode_rgba_with_processing(
+    input: &[u8],
+    transforms_list: &[Transform],
+    operations: &[ProcessingOperation],
+) -> Result<(Vec<u8>, Dimensions), ConvertError> {
+    let decoded = image::load_from_memory(input).map_err(ConvertError::Decode)?;
+    let transformed = transforms::apply_transforms(decoded, transforms_list);
+    let processed = processing::apply_operations(transformed, operations)
+        .map_err(ConvertError::ProcessingFailed)?;
+    let width = processed.width();
+    let height = processed.height();
+    let rgba = processed.into_rgba8().into_raw();
+    Ok((rgba, Dimensions { width, height }))
+}
+
 /// Errors that can occur during image conversion or dimension reading.
 #[derive(Debug)]
 pub enum ConvertError {
@@ -159,6 +252,8 @@ pub enum ConvertError {
     UnsupportedTarget(String),
     /// Quality value is outside the valid 1-100 range.
     InvalidQuality(u8),
+    /// A processing operation failed.
+    ProcessingFailed(processing::ProcessingError),
 }
 
 impl std::fmt::Display for ConvertError {
@@ -170,6 +265,7 @@ impl std::fmt::Display for ConvertError {
             Self::InvalidQuality(q) => {
                 write!(f, "Quality must be between 1 and 100, got {q}")
             }
+            Self::ProcessingFailed(e) => write!(f, "Processing failed: {e}"),
         }
     }
 }
