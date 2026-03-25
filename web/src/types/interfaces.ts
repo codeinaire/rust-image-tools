@@ -1,5 +1,23 @@
 import type { MessageType, ValidFormat } from './enums'
 
+// Processing operation types (match Rust serde format)
+
+/** Resize filter algorithms available for resize operations. */
+export type ResizeFilter = 'nearest' | 'triangle' | 'catmull_rom' | 'gaussian' | 'lanczos3'
+
+/** A single image processing operation with its parameters. */
+export type ProcessingOperation =
+  | { type: 'resize'; width: number; height: number; filter: ResizeFilter }
+  | { type: 'resize_exact'; width: number; height: number; filter: ResizeFilter }
+  | { type: 'thumbnail'; max_width: number; max_height: number }
+  | { type: 'crop'; x: number; y: number; width: number; height: number }
+  | { type: 'blur'; sigma: number }
+  | { type: 'fast_blur'; sigma: number }
+  | { type: 'unsharpen'; sigma: number; threshold: number }
+  | { type: 'brighten'; value: number }
+  | { type: 'contrast'; value: number }
+  | { type: 'hue_rotate'; degrees: number }
+
 // Request types (main thread → worker)
 
 export interface DetectFormatRequest {
@@ -163,4 +181,41 @@ export interface GetMetadataSuccessResponse {
   id: number
   success: true
   metadata: ImageMetadata
+}
+
+// Processing operation worker messages
+
+export interface ProcessImageRequest {
+  type: MessageType.ProcessImage
+  id: number
+  data: Uint8Array
+  targetFormat: ValidFormat
+  quality?: number
+  transforms?: string[]
+  operations: ProcessingOperation[]
+}
+
+export interface ProcessImageSuccessResponse {
+  type: MessageType.ProcessImage
+  id: number
+  success: true
+  data: Uint8Array
+  conversionMs: number
+}
+
+export interface PreviewOperationsRequest {
+  type: MessageType.PreviewOperations
+  id: number
+  data: Uint8Array
+  operations: ProcessingOperation[]
+  maxWidth: number
+}
+
+export interface PreviewOperationsSuccessResponse {
+  type: MessageType.PreviewOperations
+  id: number
+  success: true
+  rgba: Uint8Array
+  width: number
+  height: number
 }

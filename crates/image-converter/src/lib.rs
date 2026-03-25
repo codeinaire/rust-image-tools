@@ -1,11 +1,13 @@
 pub mod convert;
 pub mod formats;
 pub mod metadata;
+pub mod processing;
 pub mod transforms;
 
 use wasm_bindgen::prelude::*;
 
 use formats::ImageFormat;
+use processing::ProcessingOperation;
 
 /// Detect the format of an image from its raw bytes.
 ///
@@ -177,4 +179,131 @@ pub fn get_image_metadata(input: &[u8]) -> Result<JsValue, JsError> {
         metadata::extract(input).map_err(|e| JsError::new(&format!("Metadata error: {e}")))?;
     serde_wasm_bindgen::to_value(&meta)
         .map_err(|e| JsError::new(&format!("Failed to serialize metadata: {e}")))
+}
+
+/// Convert an image with both transforms and processing operations applied.
+///
+/// Applies transforms (flip, rotate, grayscale) first, then processing operations
+/// (resize, crop, blur, brightness, etc.), then encodes to the target format.
+///
+/// The `operations` parameter is a JavaScript array of operation objects, each with
+/// a `type` field and operation-specific parameters (e.g. `{ type: "blur", sigma: 2.0 }`).
+///
+/// # Errors
+///
+/// Returns a `JsError` if:
+/// - The target format name is not recognized
+/// - The quality value is outside the 1-100 range
+/// - A transform name is not recognized
+/// - An operation has invalid parameters
+/// - The input image cannot be decoded
+/// - Encoding to the target format fails
+#[wasm_bindgen]
+pub fn process_and_convert(
+    input: &[u8],
+    target_format: &str,
+    quality: Option<u8>,
+    transforms_csv: &str,
+    operations: JsValue,
+) -> Result<Vec<u8>, JsError> {
+    if let Some(q) = quality {
+        if q == 0 || q > 100 {
+            return Err(JsError::new("Quality must be between 1 and 100"));
+        }
+    }
+
+    let target = ImageFormat::from_name(target_format)
+        .map_err(|e| JsError::new(&format!("Invalid target format: {e}")))?;
+
+    let transform_list = transforms::parse_transforms(transforms_csv)
+        .map_err(|e| JsError::new(&format!("Invalid transform: {e}")))?;
+
+    let ops: Vec<ProcessingOperation> = serde_wasm_bindgen::from_value(operations)
+        .map_err(|e| JsError::new(&format!("Invalid processing operations: {e}")))?;
+
+    let result =
+        convert::convert_with_processing(input.to_vec(), target, quality, &transform_list, &ops)
+            .map_err(|e| JsError::new(&e.to_string()))?;
+
+    Ok(result)
+}
+
+/// Decode an image, apply transforms and processing operations, and return raw RGBA8 pixels.
+///
+/// Returns a `JsValue` object with `rgba` (Uint8Array), `width` (u32), and `height` (u32).
+/// Used for the WebP encoding path where Canvas handles the final encoding.
+///
+/// # Errors
+///
+/// Returns a `JsError` if the input cannot be decoded, transforms are invalid,
+/// or a processing operation has invalid parameters.
+#[wasm_bindgen]
+pub fn decode_rgba_with_processing(
+    input: &[u8],
+    transforms_csv: &str,
+    operations: JsValue,
+) -> Result<JsValue, JsError> {
+    let transform_list = transforms::parse_transforms(transforms_csv)
+        .map_err(|e| JsError::new(&format!("Invalid transform: {e}")))?;
+
+    let ops: Vec<ProcessingOperation> = serde_wasm_bindgen::from_value(operations)
+        .map_err(|e| JsError::new(&format!("Invalid processing operations: {e}")))?;
+
+    let (rgba, dims) = convert::decode_rgba_with_processing(input, &transform_list, &ops)
+        .map_err(|e| JsError::new(&format!("Failed to process image: {e}")))?;
+
+    let obj = js_sys::Object::new();
+    let rgba_array = js_sys::Uint8Array::from(rgba.as_slice());
+    js_sys::Reflect::set(&obj, &"rgba".into(), &rgba_array)
+        .map_err(|_| JsError::new("Failed to set rgba property"))?;
+    js_sys::Reflect::set(&obj, &"width".into(), &dims.width.into())
+        .map_err(|_| JsError::new("Failed to set width property"))?;
+    js_sys::Reflect::set(&obj, &"height".into(), &dims.height.into())
+        .map_err(|_| JsError::new("Failed to set height property"))?;
+
+    Ok(obj.into())
+}
+
+/// Generate a low-resolution preview with processing operations applied.
+///
+/// Thumbnails the input to fit within `max_width` (preserving aspect ratio),
+/// then applies all processing operations. Returns RGBA pixels and dimensions.
+///
+/// Used for interactive preview during parameter adjustment.
+///
+/// # Errors
+///
+/// Returns a `JsError` if decoding fails or a processing operation has invalid parameters.
+#[wasm_bindgen]
+pub fn preview_operations(
+    input: &[u8],
+    operations: JsValue,
+    max_width: u32,
+) -> Result<JsValue, JsError> {
+    let ops: Vec<ProcessingOperation> = serde_wasm_bindgen::from_value(operations)
+        .map_err(|e| JsError::new(&format!("Invalid processing operations: {e}")))?;
+
+    let decoded =
+        image::load_from_memory(input).map_err(|e| JsError::new(&format!("Decode error: {e}")))?;
+
+    // Thumbnail to max_width for fast preview
+    let thumb = decoded.thumbnail(max_width, max_width);
+
+    let processed = processing::apply_operations(thumb, &ops)
+        .map_err(|e| JsError::new(&format!("Processing error: {e}")))?;
+
+    let width = processed.width();
+    let height = processed.height();
+    let rgba = processed.into_rgba8().into_raw();
+
+    let obj = js_sys::Object::new();
+    let rgba_array = js_sys::Uint8Array::from(rgba.as_slice());
+    js_sys::Reflect::set(&obj, &"rgba".into(), &rgba_array)
+        .map_err(|_| JsError::new("Failed to set rgba property"))?;
+    js_sys::Reflect::set(&obj, &"width".into(), &width.into())
+        .map_err(|_| JsError::new("Failed to set width property"))?;
+    js_sys::Reflect::set(&obj, &"height".into(), &height.into())
+        .map_err(|_| JsError::new("Failed to set height property"))?;
+
+    Ok(obj.into())
 }

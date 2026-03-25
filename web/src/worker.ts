@@ -6,13 +6,16 @@ import init, {
   convert_image_with_transforms,
   decode_to_rgba,
   decode_to_rgba_with_transforms,
+  decode_rgba_with_processing,
   detect_format,
   get_dimensions,
   get_image_metadata,
+  process_and_convert,
+  preview_operations,
 } from '../../crates/image-converter/pkg/image_converter.js'
 
 import { MessageType, ValidFormat } from './types'
-import type { ImageMetadata } from './types'
+import type { ImageMetadata, ProcessingOperation } from './types'
 import type { BenchmarkImagesRequest, WorkerRequest, WorkerResponse } from './types'
 import { getQualityForFormat } from './lib/quality'
 
@@ -57,6 +60,19 @@ onmessage = (event: MessageEvent<WorkerRequest>) => {
       break
     case MessageType.BenchmarkImages:
       void handleBenchmarkImages(request)
+      break
+    case MessageType.ProcessImage:
+      void handleProcessImage(
+        request.id,
+        request.data,
+        request.targetFormat,
+        request.operations,
+        request.quality,
+        request.transforms,
+      )
+      break
+    case MessageType.PreviewOperations:
+      handlePreviewOperations(request.id, request.data, request.operations, request.maxWidth)
       break
   }
 }
@@ -220,6 +236,86 @@ function handleGetMetadata(id: number, data: Uint8Array): void {
       metadata,
     }
     postMessage(response)
+  } catch (e) {
+    postError(id, e)
+  }
+}
+
+/** Encodes raw RGBA pixels, applies transforms + processing ops, then encodes to WebP via Canvas. */
+async function encodeWebpWithProcessing(
+  data: Uint8Array,
+  quality: number,
+  transforms: string[],
+  operations: ProcessingOperation[],
+): Promise<Uint8Array> {
+  const transformsCsv = transforms.join(',')
+  const result = decode_rgba_with_processing(data, transformsCsv, operations) as {
+    rgba: Uint8Array
+    width: number
+    height: number
+  }
+  return encodeRgbaToWebp(result.rgba, result.width, result.height, quality)
+}
+
+/** Convert an image with processing operations applied. */
+async function handleProcessImage(
+  id: number,
+  data: Uint8Array,
+  targetFormat: ValidFormat,
+  operations: ProcessingOperation[],
+  quality?: number,
+  transforms?: string[],
+): Promise<void> {
+  try {
+    const start = performance.now()
+    let result: Uint8Array
+    const hasTransforms = transforms !== undefined && transforms.length > 0
+    const transformsCsv = hasTransforms ? transforms.join(',') : ''
+
+    if (targetFormat === ValidFormat.WebP) {
+      const canvasQuality = quality !== undefined ? quality / 100 : 0.85
+      const actualTransforms = hasTransforms ? transforms : []
+      result = await encodeWebpWithProcessing(data, canvasQuality, actualTransforms, operations)
+    } else {
+      result = process_and_convert(data, targetFormat, quality, transformsCsv, operations)
+    }
+
+    const conversionMs = Math.round(performance.now() - start)
+    const response: WorkerResponse = {
+      type: MessageType.ProcessImage,
+      id,
+      success: true,
+      data: result,
+      conversionMs,
+    }
+    postMessage(response, [result.buffer])
+  } catch (e) {
+    postError(id, e)
+  }
+}
+
+/** Generate a low-resolution preview with processing operations applied. */
+function handlePreviewOperations(
+  id: number,
+  data: Uint8Array,
+  operations: ProcessingOperation[],
+  maxWidth: number,
+): void {
+  try {
+    const result = preview_operations(data, operations, maxWidth) as {
+      rgba: Uint8Array
+      width: number
+      height: number
+    }
+    const response: WorkerResponse = {
+      type: MessageType.PreviewOperations,
+      id,
+      success: true,
+      rgba: result.rgba,
+      width: result.width,
+      height: result.height,
+    }
+    postMessage(response, [result.rgba.buffer])
   } catch (e) {
     postError(id, e)
   }
