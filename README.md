@@ -14,38 +14,55 @@ Most online image converters upload your files to a server. This tool runs entir
 - **Fast** — no network round-trip, just local computation
 - **Offline-capable** — works without an internet connection (once loaded)
 
+## Features
+
+- **Format conversion** — convert between 10 image formats (see table below)
+- **Image transforms** — flip horizontal/vertical, rotate 90/180/270 degrees, grayscale, invert
+- **EXIF & metadata** — view camera info, GPS coordinates, PNG text chunks, ICC profiles
+- **Quality control** — adjustable quality slider (1-100%) for JPEG and PNG
+- **Clipboard paste** — paste images directly from the clipboard
+- **Benchmark mode** — compare conversion performance across all output formats
+- **HEIC support** — auto-converts HEIC/HEIF input to PNG via a lazy-loaded WASM decoder
+
 ## Supported Formats
 
-| Format | Input | Output |
-|--------|-------|--------|
-| PNG    | Yes   | Yes    |
-| JPEG   | Yes   | Yes    |
-| WebP   | Yes   | No (decode only) |
-| GIF    | Yes   | Yes    |
-| BMP    | Yes   | Yes    |
+| Format    | Input | Output | Notes                                    |
+|-----------|-------|--------|------------------------------------------|
+| PNG       | Yes   | Yes    | Compression level via quality slider     |
+| JPEG      | Yes   | Yes    | Quality parameter via quality slider     |
+| WebP      | Yes   | No     | Decode only — encoding not supported     |
+| GIF       | Yes   | Yes    |                                          |
+| BMP       | Yes   | Yes    |                                          |
+| TIFF      | Yes   | Yes    |                                          |
+| ICO       | Yes   | Yes    |                                          |
+| TGA       | No    | Yes    | No magic bytes — cannot auto-detect      |
+| QOI       | Yes   | Yes    |                                          |
+| HEIC/HEIF | Yes   | No     | Input only — converted to PNG for output |
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│  Browser                                    │
-│                                             │
-│  ┌───────────────┐    ┌──────────────────┐  │
-│  │  JS Frontend  │───>│   Web Worker     │  │
-│  │  (Parcel + TS)│<───│                  │  │
-│  │               │    │  ┌────────────┐  │  │
-│  │  - File input │    │  │ Rust WASM  │  │  │
-│  │  - Format     │    │  │ Module     │  │  │
-│  │    selector   │    │  │            │  │  │
-│  │  - Preview    │    │  │ image crate│  │  │
-│  │  - Download   │    │  └────────────┘  │  │
-│  └───────────────┘    └──────────────────┘  │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────┐
+│  Browser                                             │
+│                                                      │
+│  ┌────────────────────┐    ┌──────────────────────┐  │
+│  │  Astro + Preact    │───>│   Web Worker         │  │
+│  │  (Vite bundled)    │<───│                      │  │
+│  │                    │    │  ┌────────────────┐  │  │
+│  │  - Drag & drop     │    │  │  Rust WASM     │  │  │
+│  │  - Format selector │    │  │  Module         │  │  │
+│  │  - Quality slider  │    │  │                │  │  │
+│  │  - Transforms      │    │  │  image crate   │  │  │
+│  │  - EXIF viewer     │    │  │  kamadak-exif  │  │  │
+│  │  - Preview         │    │  └────────────────┘  │  │
+│  │  - Benchmark       │    │                      │  │
+│  └────────────────────┘    └──────────────────────┘  │
+└──────────────────────────────────────────────────────┘
 ```
 
-- **Rust WASM library** — handles image decoding, format detection, and encoding using the `image` crate
+- **Rust WASM library** — image decoding, encoding, format detection, transforms, and EXIF extraction via the `image` and `kamadak-exif` crates
 - **Web Worker** — runs WASM off the main thread so the UI stays responsive
-- **TypeScript frontend** — vanilla TS with Tailwind CSS, bundled by Parcel
+- **Astro + Preact frontend** — TypeScript with Tailwind CSS v4, bundled by Vite
 
 ### Worker–Main Thread Communication
 
@@ -70,143 +87,22 @@ All WASM operations run inside a Web Worker. The main thread (`main.ts`) communi
 
 The Worker is created eagerly on page load. It calls the wasm-pack `init()` function immediately and posts back the initialization result with timing.
 
-#### Format Detection
+All WASM operations use the same request/response pattern: the main thread sends a message with a numeric ID, the Worker processes it and posts back a response keyed to that ID.
 
-```
-  caller             main.ts                          worker.ts
-    │                  │                                 │
-    │  detectFormat()  │                                 │
-    │─────────────────▶│                                 │
-    │                  │  await ready                    │
-    │                  │  id = nextRequestId++           │
-    │                  │  store {resolve, reject} in map │
-    │                  │                                 │
-    │                  │  postMessage({                  │
-    │                  │    type: DetectFormat,           │
-    │                  │    id,                          │
-    │                  │    data: Uint8Array              │
-    │                  │  })                             │
-    │                  │────────────────────────────────▶│
-    │                  │                     detect_format(data)
-    │                  │                                 │
-    │                  │  { type: DetectFormat,           │
-    │                  │    id, success, format }        │
-    │                  │◀────────────────────────────────│
-    │                  │                                 │
-    │                  │  pendingRequests.get(id)        │
-    │                  │  resolve(response)              │
-    │  ◀── "png" ──────│                                 │
-    │                  │                                 │
-```
-
-#### Image Conversion
-
-```
-  caller             main.ts                          worker.ts
-    │                  │                                 │
-    │  convertImage()  │                                 │
-    │─────────────────▶│                                 │
-    │                  │  await ready                    │
-    │                  │  id = nextRequestId++           │
-    │                  │  store {resolve, reject} in map │
-    │                  │                                 │
-    │                  │  postMessage({                  │
-    │                  │    type: ConvertImage,           │
-    │                  │    id,                          │
-    │                  │    data: Uint8Array,             │
-    │                  │    targetFormat: "jpeg"          │
-    │                  │  })                             │
-    │                  │──────── copy ─────────────────▶│
-    │                  │                     convert_image(data, fmt)
-    │                  │                                 │
-    │                  │  { type: ConvertImage,           │
-    │                  │    id, success,                 │
-    │                  │    data: Uint8Array }            │
-    │                  │◀─── transfer (zero-copy) ───────│
-    │                  │     [result.buffer]              │
-    │                  │                                 │
-    │                  │  pendingRequests.get(id)        │
-    │                  │  resolve(response)              │
-    │  ◀── Uint8Array ─│                                 │
-    │                  │                                 │
-```
+**Message types**: `Init`, `DetectFormat`, `ConvertImage`, `GetDimensions`, `GetMetadata`, `BenchmarkImages`
 
 Input data is **copied** to the Worker (default `postMessage` behavior) so the caller retains the original bytes. Output data is **transferred** back via `[result.buffer]` (zero-copy, O(1) regardless of size).
 
-#### Dimension Reading
-
-```
-  caller             main.ts                          worker.ts
-    │                  │                                 │
-    │  getDimensions() │                                 │
-    │─────────────────▶│                                 │
-    │                  │  await ready                    │
-    │                  │  id = nextRequestId++           │
-    │                  │  store {resolve, reject} in map │
-    │                  │                                 │
-    │                  │  postMessage({                  │
-    │                  │    type: GetDimensions,          │
-    │                  │    id,                          │
-    │                  │    data: Uint8Array              │
-    │                  │  })                             │
-    │                  │────────────────────────────────▶│
-    │                  │                     get_dimensions(data)
-    │                  │                                 │
-    │                  │  { type: GetDimensions,          │
-    │                  │    id, success,                 │
-    │                  │    width, height }              │
-    │                  │◀────────────────────────────────│
-    │                  │                                 │
-    │                  │  pendingRequests.get(id)        │
-    │                  │  resolve(response)              │
-    │  ◀── {w, h} ─────│                                 │
-    │                  │                                 │
-```
-
-#### Error Handling
-
-```
-  caller             main.ts                          worker.ts
-    │                  │                                 │
-    │  convertImage()  │                                 │
-    │─────────────────▶│                                 │
-    │                  │  postMessage(request)           │
-    │                  │────────────────────────────────▶│
-    │                  │                     convert_image() throws
-    │                  │                                 │
-    │                  │  { type: Error,                  │
-    │                  │    id,                          │
-    │                  │    error: "Failed to decode..." }│
-    │                  │◀────────────────────────────────│
-    │                  │                                 │
-    │                  │  pendingRequests.get(id)        │
-    │                  │  reject(new Error(...))         │
-    │  ◀── throws ─────│                                 │
-    │                  │                                 │
-```
-
-If the Worker itself crashes, the `onerror` handler rejects the init promise and all pending requests:
-
-```
-  caller             main.ts                          worker.ts
-    │                  │                                 │
-    │  (pending ops)   │                                 💥
-    │                  │◀──── onerror ───────────────────│
-    │                  │                                 │
-    │                  │  rejectInit(error)              │
-    │                  │  for each pending request:      │
-    │                  │    reject("Worker crashed")     │
-    │  ◀── throws ─────│                                 │
-    │                  │                                 │
-```
+If a WASM call throws, the Worker sends an `Error` response with the original request ID, and the main thread rejects the corresponding Promise. If the Worker itself crashes, `onerror` rejects the init promise and all pending requests.
 
 ## How to Use
 
 1. Open the app in your browser
-2. Drop an image file (or click to browse) — the source format is auto-detected
-3. Select a target format from the dropdown
-4. Click **Convert**
-5. Preview the result and click **Download**
+2. Drop an image file, click to browse, or paste from clipboard — the source format is auto-detected
+3. Select a target format (4 primary formats shown, expand for TIFF/ICO/TGA/QOI)
+4. Optionally adjust the quality slider (JPEG, PNG) or apply transforms (flip, rotate, grayscale, invert)
+5. Click **Convert**
+6. Preview the result, view EXIF metadata, and click **Download**
 
 ### Limits
 
@@ -234,7 +130,10 @@ cargo install wasm-pack
 wasm-pack build crates/image-converter --target web --release
 
 # Install frontend dependencies & start dev server
-cd web && npm install && npx parcel src/index.html
+cd web && npm install && npm run dev
+
+# Or build WASM + start dev in one step
+cd web && npm run dev:full
 ```
 
 ### Deploy to Cloudflare Pages
@@ -251,7 +150,7 @@ Configure Cloudflare Pages with:
 - **Build command**: `bash build.sh`
 - **Output directory**: `web/dist`
 
-The script installs Rust if not present, adds the `wasm32-unknown-unknown` target, installs npm dependencies (which includes `wasm-pack`), builds the WASM module, then runs Parcel.
+The script installs Rust if not present, adds the `wasm32-unknown-unknown` target, installs npm dependencies (which includes `wasm-pack`), builds the WASM module, then runs the Astro build.
 
 ### Testing
 
@@ -277,14 +176,24 @@ cargo test --manifest-path crates/image-converter/Cargo.toml -- --ignored --noca
 wasm-pack test --headless --chrome crates/image-converter
 ```
 
-#### TypeScript (Playwright)
+#### TypeScript — Unit (Vitest)
 
 ```bash
-# Run all integration tests
+# Run unit tests
+cd web && npm test
+
+# Run with UI
+cd web && npx vitest --ui
+```
+
+#### TypeScript — E2E (Playwright)
+
+```bash
+# Run all E2E tests
 cd web && npm run test:e2e
 
 # Run a specific spec file
-cd web && npx playwright test tests/integration/conversion.spec.ts
+cd web && npx playwright test tests/e2e/conversion.spec.ts
 
 # Run a specific test by name
 cd web && npx playwright test --grep "WASM initializes"
@@ -294,6 +203,13 @@ cd web && npx playwright test --headed
 
 # Show HTML report after a run
 cd web && npx playwright show-report
+```
+
+#### All Tests
+
+```bash
+# Run Rust + Vitest + Playwright in sequence
+cd web && npm run tests
 ```
 
 ### Benchmarks
@@ -333,34 +249,62 @@ cargo fmt
 
 # Run Clippy (all warnings are treated as errors)
 cargo clippy -- -D warnings
+
+# TypeScript: type check + ESLint + Prettier in one command
+cd web && npm run check:all
+
+# Auto-fix formatting
+cd web && npm run format
 ```
 
 ## Project Structure
 
 ```
 rust-image-tools/
-├── Cargo.toml                      # Workspace root
+├── Cargo.toml                        # Workspace root
 ├── crates/
-│   └── image-converter/            # Rust WASM library
+│   └── image-converter/              # Rust WASM library
 │       ├── Cargo.toml
 │       ├── src/
-│       │   ├── lib.rs              # #[wasm_bindgen] exports
-│       │   ├── convert.rs          # Core conversion logic
-│       │   └── formats.rs          # Format detection & mapping
+│       │   ├── lib.rs                # #[wasm_bindgen] exports
+│       │   ├── convert.rs            # Core conversion logic
+│       │   ├── formats.rs            # Format detection & mapping
+│       │   ├── transforms.rs         # Image transform operations
+│       │   └── metadata.rs           # EXIF & metadata extraction
 │       └── benches/
-│           └── conversion_bench.rs # Criterion performance benchmarks
-├── web/                            # Frontend
+│           └── conversion_bench.rs   # Criterion performance benchmarks
+├── web/                              # Frontend
 │   ├── package.json
+│   ├── astro.config.ts
 │   ├── tsconfig.json
 │   └── src/
-│       ├── index.html
-│       ├── main.ts                 # Entry point
-│       ├── worker.ts               # Web Worker for WASM calls
-│       ├── ui.ts                   # DOM manipulation
-│       └── styles.css
-├── plans/                          # Implementation plans
-├── PLANNING.md                     # Architecture & design decisions
-└── CLAUDE.md                       # Coding conventions
+│       ├── pages/
+│       │   ├── index.astro           # Homepage with converter + SEO schema
+│       │   └── [from]-to-[to].astro  # Dynamic conversion landing pages
+│       ├── components/
+│       │   ├── ImageConverter.tsx     # Top-level converter container
+│       │   ├── DropZone/             # File input, format selector, quality, download
+│       │   ├── ImagePreview.tsx      # Side-by-side source/output preview
+│       │   ├── TransformToolbar.tsx  # Transform toggle buttons
+│       │   ├── TransformModal.tsx    # Full-screen transform editor with undo
+│       │   ├── MetadataPanel.tsx     # EXIF & metadata display
+│       │   ├── MetadataModal.tsx     # Modal wrapper for metadata
+│       │   ├── BenchmarkTable.tsx    # Format comparison results
+│       │   └── ProgressBar.tsx       # Conversion progress
+│       ├── hooks/                    # useConverter, useBenchmark, useClipboardPaste
+│       ├── lib/                      # Worker wrapper, HEIC conversion, quality utils
+│       ├── types/                    # Enums, interfaces, type re-exports
+│       ├── data/                     # Format pairs & copy for landing pages
+│       ├── layouts/
+│       │   └── Base.astro            # HTML template, OG tags, JSON-LD schema
+│       ├── worker.ts                 # Web Worker for WASM calls
+│       └── styles.css                # Global styles
+│   └── tests/
+│       ├── unit/                     # Vitest unit tests
+│       └── e2e/                      # Playwright E2E tests
+├── plans/                            # Implementation plans
+├── PLANNING.md                       # Architecture & design decisions
+└── CLAUDE.md                         # Coding conventions
 ```
 
 ## Tech Stack
@@ -368,12 +312,17 @@ rust-image-tools/
 | Layer | Choice |
 |-------|--------|
 | Image processing | `image` crate (pure Rust, WASM-compatible) |
-| Rust-WASM glue | `wasm-bindgen` |
+| EXIF parsing | `kamadak-exif` |
+| Rust-WASM glue | `wasm-bindgen` + `serde-wasm-bindgen` |
 | WASM build tool | `wasm-pack` |
-| Frontend bundler | Parcel |
-| Frontend language | TypeScript |
+| Frontend framework | Astro |
+| UI components | Preact |
+| Frontend bundler | Vite |
 | Styling | Tailwind CSS v4 |
-| Integration testing | Playwright |
+| Unit testing | Vitest |
+| E2E testing | Playwright |
+| HEIC decoding | `heic-to` (lazy-loaded WASM) |
+| Analytics | PostHog |
 
 ## License
 
