@@ -11,6 +11,10 @@ Use `npm run bundle-size:build` to clean, rebuild, and then measure.
 
 | Date       | Branch       | Asset     | Raw          | Gzip         | Top Contributor #1                                   | Top Contributor #2                                  | Top Contributor #3                                |
 |------------|--------------|-----------|--------------|--------------|------------------------------------------------------|-----------------------------------------------------|---------------------------------------------------|
+| 2026-03-25 | Meta data display | WASM      | 1.19 MB | 398.3 KB | Fn code (4199 fns): 1.17 MB (74.2%) | Static data (2 segs): 172.0 KB (10.7%) | Custom: __wasm_bindgen_unstable: 166.1 KB (10.3%) |
+| 2026-03-25 | Meta data display | JS        | 2.86 MB   | 742.9 KB   | _astro/heic-to.DIRPI3VF.js: 657.9 KB (88.6%)   | _astro/ImageConverter.p9805e4c.js: 71.8 KB (9.7%)   | _astro/preload-helper.WFnymgzv.js: 5.0 KB (0.7%)   |
+| 2026-03-25 | Meta data display | CSS       | 13.1 KB  | 3.6 KB  | _astro/format-pairs.0zdR6Atu.css: 3.6 KB (100.0%)  | —  | —  |
+| 2026-03-25 | Meta data display | **Total** | **4.06 MB** | **1.12 MB** | | | |
 | 2026-03-14 | Qualiy Slider Support | WASM      | 1.04 MB | 347.1 KB | Fn code (3769 fns): 1.04 MB (73.9%) | Custom: __wasm_bindgen_unstable: 164.2 KB (11.4%) | Static data (2 segs): 136.5 KB (9.5%) |
 | 2026-03-14 | Qualiy Slider Support | JS        | 2.83 MB   | 736.3 KB   | _astro/heic-to.DIRPI3VF.js: 657.9 KB (89.3%)   | _astro/ImageConverter.Cma1vCQX.js: 65.9 KB (9.0%)   | _astro/preload-helper.C3igGt72.js: 4.9 KB (0.7%)   |
 | 2026-03-14 | Qualiy Slider Support | CSS       | 11.2 KB  | 3.3 KB  | _astro/_from_-to-_to_.wmaDk4Vx.css: 3.3 KB (100.0%)  | —  | —  |

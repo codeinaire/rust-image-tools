@@ -1539,7 +1539,7 @@ Bundle size deltas are **gzipped** (over-the-wire). WASM and JS deltas are broke
 | 5   | Simple Transforms (Flip, Rotate, Grayscale, Invert) | 2/5        | High      | Medium    | +~16–29 KB    | +~2–3.5 KB    | +~18–32 KB    | [x]  |
 | 6   | Format Landing Pages (SEO)                          | 2.5/5      | High      | Medium    | 0             | +~0.3–0.5 KB  | +~0.3–0.5 KB  | [x]  |
 | 7   | SVG Rasterization                                   | 2.5/5      | Medium    | Medium    | +~540 KB–1 MB | +~0.5–1 KB    | +~541 KB–1 MB | [ ]  |
-| 8   | Image Metadata + EXIF Display                       | 2.5/5      | Medium    | Medium    | +~28–45 KB    | +~1.2–2 KB    | +~29–47 KB    | [ ]  |
+| 8   | Image Metadata + EXIF Display                       | 2.5/5      | Medium    | Medium    | +~28–45 KB    | +~1.2–2 KB    | +~29–47 KB    | [x]  |
 | 9   | Compression Benchmark                               | 2.5/5      | High      | Medium    | 0             | +~1.2–2.3 KB  | +~1.2–2.3 KB  | [x]  |
 | 10  | Parameterized Processing (Resize, Crop, Blur, etc.) | 3/5        | Very High | High      | +~32–53 KB    | +~3–5 KB      | +~35–58 KB    | [ ]  |
 | 11  | Side-by-Side Comparison                             | 3/5        | High      | Medium    | 0             | +~2–3.5 KB    | +~2–3.5 KB    | [ ]  |
